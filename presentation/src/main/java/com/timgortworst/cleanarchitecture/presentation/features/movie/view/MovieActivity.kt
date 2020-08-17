@@ -38,16 +38,11 @@ class MovieActivity : AppCompatActivity(), MovieListFragment.MovieDetailsClickLi
         }
     }
 
-    private fun replaceFragment(
-        fragment: Fragment,
-        sharedElement: View,
-        transitionName: String
-    ) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_placeholder, fragment)
-        transaction.addSharedElement(sharedElement, transitionName)
-        transaction.addToBackStack(null)
-        transaction.commit()
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_placeholder, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onMovieClicked(
@@ -55,11 +50,7 @@ class MovieActivity : AppCompatActivity(), MovieListFragment.MovieDetailsClickLi
         moviePoster: ImageView,
         transitionName: String
     ) {
-        replaceFragment(
-            MovieDetailsFragment.newInstance(movie.id, movie.posterPath),
-            moviePoster,
-            transitionName
-        )
+        replaceFragment(MovieDetailsFragment.newInstance(movie.id, movie.posterPath))
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

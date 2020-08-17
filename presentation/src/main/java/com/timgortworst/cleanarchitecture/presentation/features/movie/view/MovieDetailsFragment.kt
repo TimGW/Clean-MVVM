@@ -8,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.transition.Transition
 import androidx.transition.TransitionInflater
 import com.squareup.picasso.Picasso
 import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES
 import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES_HIGH_RES
-import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.customview.DetailsTransition
@@ -44,11 +44,6 @@ class MovieDetailsFragment : Fragment() {
             moviePoster?.let { args.putString(MOVIE_POSTER_BUNDLE_KEY, it) }
             fragment.arguments = args
 
-            fragment.sharedElementEnterTransition = DetailsTransition()
-            fragment.enterTransition = Fade()
-            fragment.exitTransition = Fade()
-            fragment.sharedElementReturnTransition = DetailsTransition()
-
             return fragment
         }
     }
@@ -57,23 +52,20 @@ class MovieDetailsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_movie_details, container, false)
-    }
+    ) = inflater.inflate(R.layout.fragment_movie_details, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Picasso.get().load(BASE_URL_IMAGES.plus(posterPath))
-            .centerCrop()
-            .fit()
-            .into(movie_details_image)
+        loadImage(BASE_URL_IMAGES.plus(posterPath))
+
+        observeUI()
 
         viewModel.fetchMovieDetails(movieId)
+    }
 
-        viewModel.movies.observe(viewLifecycleOwner, Observer {
-            presentMovieDetails(it)
-        })
+    private fun observeUI() {
+        viewModel.movies.observe(viewLifecycleOwner, Observer { presentMovieDetails(it) })
         viewModel.loading.observe(viewLifecycleOwner, Observer {
             progress_bar?.visibility = if (it) View.VISIBLE else View.INVISIBLE
         })
@@ -88,16 +80,7 @@ class MovieDetailsFragment : Fragment() {
             getString(R.string.movie_detail_release_date, movieDetails.releaseDate)
         movie_details_overview.text = movieDetails.overview
 
-        // load high res image instead of low-res placeholder, short delay for animation to finish
-        val delay = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-        Handler().postDelayed({
-            Picasso.get().load(BASE_URL_IMAGES_HIGH_RES.plus(movieDetails.posterPath))
-                .noPlaceholder()
-                .noFade()
-                .centerCrop()
-                .fit()
-                .into(movie_details_image)
-        }, delay)
+        loadImage(BASE_URL_IMAGES_HIGH_RES.plus(movieDetails.posterPath))
     }
 
     private fun presentError(errorMessage: Int) {
@@ -105,4 +88,11 @@ class MovieDetailsFragment : Fragment() {
         error_message.text =
             getString(R.string.no_internet_placeholder_text, getString(errorMessage))
     }
+
+    private fun loadImage(url: String) = Picasso.get().load(url)
+        .noPlaceholder()
+        .noFade()
+        .centerCrop()
+        .fit()
+        .into(movie_details_image)
 }

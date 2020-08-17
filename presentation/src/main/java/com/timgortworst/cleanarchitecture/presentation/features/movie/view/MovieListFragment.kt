@@ -23,7 +23,6 @@ class MovieListFragment : Fragment() {
     private val listViewModel: MovieListViewModel by inject()
 
     private lateinit var adapter: MovieListAdapter
-    private lateinit var activityContext: AppCompatActivity
     private var movieDetailsClickListener: MovieDetailsClickListener? = null
 
     companion object {
@@ -45,13 +44,6 @@ class MovieListFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-
-        activityContext = (activity as AppCompatActivity)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,14 +55,20 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activityContext.setSupportActionBar(toolbar)
-        activityContext.title = getString(R.string.movie_list_toolbar_title)
+        val activity = activity as? AppCompatActivity ?: return
+        activity.setSupportActionBar(toolbar)
+        activity.title = getString(R.string.movie_list_toolbar_title)
         swiperefresh?.isEnabled = false
 
         setupMovieList()
         observeUI()
 
         listViewModel.fetchMovies()
+    }
+
+    override fun onDetach() {
+        movieDetailsClickListener = null
+        super.onDetach()
     }
 
     private fun observeUI() {
@@ -94,11 +92,6 @@ class MovieListFragment : Fragment() {
         })
     }
 
-    override fun onDetach() {
-        movieDetailsClickListener = null
-        super.onDetach()
-    }
-
     private fun setupMovieList() {
         adapter = MovieListAdapter(mutableListOf()) { movie, moviePoster, transitionName ->
             movieDetailsClickListener?.onMovieClicked(movie, moviePoster, transitionName)
@@ -107,8 +100,8 @@ class MovieListFragment : Fragment() {
         val columns = resources.getInteger(R.integer.gallery_columns)
         val orientation = resources.getInteger(R.integer.gallery_orientation)
 
-        movie_list.layoutManager = GridLayoutManager(activityContext, columns, orientation, false)
-        movie_list.adapter = adapter
+        movie_list?.layoutManager = GridLayoutManager(activity, columns, orientation, false)
+        movie_list?.adapter = adapter
     }
 
     interface MovieDetailsClickListener {
