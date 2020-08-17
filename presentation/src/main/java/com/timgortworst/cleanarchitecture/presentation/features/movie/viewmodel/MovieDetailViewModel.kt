@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
-import com.timgortworst.cleanarchitecture.domain.model.response.State
-import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieDetailsUseCase
-import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieDetailsUseCaseImpl
+import com.timgortworst.cleanarchitecture.domain.model.state.State
+import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCase
+import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCaseImpl
 import com.timgortworst.cleanarchitecture.presentation.extension.cancelIfActive
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -35,8 +35,9 @@ class MovieDetailViewModel(
         moviesJob.cancelIfActive()
 
         moviesJob = viewModelScope.launch {
+            _loading.postValue(true)
+
             when (val res = getMovieDetailsUseCase.execute(GetMovieDetailsUseCaseImpl.Params(movieId))) {
-                State.Loading -> _loading.postValue(true)
                 is State.Success -> {
                     _loading.postValue(false)
                     _movies.postValue(res.data)

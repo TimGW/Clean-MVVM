@@ -1,7 +1,7 @@
 package com.timgortworst.cleanarchitecture.data.repository
 
-import com.timgortworst.cleanarchitecture.domain.model.response.ErrorHandler
-import com.timgortworst.cleanarchitecture.domain.model.response.State
+import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
+import com.timgortworst.cleanarchitecture.domain.model.state.State
 import kotlinx.coroutines.flow.*
 import retrofit2.Response
 
@@ -33,23 +33,11 @@ abstract class NetworkBoundRepository<NETWORK, DOMAIN> {
         e.printStackTrace()
     }
 
-    /**
-     * set an error handler
-     */
     protected abstract suspend fun getErrorHandler() : ErrorHandler
 
-    /**
-     * Saves retrieved from remote into the persistence storage.
-     */
     protected abstract suspend fun saveRemoteData(response: NETWORK)
 
-    /**
-     * Retrieves all data from persistence storage.
-     */
     protected abstract fun fetchFromLocal(): Flow<DOMAIN>
 
-    /**
-     * Fetches [State] from the remote end point.
-     */
     protected abstract suspend fun fetchFromRemote(): Response<NETWORK>
 }

@@ -1,8 +1,8 @@
-package com.timgortworst.cleanarchitecture.domain.usecase.movie
+package com.timgortworst.cleanarchitecture.domain.usecase.movielist
 
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
-import com.timgortworst.cleanarchitecture.domain.model.response.ErrorHandler
-import com.timgortworst.cleanarchitecture.domain.model.response.State
+import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
+import com.timgortworst.cleanarchitecture.domain.model.state.State
 import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

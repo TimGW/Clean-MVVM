@@ -10,10 +10,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.MyTheme_NoActionBar_Launcher)
         super.onCreate(savedInstanceState)
-        goToMainActivity()
-    }
 
-    private fun goToMainActivity() {
         startActivity(MovieActivity.intentBuilder(this))
         finish()
     }

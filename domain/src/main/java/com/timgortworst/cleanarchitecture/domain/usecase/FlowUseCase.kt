@@ -1,6 +1,6 @@
 package com.timgortworst.cleanarchitecture.domain.usecase
 
-import com.timgortworst.cleanarchitecture.domain.model.response.State
+import com.timgortworst.cleanarchitecture.domain.model.state.State
 import kotlinx.coroutines.flow.Flow
 
 // Multiple Values Requests

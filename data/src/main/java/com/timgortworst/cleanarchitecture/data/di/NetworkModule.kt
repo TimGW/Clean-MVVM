@@ -1,17 +1,22 @@
 package com.timgortworst.cleanarchitecture.data.di
 
 import com.timgortworst.cleanarchitecture.data.BuildConfig
+import com.timgortworst.cleanarchitecture.data.error.ErrorHandlerImpl
 import com.timgortworst.cleanarchitecture.data.network.AuthHeaderInterceptor
 import com.timgortworst.cleanarchitecture.data.network.RemoteDataSourceMovie
+import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
+    factory<ErrorHandler> { ErrorHandlerImpl() }
+
     factory { provideAuthHeaderInterceptor() }
     factory { provideOkHttpClient(get()) }
     factory { provideMovieEndPoint(get()) }
+
     single { provideRetrofit(get()) }
 }
 

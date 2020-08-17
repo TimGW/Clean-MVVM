@@ -1,8 +1,5 @@
-package com.timgortworst.cleanarchitecture.domain.model.response
+package com.timgortworst.cleanarchitecture.domain.model.state
 
-import androidx.annotation.Keep
-
-@Keep
 sealed class ErrorEntity {
     abstract val throwable: Throwable?
 

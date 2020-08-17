@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.domain.model.response
+package com.timgortworst.cleanarchitecture.domain.model.state
 
 sealed class State<out T> {
     data class Success<out T>(val data: T) : State<T>()

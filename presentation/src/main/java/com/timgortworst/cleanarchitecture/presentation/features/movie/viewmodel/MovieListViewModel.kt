@@ -2,8 +2,8 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie.viewmodel
 
 import androidx.lifecycle.*
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
-import com.timgortworst.cleanarchitecture.domain.model.response.State
-import com.timgortworst.cleanarchitecture.domain.usecase.movie.*
+import com.timgortworst.cleanarchitecture.domain.model.state.State
+import com.timgortworst.cleanarchitecture.domain.usecase.movielist.*
 import com.timgortworst.cleanarchitecture.presentation.extension.cancelIfActive
 import com.timgortworst.cleanarchitecture.presentation.model.Event
 import kotlinx.coroutines.Job

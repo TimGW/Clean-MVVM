@@ -28,8 +28,4 @@ class CleanApp : Application() {
             modules(appComponent)
         }
     }
-
-    companion object {
-        const val TAG = "TasqsApp"
-    }
 }

@@ -1,8 +1,5 @@
 package com.timgortworst.cleanarchitecture.domain.model.movie
 
-import java.io.Serializable
-
-
 data class MovieDetails(
     val adult: Boolean = false,
     val backdropPath: String = "",

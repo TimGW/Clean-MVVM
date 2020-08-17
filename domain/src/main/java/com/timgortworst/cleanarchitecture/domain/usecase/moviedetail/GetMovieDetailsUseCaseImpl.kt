@@ -1,7 +1,7 @@
-package com.timgortworst.cleanarchitecture.domain.usecase.movie
+package com.timgortworst.cleanarchitecture.domain.usecase.moviedetail
 
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
-import com.timgortworst.cleanarchitecture.domain.model.response.State
+import com.timgortworst.cleanarchitecture.domain.model.state.State
 import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
 
 class GetMovieDetailsUseCaseImpl(
