@@ -1,21 +1,16 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.view
 
 import android.os.Bundle
-import android.os.Handler
-import android.transition.Fade
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.transition.Transition
-import androidx.transition.TransitionInflater
 import com.squareup.picasso.Picasso
 import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES
 import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES_HIGH_RES
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.presentation.R
-import com.timgortworst.cleanarchitecture.presentation.customview.DetailsTransition
 import com.timgortworst.cleanarchitecture.presentation.features.movie.viewmodel.MovieDetailViewModel
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 import org.koin.android.ext.android.inject
