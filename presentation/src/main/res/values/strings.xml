@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">CleanArchitecture</string>
+    <string name="connection_error">Please check your internet connection.</string>
+    <string name="server_error">A Server Error occurred.</string>
+    <string name="generic_error">Something went wrong.</string>
+    <string name="movie_detail_release_date">Release Date: %1$s</string>
+    <string name="movie_detail_genre">Genre(s): %1$s</string>
+    <string name="movie_detail_language">Language: %1$s</string>
+    <string name="no_internet_placeholder_text">%1$s Swipe down to retry.</string>
+    <string name="no_results_placeholder_text">There are no results found.</string>
+    <string name="search_movie_hint">Search Movies</string>
+    <string name="movie_list_toolbar_title">Movies</string>
+    <string name="movie_details_toolbar_title">Movie details</string>
 </resources>
