@@ -36,7 +36,7 @@ data class NetworkMovieDetails(
 
     data class ProductionCompany(
         @SerializedName("id") val id: Int = 0,
-        @SerializedName("logo_path") val logoPath: String = "",
+        @SerializedName("logo_path") val logoPath: String? = "",
         @SerializedName("name") val name: String = "",
         @SerializedName("origin_country") val originCountry: String = ""
     )

@@ -43,7 +43,7 @@ fun NetworkMovieDetails.Genre.asDomainModel() = with(this) {
 fun NetworkMovieDetails.ProductionCompany.asDomainModel() = with(this) {
     MovieDetails.ProductionCompany(
         id,
-        logoPath,
+        logoPath.orEmpty(),
         name,
         originCountry
     )
