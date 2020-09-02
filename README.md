@@ -1,2 +1,2 @@
 # clean-architecture-sample
-Android application with clean architecture principles, MVVM, Koin DI, Kotlin, Coroutines, LiveData, Room and Retrofit
+Android application with clean architecture principles, MVVM, Koin DI, Kotlin, Coroutines, Kotlin Flow, LiveData, Room and Retrofit
