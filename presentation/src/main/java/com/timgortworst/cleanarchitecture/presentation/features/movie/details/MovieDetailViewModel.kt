@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.viewmodel
+package com.timgortworst.cleanarchitecture.presentation.features.movie.details
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

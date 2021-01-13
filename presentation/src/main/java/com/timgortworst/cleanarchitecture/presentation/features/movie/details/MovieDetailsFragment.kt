@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.view
+package com.timgortworst.cleanarchitecture.presentation.features.movie.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES
 import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES_HIGH_RES
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.presentation.R
-import com.timgortworst.cleanarchitecture.presentation.features.movie.viewmodel.MovieDetailViewModel
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 import org.koin.android.ext.android.inject
 

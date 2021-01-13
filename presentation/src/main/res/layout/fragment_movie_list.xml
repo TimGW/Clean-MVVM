@@ -5,7 +5,7 @@
     android:id="@+id/movie_list_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.movie.view.MovieListFragment">
+    tools:context=".features.movie.list.MovieListFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

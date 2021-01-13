@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.adapter
+package com.timgortworst.cleanarchitecture.presentation.features.movie.list
 
 import android.view.LayoutInflater
 import android.view.View

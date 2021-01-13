@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.viewmodel
+package com.timgortworst.cleanarchitecture.presentation.features.movie.list
 
 import androidx.lifecycle.*
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie

@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.view
+package com.timgortworst.cleanarchitecture.presentation.features.movie
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
+import com.timgortworst.cleanarchitecture.presentation.features.movie.details.MovieDetailsFragment
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.MovieListFragment
 
 class MovieActivity : AppCompatActivity(), MovieListFragment.MovieDetailsClickListener {
 

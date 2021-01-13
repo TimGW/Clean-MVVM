@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.view
+package com.timgortworst.cleanarchitecture.presentation.features.movie.list
 
 import android.content.Context
 import android.os.Bundle
@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
-import com.timgortworst.cleanarchitecture.presentation.features.movie.adapter.MovieListAdapter
-import com.timgortworst.cleanarchitecture.presentation.features.movie.viewmodel.MovieListViewModel
 import com.timgortworst.cleanarchitecture.presentation.model.EventObserver
 import kotlinx.android.synthetic.main.fragment_movie_list.*
 import org.koin.android.ext.android.inject
