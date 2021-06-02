@@ -8,17 +8,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
+import com.timgortworst.cleanarchitecture.presentation.features.movie.details.MovieDetailViewModel
 import com.timgortworst.cleanarchitecture.presentation.model.EventObserver
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_movie_list.*
-import org.koin.android.ext.android.inject
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@AndroidEntryPoint
 class MovieListFragment : Fragment() {
-    private val listViewModel: MovieListViewModel by inject()
+    private val listViewModel by viewModels<MovieListViewModel>()
 
     private lateinit var adapter: MovieListAdapter
     private var movieDetailsClickListener: MovieDetailsClickListener? = null

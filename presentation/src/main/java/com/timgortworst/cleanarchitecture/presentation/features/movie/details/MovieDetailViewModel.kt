@@ -9,10 +9,13 @@ import com.timgortworst.cleanarchitecture.domain.model.state.State
 import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCaseImpl
 import com.timgortworst.cleanarchitecture.presentation.extension.cancelIfActive
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MovieDetailViewModel(
+@HiltViewModel
+class MovieDetailViewModel @Inject constructor(
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase
 ) : ViewModel() {
 

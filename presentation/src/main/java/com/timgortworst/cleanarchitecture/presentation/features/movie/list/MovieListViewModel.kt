@@ -6,11 +6,14 @@ import com.timgortworst.cleanarchitecture.domain.model.state.State
 import com.timgortworst.cleanarchitecture.domain.usecase.movielist.*
 import com.timgortworst.cleanarchitecture.presentation.extension.cancelIfActive
 import com.timgortworst.cleanarchitecture.presentation.model.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MovieListViewModel(
+@HiltViewModel
+class MovieListViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase
 ) : ViewModel() {
     private var moviesJob: Job? = null
@@ -36,7 +39,7 @@ class MovieListViewModel(
                     State.Loading -> _loading.value = true
                     is State.Success -> {
                         _loading.value = false
-                        _movies.postValue(res.data)
+                        _movies.postValue(res.data!!)
                     }
                     is State.Error -> {
                         _loading.value = false

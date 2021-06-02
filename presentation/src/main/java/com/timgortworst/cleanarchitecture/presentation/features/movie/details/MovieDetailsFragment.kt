@@ -5,18 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
 import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES
 import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES_HIGH_RES
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.presentation.R
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_movie_details.*
-import org.koin.android.ext.android.inject
 
-
+@AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
-    private val viewModel: MovieDetailViewModel by inject()
+    private val viewModel by viewModels<MovieDetailViewModel>()
 
     private val movieId: Int by lazy {
         arguments?.getInt(MOVIE_ID_BUNDLE_KEY, INVALID_MOVIE_ID) ?: INVALID_MOVIE_ID

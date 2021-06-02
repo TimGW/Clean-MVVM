@@ -1,14 +1,58 @@
 package com.timgortworst.cleanarchitecture.data.di
 
+import android.content.Context
 import androidx.room.Room
+import com.timgortworst.cleanarchitecture.data.BuildConfig
 import com.timgortworst.cleanarchitecture.data.database.AppDatabase
-import org.koin.dsl.module
+import com.timgortworst.cleanarchitecture.data.error.ErrorHandlerImpl
+import com.timgortworst.cleanarchitecture.data.network.AuthHeaderInterceptor
+import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
-val appModule = module {
-    single {
-        Room.databaseBuilder(get(), AppDatabase::class.java, "movie_database")
+/**
+ * Module for all globally required dependencies
+ */
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class AppModule {
+
+    @Binds
+    abstract fun bindErrorHandler(errorHandlerImpl: ErrorHandlerImpl): ErrorHandler
+
+    companion object {
+
+        @Provides
+        @Singleton
+        fun providesRoomDb(
+            @ApplicationContext context: Context
+        ) = Room.databaseBuilder(context, AppDatabase::class.java, "movie_database")
             .fallbackToDestructiveMigration()
             .build()
+
+        @Provides
+        @Singleton
+        fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+            return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL).client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create()).build()
+        }
+
+        @Provides
+        fun provideOkHttpClient(authInterceptor: AuthHeaderInterceptor): OkHttpClient {
+            return OkHttpClient().newBuilder().addInterceptor(authInterceptor).build()
+        }
+
+        @Provides
+        fun provideAuthHeaderInterceptor(): AuthHeaderInterceptor {
+            return AuthHeaderInterceptor(BuildConfig.API_KEY)
+        }
     }
-    single { get<AppDatabase>().movieDao() }
 }

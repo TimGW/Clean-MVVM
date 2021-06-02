@@ -10,7 +10,9 @@ import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.features.movie.details.MovieDetailsFragment
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.MovieListFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MovieActivity : AppCompatActivity(), MovieListFragment.MovieDetailsClickListener {
 
     companion object {
