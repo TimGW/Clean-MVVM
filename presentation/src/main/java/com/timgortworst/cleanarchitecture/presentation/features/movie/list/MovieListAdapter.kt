@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.movie_list_item.view.*
 
 class MovieListAdapter(
     private var movieList: MutableList<Movie>,
-    private val clickListener: (Movie, ImageView, String) -> Unit
+    private val clickListener: (View, Movie, ImageView, String) -> Unit
 ) : RecyclerView.Adapter<MovieListAdapter.ViewHolder>() {
 
     override fun getItemCount() = movieList.size
@@ -40,7 +40,7 @@ class MovieListAdapter(
         ViewCompat.setTransitionName(holder.moviePoster, transitionName)
 
         holder.itemView.setOnClickListener {
-            clickListener.invoke(movieList[position], holder.moviePoster, transitionName)
+            clickListener.invoke(it, movieList[position], holder.moviePoster, transitionName)
         }
     }
 

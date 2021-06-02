@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragmentMovieList">
+
+    <fragment
+        android:id="@+id/fragmentMovieList"
+        android:name="com.timgortworst.cleanarchitecture.presentation.features.movie.list.MovieListFragment"
+        android:label="@string/movie_list_toolbar_title"
+        tools:layout="@layout/fragment_movie_list">
+
+        <action
+            android:id="@+id/show_movie_details"
+            app:destination="@id/fragmentMovieDetails"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/fragmentMovieList"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentMovieDetails"
+        android:name="com.timgortworst.cleanarchitecture.presentation.features.movie.details.MovieDetailsFragment"
+        android:label="@string/movie_details_toolbar_title"
+        tools:layout="@layout/fragment_movie_details">
+
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
+
+        <argument
+            android:name="moviePoster"
+            app:argType="string" />
+
+    </fragment>
+</navigation>

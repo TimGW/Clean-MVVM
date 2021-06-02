@@ -5,12 +5,12 @@
     android:startOffset="50">
 
     <alpha
-        android:duration="150"
+        android:duration="@android:integer/config_mediumAnimTime"
         android:fromAlpha="0.0"
         android:toAlpha="1.0"/>
 
     <translate
-        android:duration="150"
+        android:duration="@android:integer/config_mediumAnimTime"
         android:fromYDelta="8%"
         android:toYDelta="0%"/>
 

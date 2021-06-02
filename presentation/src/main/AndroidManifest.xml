@@ -12,9 +12,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/MyTheme.NoActionBar">
+        android:theme="@style/MyTheme.DayNight">
 
-        <activity android:name=".features.splash.SplashActivity">
+        <activity
+            android:name=".features.splash.SplashActivity"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +24,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".features.movie.MovieActivity" />
+        <activity
+            android:name=".features.movie.MovieActivity"
+            android:exported="false" />
 
     </application>
 

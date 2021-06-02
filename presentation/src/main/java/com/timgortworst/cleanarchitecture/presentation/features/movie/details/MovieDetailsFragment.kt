@@ -6,67 +6,49 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
 import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES
 import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES_HIGH_RES
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.presentation.R
+import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
     private val viewModel by viewModels<MovieDetailViewModel>()
-
-    private val movieId: Int by lazy {
-        arguments?.getInt(MOVIE_ID_BUNDLE_KEY, INVALID_MOVIE_ID) ?: INVALID_MOVIE_ID
-    }
-
-    private val posterPath: String by lazy {
-        arguments?.getString(MOVIE_POSTER_BUNDLE_KEY, "") ?: ""
-    }
-
-    companion object {
-        private const val INVALID_MOVIE_ID = -1
-        private const val MOVIE_ID_BUNDLE_KEY = "MOVIE_ID_BUNDLE_KEY"
-        private const val MOVIE_POSTER_BUNDLE_KEY = "MOVIE_POSTER_BUNDLE_KEY"
-
-        fun newInstance(movieId: Int, moviePoster: String? = null): MovieDetailsFragment {
-            val fragment = MovieDetailsFragment()
-            val args = Bundle()
-            args.putInt(MOVIE_ID_BUNDLE_KEY, movieId)
-            moviePoster?.let { args.putString(MOVIE_POSTER_BUNDLE_KEY, it) }
-            fragment.arguments = args
-
-            return fragment
-        }
-    }
+    private val args: MovieDetailsFragmentArgs by navArgs()
+    private lateinit var binding: FragmentMovieDetailsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_movie_details, container, false)
+    ): View {
+        binding = FragmentMovieDetailsBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadImage(BASE_URL_IMAGES.plus(posterPath))
+        loadImage(BASE_URL_IMAGES.plus(args.moviePoster))
 
         observeUI()
 
-        viewModel.fetchMovieDetails(movieId)
+        viewModel.fetchMovieDetails(args.movieId)
     }
 
     private fun observeUI() {
-        viewModel.movies.observe(viewLifecycleOwner, Observer { presentMovieDetails(it) })
-        viewModel.loading.observe(viewLifecycleOwner, Observer {
+        viewModel.movies.observe(viewLifecycleOwner) { presentMovieDetails(it) }
+        viewModel.loading.observe(viewLifecycleOwner) {
             progress_bar?.visibility = if (it) View.VISIBLE else View.INVISIBLE
-        })
-        viewModel.error.observe(viewLifecycleOwner, Observer {
+        }
+        viewModel.error.observe(viewLifecycleOwner) {
             presentError(R.string.generic_error)
-        })
+        }
     }
 
     private fun presentMovieDetails(movieDetails: MovieDetails) {

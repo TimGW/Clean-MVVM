@@ -5,8 +5,9 @@ import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.HttpURLConnection
+import javax.inject.Inject
 
-class ErrorHandlerImpl : ErrorHandler {
+class ErrorHandlerImpl @Inject constructor() : ErrorHandler {
 
     override fun getError(throwable: Throwable): ErrorEntity {
         return when (throwable) {

@@ -3,17 +3,19 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import com.timgortworst.cleanarchitecture.presentation.R
-import com.timgortworst.cleanarchitecture.presentation.features.movie.details.MovieDetailsFragment
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.MovieListFragment
+import com.timgortworst.cleanarchitecture.presentation.databinding.ActivityMovieBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MovieActivity : AppCompatActivity(), MovieListFragment.MovieDetailsClickListener {
+class MovieActivity : AppCompatActivity() {
+    private var navController: NavController? = null
+    private lateinit var binding: ActivityMovieBinding
 
     companion object {
         fun intentBuilder(context: Context): Intent {
@@ -23,40 +25,24 @@ class MovieActivity : AppCompatActivity(), MovieListFragment.MovieDetailsClickLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie)
+        binding = ActivityMovieBinding.inflate(layoutInflater)
 
-        if (savedInstanceState == null) {
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_placeholder, MovieListFragment.newInstance())
-            transaction.commit()
-        }
+        setContentView(binding.root)
+        setSupportActionBar(binding.appbar.toolbar)
+
+        NavigationUI.setupActionBarWithNavController(this, getNavController())
     }
 
-    override fun onBackPressed() {
-        val fm = supportFragmentManager
-        if (fm.backStackEntryCount > 0) {
-            fm.popBackStack()
+    override fun onSupportNavigateUp(): Boolean {
+        return getNavController().navigateUp() || super.onSupportNavigateUp()
+    }
+
+    private fun getNavController(): NavController {
+        return if (navController == null) {
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+            (navHostFragment as NavHostFragment).navController
         } else {
-            super.onBackPressed()
+            navController as NavController
         }
-    }
-
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_placeholder, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    override fun onMovieClicked(
-        movie: Movie,
-        moviePoster: ImageView,
-        transitionName: String
-    ) {
-        replaceFragment(MovieDetailsFragment.newInstance(movie.id, movie.posterPath))
-    }
-
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data) // delegate to fragment
     }
 }
