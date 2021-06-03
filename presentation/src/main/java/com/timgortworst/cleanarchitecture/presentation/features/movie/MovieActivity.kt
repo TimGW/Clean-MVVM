@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.ActivityMovieBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,9 +28,12 @@ class MovieActivity : AppCompatActivity() {
         binding = ActivityMovieBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-        setSupportActionBar(binding.appbar.toolbar)
 
-        NavigationUI.setupActionBarWithNavController(this, getNavController())
+        binding.collapsingToolbarLayout.setupWithNavController(
+            binding.toolbar,
+            getNavController(),
+            AppBarConfiguration(getNavController().graph)
+        )
     }
 
     override fun onSupportNavigateUp(): Boolean {

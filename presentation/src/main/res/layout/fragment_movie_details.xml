@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:scaleType="centerCrop"
-        tools:srcCompat="@drawable/movie_placeholder" />
+        android:transitionName="imageView"
+        app:layout_collapseMode="parallax"
+        app:srcCompat="@drawable/movie_placeholder" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

@@ -23,6 +23,7 @@
     <dimen name="week_tile_height">50dp</dimen>
 
     <dimen name="loading_line_height">20dp</dimen>
+    <dimen name="default_padding">16dp</dimen>
 
     <integer name="gallery_columns">3</integer>
     <integer name="gallery_orientation">1</integer>
