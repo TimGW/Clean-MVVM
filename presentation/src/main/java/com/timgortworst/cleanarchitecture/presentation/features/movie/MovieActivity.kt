@@ -3,12 +3,11 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.ActivityMovieBinding
@@ -38,6 +37,13 @@ class MovieActivity : AppCompatActivity() {
             navController,
             AppBarConfiguration(navController.graph)
         )
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.appbar.visibility = when (destination.id) {
+                R.id.fragmentMovieList -> View.VISIBLE
+                else -> View.GONE
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
