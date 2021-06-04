@@ -68,4 +68,9 @@
         <item name="colorAccent">?colorSecondary</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="ToolbarStyle" parent="@style/Widget.MaterialComponents.Toolbar">
+        <item name="titleTextColor">@android:color/white</item>
+    </style>
 </resources>

@@ -2,15 +2,19 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsetsController
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.ActivityMovieBinding
+import com.timgortworst.cleanarchitecture.presentation.extension.setLightStatusBar
+import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,16 +36,20 @@ class MovieActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
         navController = (navHostFragment as NavHostFragment).navController
 
-        binding.collapsingToolbarLayout.setupWithNavController(
-            binding.toolbar,
-            navController,
-            AppBarConfiguration(navController.graph)
-        )
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.appbar.visibility = when (destination.id) {
-                R.id.fragmentMovieList -> View.VISIBLE
-                else -> View.GONE
+            when (destination.id) {
+                R.id.fragmentMovieList -> setTranslucentStatus(false)
+                R.id.fragmentMovieDetails -> setTranslucentStatus(true)
+            }
+
+            when (resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                Configuration.UI_MODE_NIGHT_YES -> setLightStatusBar(false)
+                else -> {
+                    when (destination.id) {
+                        R.id.fragmentMovieList -> setLightStatusBar(true)
+                        R.id.fragmentMovieDetails -> setLightStatusBar(false)
+                    }
+                }
             }
         }
     }
