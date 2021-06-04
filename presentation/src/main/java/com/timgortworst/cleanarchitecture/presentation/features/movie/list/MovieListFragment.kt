@@ -30,39 +30,31 @@ import dagger.hilt.android.AndroidEntryPoint
 class MovieListFragment : Fragment() {
     private val listViewModel by viewModels<MovieListViewModel>()
     private lateinit var adapter: MovieListAdapter
-    private lateinit var collapsingToolbarLayout: CollapsingToolbarLayout
-    private lateinit var toolbar: MaterialToolbar
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var noResults: TextView
-    private lateinit var swiperefresh: SwipeRefreshLayout
+    private lateinit var binding: FragmentMovieListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
         exitTransition = inflater.inflateTransition(R.transition.fade_out)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = FragmentMovieListBinding.inflate(layoutInflater, container, false)
         sharedElementReturnTransition =
             TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-
-        // viewbinding can't be use with the ContextThemeWrapper
-        val contextThemeWrapper = ContextThemeWrapper(context, R.style.MyTheme_DayNight)
-        val localInflater = inflater.cloneInContext(contextThemeWrapper)
-        return localInflater.inflate(R.layout.fragment_movie_list, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupViews()
-
         val navController = findNavController()
-        collapsingToolbarLayout.setupWithNavController(
-            toolbar,
+        binding.collapsingToolbarLayout.setupWithNavController(
+            binding.toolbar,
             navController,
             AppBarConfiguration(navController.graph)
         )
@@ -71,16 +63,16 @@ class MovieListFragment : Fragment() {
         observeUI()
 
         postponeEnterTransition()
-        recyclerView.doOnPreDraw { startPostponedEnterTransition() }
+        binding.recyclerView.doOnPreDraw { startPostponedEnterTransition() }
     }
 
     private fun observeUI() {
         listViewModel.movies.observe(viewLifecycleOwner, { response ->
             response?.let {
                 if (it is Error) {
-                    noResults.visibility = View.VISIBLE
+                    binding.noResults.visibility = View.VISIBLE
                 } else if(it is State.Success) {
-                    noResults.visibility = View.GONE
+                    binding.noResults.visibility = View.GONE
                     adapter.addMoviesToList(it.data.toMutableList())
                 }
             }
@@ -107,19 +99,10 @@ class MovieListFragment : Fragment() {
             findNavController().navigate(directions, extras)
         }
 
-        recyclerView.apply {
+        binding.recyclerView.apply {
             layoutManager = GridLayoutManager(activity, columns, orientation, false)
             adapter = this@MovieListFragment.adapter
             addItemDecoration(GridMarginDecoration(columns, padding))
         }
-    }
-
-    private fun setupViews() {
-        collapsingToolbarLayout = requireView().findViewById(R.id.collapsing_toolbar_layout)
-        toolbar = requireView().findViewById(R.id.toolbar)
-        collapsingToolbarLayout = requireView().findViewById(R.id.collapsing_toolbar_layout)
-        toolbar = requireView().findViewById(R.id.toolbar)
-        recyclerView = requireView().findViewById(R.id.recyclerView)
-        noResults = requireView().findViewById(R.id.no_results)
     }
 }
