@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * Decoration for adding margin between blocks when used with a grid layout.
  */
-class InnerGridMarginRvItemDecoration(
+class GridMarginDecoration(
     private val spanCount: Int,
     private val spacing: Int
 ) : RecyclerView.ItemDecoration() {

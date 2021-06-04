@@ -4,18 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
-import com.squareup.picasso.Picasso
-import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES
-import com.timgortworst.cleanarchitecture.data.BuildConfig.BASE_URL_IMAGES_HIGH_RES
+import com.bumptech.glide.Glide
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
+
 
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
@@ -25,8 +24,8 @@ class MovieDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = TransitionInflater.from(context)
-            .inflateTransition(android.R.transition.move)
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.fade_in)
     }
 
     override fun onCreateView(
@@ -34,16 +33,19 @@ class MovieDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMovieDetailsBinding.inflate(layoutInflater)
+        binding = FragmentMovieDetailsBinding.inflate(layoutInflater, container, false)
+        sharedElementEnterTransition = TransitionInflater.from(context)
+                .inflateTransition(android.R.transition.move)
+        val delay = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+        postponeEnterTransition(delay, TimeUnit.MILLISECONDS)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        ViewCompat.setTransitionName(binding.movieDetailsImage, args.movieId.toString())
-
-//        loadImage(BASE_URL_IMAGES.plus(args.moviePoster))
+        Glide.with(this).load(args.uri).into( binding.movieDetailsImage)
+        binding.movieDetailsImage.transitionName = args.uri
 
         observeUI()
 
@@ -65,8 +67,6 @@ class MovieDetailsFragment : Fragment() {
         binding.movieDetailsReleaseDate.text =
             getString(R.string.movie_detail_release_date, movieDetails.releaseDate)
         binding.movieDetailsOverview.text = movieDetails.overview
-
-        loadImage(BASE_URL_IMAGES_HIGH_RES.plus(movieDetails.posterPath))
     }
 
     private fun presentError(errorMessage: Int) {
@@ -74,11 +74,4 @@ class MovieDetailsFragment : Fragment() {
         binding.errorMessage.text =
             getString(R.string.no_internet_placeholder_text, getString(errorMessage))
     }
-
-    private fun loadImage(url: String) = Picasso.get().load(url)
-        .noPlaceholder()
-        .noFade()
-        .centerCrop()
-        .fit()
-        .into(binding.movieDetailsImage)
 }

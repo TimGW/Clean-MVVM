@@ -11,14 +11,11 @@
         android:label="@string/movie_list_toolbar_title"
         tools:layout="@layout/fragment_movie_list">
 
+        <!-- don't use animations here.
+        These are handeld by the Transition Framework-->
         <action
             android:id="@+id/show_movie_details"
-            app:destination="@id/fragmentMovieDetails"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out"
-            app:popUpTo="@id/fragmentMovieList"/>
+            app:destination="@id/fragmentMovieDetails" />
 
     </fragment>
 
@@ -33,7 +30,7 @@
             app:argType="integer" />
 
         <argument
-            android:name="moviePoster"
+            android:name="uri"
             app:argType="string" />
 
     </fragment>

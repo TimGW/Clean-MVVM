@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.transition.TransitionInflater
+import com.timgortworst.cleanarchitecture.domain.model.state.State
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
@@ -18,15 +21,22 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
     private val listViewModel by viewModels<MovieListViewModel>()
-    private lateinit var movieAdapter: MovieListAdapter
+    private lateinit var adapter: MovieListAdapter
     private lateinit var binding: FragmentMovieListBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        exitTransition = inflater.inflateTransition(R.transition.fade_out)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMovieListBinding.inflate(layoutInflater)
+        binding = FragmentMovieListBinding.inflate(layoutInflater, container, false)
+        sharedElementReturnTransition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         return binding.root
     }
 
@@ -36,23 +46,24 @@ class MovieListFragment : Fragment() {
         setupMovieList()
         observeUI()
 
-        listViewModel.fetchMovies()
+        postponeEnterTransition()
+        binding.recyclerView.doOnPreDraw { startPostponedEnterTransition() }
     }
 
     private fun observeUI() {
-        listViewModel.movie.observe(viewLifecycleOwner, Observer { response ->
+        listViewModel.movies.observe(viewLifecycleOwner, { response ->
             response?.let {
-                if (it.isEmpty()) {
+                if (it is Error) {
                     binding.noResults.visibility = View.VISIBLE
-                } else {
+                } else if(it is State.Success) {
                     binding.noResults.visibility = View.GONE
-                    movieAdapter.addMoviesToList(it.toMutableList())
+                    adapter.addMoviesToList(it.data.toMutableList())
                 }
             }
         })
 
-        listViewModel.loading.observe(viewLifecycleOwner, Observer {
-            binding.swiperefresh.isRefreshing = it
+        listViewModel.loading.observe(viewLifecycleOwner, {
+//            binding.swiperefresh.isRefreshing = it
         })
 
         listViewModel.error.observe(viewLifecycleOwner, EventObserver {
@@ -63,29 +74,19 @@ class MovieListFragment : Fragment() {
     private fun setupMovieList() {
         val columns = resources.getInteger(R.integer.gallery_columns)
         val orientation = resources.getInteger(R.integer.gallery_orientation)
+        val padding = resources.getDimension(R.dimen.default_padding).toInt()
 
-        binding.movieList.addItemDecoration(InnerGridMarginRvItemDecoration(columns,
-            resources.getDimension(R.dimen.default_padding).toInt()))
-
-        movieAdapter = MovieListAdapter(mutableListOf()) { view, movie ->
-            view.findNavController().navigate(
-                MovieListFragmentDirections.showMovieDetails(
-                    movie.id,
-                    movie.posterPath.orEmpty()
-                )
-            )
+        adapter = MovieListAdapter { movie, imageView ->
+            val directions =
+                MovieListFragmentDirections.showMovieDetails(movie.id, movie.highResImage)
+            val extras = FragmentNavigatorExtras(imageView to movie.highResImage)
+            findNavController().navigate(directions, extras)
         }
 
-
-        binding.movieList.apply {
-            this.adapter = movieAdapter
-            this.layoutManager = GridLayoutManager(activity, columns, orientation, false)
-
-//            postponeEnterTransition()
-//            viewTreeObserver.addOnPreDrawListener {
-//                startPostponedEnterTransition()
-//                true
-//            }
+        binding.recyclerView.apply {
+            layoutManager = GridLayoutManager(activity, columns, orientation, false)
+            adapter = this@MovieListFragment.adapter
+            addItemDecoration(GridMarginDecoration(columns, padding))
         }
     }
 }

@@ -20,6 +20,11 @@ class GetMoviesUseCaseImpl(
                     val mappedResult = response.data
                             .filterNot { it.adult }
                             .sortedBy { it.popularity }
+                            .map {
+                                it.lowResImage = "https://image.tmdb.org/t/p/w185/".plus(it.posterPath)
+                                it.highResImage = "https://image.tmdb.org/t/p/original/".plus(it.posterPath)
+                                it
+                            }
 
                     State.Success(mappedResult)
                 }

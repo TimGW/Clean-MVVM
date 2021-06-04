@@ -27,16 +27,12 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "BASE_URL", '"https://api.themoviedb.org/3/"'
-            buildConfigField "String", "BASE_URL_IMAGES", '"https://image.tmdb.org/t/p/w185/"'
-            buildConfigField "String", "BASE_URL_IMAGES_HIGH_RES", '"https://image.tmdb.org/t/p/original/"'
             buildConfigField "String", "API_KEY", apiKeyProperties["THEMOVIEDB_API_KEY"]
         }
 
         release {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "BASE_URL", '"https://api.themoviedb.org/3/"'
-            buildConfigField "String", "BASE_URL_IMAGES", '"https://image.tmdb.org/t/p/w185/"'
-            buildConfigField "String", "BASE_URL_IMAGES_HIGH_RES", '"https://image.tmdb.org/t/p/original/"'
             buildConfigField "String", "API_KEY", apiKeyProperties["THEMOVIEDB_API_KEY"]
         }
     }
