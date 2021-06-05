@@ -14,6 +14,14 @@ class MovieListAdapter(
 ) : RecyclerView.Adapter<MovieListAdapter.ViewHolder>() {
     private val movieList = mutableListOf<Movie>()
 
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return movieList[position].id.toLong()
+    }
+
     override fun getItemCount() = movieList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
