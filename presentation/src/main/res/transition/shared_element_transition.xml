@@ -8,10 +8,9 @@
         <target android:excludeId="@android:id/navigationBarBackground" />
     </targets>
 
-    <changeBounds android:interpolator="@android:interpolator/fast_out_slow_in" />
+    <changeBounds android:interpolator="@android:interpolator/accelerate_decelerate" />
     <changeTransform />
     <changeClipBounds />
-<!--    <changeImageTransform />-->
 
 </transitionSet>
 

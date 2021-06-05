@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,11 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.transition.TransitionInflater
-import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.appbar.MaterialToolbar
 import com.timgortworst.cleanarchitecture.domain.model.state.State
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
@@ -35,7 +29,7 @@ class MovieListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
-        exitTransition = inflater.inflateTransition(R.transition.fade_out)
+        exitTransition = inflater.inflateTransition(android.R.transition.fade)
     }
 
     override fun onCreateView(
@@ -44,13 +38,14 @@ class MovieListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMovieListBinding.inflate(layoutInflater, container, false)
-        sharedElementReturnTransition =
-            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementReturnTransition = TransitionInflater.from(context)
+                .inflateTransition(R.transition.shared_element_transition)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
 
         val navController = findNavController()
         binding.collapsingToolbarLayout.setupWithNavController(
@@ -61,9 +56,6 @@ class MovieListFragment : Fragment() {
 
         setupMovieList()
         observeUI()
-
-        postponeEnterTransition()
-        binding.recyclerView.doOnPreDraw { startPostponedEnterTransition() }
     }
 
     private fun observeUI() {
@@ -76,6 +68,7 @@ class MovieListFragment : Fragment() {
                     adapter.addMoviesToList(it.data.toMutableList())
                 }
             }
+            binding.recyclerView.doOnPreDraw { startPostponedEnterTransition() }
         })
 
         listViewModel.loading.observe(viewLifecycleOwner, {

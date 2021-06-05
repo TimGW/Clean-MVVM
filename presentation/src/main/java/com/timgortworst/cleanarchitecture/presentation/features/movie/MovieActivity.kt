@@ -3,11 +3,7 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.WindowInsetsController
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment

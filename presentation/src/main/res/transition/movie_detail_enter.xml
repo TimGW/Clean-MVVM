@@ -7,4 +7,11 @@
             <target android:targetId="@id/movie_details_container" />
         </targets>
     </fade>
+
+    <targets>
+        <target android:excludeId="@id/appbar" />
+        <target android:excludeId="@android:id/statusBarBackground"/>
+        <target android:excludeId="@android:id/navigationBarBackground"/>
+        <target android:excludeId="@id/movie_details_gradient" />
+    </targets>
 </transitionSet>
