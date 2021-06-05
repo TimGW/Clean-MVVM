@@ -25,7 +25,7 @@
 
     <dimen name="loading_line_height">20dp</dimen>
     <dimen name="default_padding">8dp</dimen>
-    <dimen name="scrim_visible_height_trigger">150dp</dimen>
+    <dimen name="scrim_visible_height_trigger">100dp</dimen>
 
     <integer name="gallery_columns">3</integer>
     <integer name="gallery_orientation">1</integer>

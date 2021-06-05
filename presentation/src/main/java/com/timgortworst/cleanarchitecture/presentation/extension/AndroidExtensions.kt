@@ -1,13 +1,11 @@
 package com.timgortworst.cleanarchitecture.presentation.extension
 
 import android.app.Activity
-import android.graphics.Color
-import android.os.Build
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowInsetsController
 import android.view.WindowManager
+import android.view.animation.*
 import com.google.android.material.snackbar.Snackbar
+
 
 fun View.snackbar(
     message: String = "",
@@ -23,37 +21,42 @@ fun View.snackbar(
     return snackbar
 }
 
-fun Activity.setLightStatusBar(isLightStatusBar: Boolean) {
-    if (isLightStatusBar) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance(
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                } else {
-                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                }
-        }
-    } else {
-        window.insetsController?.setSystemBarsAppearance(
-            0,
-            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-        )
-    }
+fun Activity.setTranslucentStatus(isTranslucent: Boolean) {
+    val flag = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+    val flags = window.attributes.flags
+
+    // guard to prevent multiple calls when flag is already set or cleared
+    if (((flags and flag) != 0 && isTranslucent) ||
+        ((flags and flag) == 0 && !isTranslucent)
+    ) return
+
+    if (isTranslucent) window.setFlags(flag, flag) else window.clearFlags(flag)
 }
 
-fun Activity.setTranslucentStatus(isTranslucent: Boolean) {
-    if (isTranslucent) {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-        )
-    } else {
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+fun View.animateSlideFade(duration: Long, visibility: Int) {
+    val animSet = AnimationSet(true).apply {
+        interpolator = LinearInterpolator()
+        fillAfter = true
+        this.duration = duration
     }
+
+    val translateAnim = if (visibility == View.VISIBLE){
+        TranslateAnimation(0, 0f, 0, 0f,
+            TranslateAnimation.RELATIVE_TO_SELF, 1f,
+            TranslateAnimation.RELATIVE_TO_SELF, 0f)
+    } else {
+        TranslateAnimation(0, 0f, 0, 0f,
+            TranslateAnimation.RELATIVE_TO_SELF, 0f,
+            TranslateAnimation.RELATIVE_TO_SELF, 1f)
+    }
+
+    val alphaAnimation = if (visibility == View.VISIBLE){
+        AlphaAnimation(0f, 1f)
+    } else {
+        AlphaAnimation(1f, 0f)
+    }
+
+    animSet.addAnimation(translateAnim)
+    animSet.addAnimation(alphaAnimation)
+    startAnimation(animSet)
 }

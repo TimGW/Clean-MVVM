@@ -12,12 +12,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.transition.Transition
 import androidx.transition.TransitionInflater
-import com.google.android.material.transition.MaterialFadeThrough
+import androidx.transition.TransitionListenerAdapter
 import com.timgortworst.cleanarchitecture.domain.model.state.State
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
-import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
 import com.timgortworst.cleanarchitecture.presentation.model.EventObserver
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +41,7 @@ class MovieListFragment : Fragment() {
     ): View {
         binding = FragmentMovieListBinding.inflate(layoutInflater, container, false)
         sharedElementReturnTransition = TransitionInflater.from(context)
-                .inflateTransition(R.transition.shared_element_transition)
+            .inflateTransition(R.transition.shared_element_transition)
         return binding.root
     }
 
@@ -58,6 +58,11 @@ class MovieListFragment : Fragment() {
 
         setupMovieList()
         observeUI()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.collapsingToolbarLayout.visibility = View.VISIBLE
     }
 
     private fun observeUI() {
@@ -88,8 +93,15 @@ class MovieListFragment : Fragment() {
         val padding = resources.getDimension(R.dimen.default_padding).toInt()
 
         adapter = MovieListAdapter { movie, imageView ->
+            // this prevents a bug where the toolbar title already has the name of the next fragment
+            binding.collapsingToolbarLayout.visibility = View.INVISIBLE
+
             val directions =
-                MovieListFragmentDirections.showMovieDetails(movie.title, movie.id, movie.highResImage)
+                MovieListFragmentDirections.showMovieDetails(
+                    movie.title,
+                    movie.id,
+                    movie.highResImage
+                )
             val extras = FragmentNavigatorExtras(imageView to movie.highResImage)
             findNavController().navigate(directions, extras)
         }

@@ -5,7 +5,6 @@
     <fade android:fadingMode="fade_in" />
 
     <targets>
-        <target android:excludeId="@id/appbar" />
         <target android:excludeId="@android:id/statusBarBackground"/>
         <target android:excludeId="@android:id/navigationBarBackground"/>
     </targets>

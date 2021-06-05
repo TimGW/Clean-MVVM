@@ -24,19 +24,45 @@ import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
+import com.timgortworst.cleanarchitecture.presentation.extension.animateSlideFade
 import dagger.hilt.android.AndroidEntryPoint
-
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
     private val viewModel by viewModels<MovieDetailViewModel>()
     private val args: MovieDetailsFragmentArgs by navArgs()
     private lateinit var binding: FragmentMovieDetailsBinding
-    private val appBarScrollListener = AppBarLayout.OnOffsetChangedListener { _, offset ->
-        if (offset < -resources.getDimension(R.dimen.scrim_visible_height_trigger)) {
-            requireActivity().setTranslucentStatus(false)
-        } else {
-            requireActivity().setTranslucentStatus(true)
+    private var isCollapsedTitleVisible = false
+    private val animTime by lazy {
+        resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+    }
+    private val appBarScrollListener = AppBarLayout.OnOffsetChangedListener { layout, offset ->
+        binding.expandedTitle.alpha = (1 - abs(offset).toFloat() / layout.totalScrollRange.toFloat())
+
+        when {
+            // fully collapsed
+            abs(offset) == layout.totalScrollRange -> {
+                requireActivity().setTranslucentStatus(false)
+
+                if(!isCollapsedTitleVisible) {
+                    binding.collapsedTitle.animateSlideFade(animTime, View.VISIBLE)
+                    isCollapsedTitleVisible = true
+                }
+            }
+
+            // fully expanded
+            offset == 0 -> { /** do nothing **/ }
+
+            // scrolling
+            else -> {
+                requireActivity().setTranslucentStatus(true)
+
+                if (isCollapsedTitleVisible) {
+                    binding.collapsedTitle.animateSlideFade(animTime, View.INVISIBLE)
+                    isCollapsedTitleVisible = false
+                }
+            }
         }
     }
 
@@ -110,7 +136,8 @@ class MovieDetailsFragment : Fragment() {
         }
 
         binding.movieDetailsOverview.text = res
-        binding.toolbar.title = movieDetails.title
+        binding.expandedTitle.text = args.pageTitle
+        binding.collapsedTitle.text = args.pageTitle
     }
 
     private fun presentError(errorMessage: Int) {
