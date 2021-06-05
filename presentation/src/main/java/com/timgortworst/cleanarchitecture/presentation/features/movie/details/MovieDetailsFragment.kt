@@ -82,7 +82,6 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun presentMovieDetails(movieDetails: MovieDetails) {
-        binding.movieDetailsTitle.text = movieDetails.title
         binding.movieDetailsReleaseDate.text =
             getString(R.string.movie_detail_release_date, movieDetails.releaseDate)
         binding.movieDetailsOverview.text = movieDetails.overview

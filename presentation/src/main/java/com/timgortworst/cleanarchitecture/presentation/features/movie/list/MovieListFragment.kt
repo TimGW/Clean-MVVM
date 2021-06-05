@@ -94,7 +94,7 @@ class MovieListFragment : Fragment() {
 
         adapter = MovieListAdapter { movie, imageView ->
             val directions =
-                MovieListFragmentDirections.showMovieDetails(movie.id, movie.highResImage)
+                MovieListFragmentDirections.showMovieDetails(movie.title, movie.id, movie.highResImage)
             val extras = FragmentNavigatorExtras(imageView to movie.highResImage)
             findNavController().navigate(directions, extras)
         }

@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_movie_list">
 
         <!-- don't use animations here.
-        These are handeld by the Transition Framework-->
+        These are handled by the Transition Framework-->
         <action
             android:id="@+id/show_movie_details"
             app:destination="@id/fragmentMovieDetails" />
@@ -22,8 +22,12 @@
     <fragment
         android:id="@+id/fragmentMovieDetails"
         android:name="com.timgortworst.cleanarchitecture.presentation.features.movie.details.MovieDetailsFragment"
-        android:label="@string/movie_details_toolbar_title"
+        android:label="{pageTitle}"
         tools:layout="@layout/fragment_movie_details">
+
+        <argument
+            android:name="pageTitle"
+            app:argType="string" />
 
         <argument
             android:name="movieId"
