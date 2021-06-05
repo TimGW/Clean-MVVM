@@ -3,7 +3,6 @@
     <targets>
         <!-- if using a custom Toolbar container, specify the ID of the AppBarLayout -->
         <target android:excludeId="@id/appbar" />
-        <target android:excludeId="@id/movie_details_gradient" />
         <target android:excludeId="@android:id/statusBarBackground" />
         <target android:excludeId="@android:id/navigationBarBackground" />
     </targets>
@@ -11,6 +10,7 @@
     <changeBounds android:interpolator="@android:interpolator/accelerate_decelerate" />
     <changeTransform />
     <changeClipBounds />
+<!--    <changeImageTransform />-->
 
 </transitionSet>
 

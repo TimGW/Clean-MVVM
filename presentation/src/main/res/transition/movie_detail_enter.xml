@@ -2,16 +2,11 @@
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
     android:transitionOrdering="together">
     <slide android:slideEdge="bottom" />
-    <fade android:fadingMode="fade_in">
-        <targets>
-            <target android:targetId="@id/movie_details_container" />
-        </targets>
-    </fade>
+    <fade android:fadingMode="fade_in" />
 
     <targets>
         <target android:excludeId="@id/appbar" />
         <target android:excludeId="@android:id/statusBarBackground"/>
         <target android:excludeId="@android:id/navigationBarBackground"/>
-        <target android:excludeId="@id/movie_details_gradient" />
     </targets>
 </transitionSet>

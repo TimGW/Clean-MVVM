@@ -12,14 +12,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.transition.Transition
 import androidx.transition.TransitionInflater
+import androidx.transition.TransitionListenerAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.google.android.material.appbar.AppBarLayout
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieDetailsBinding
+import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -28,12 +32,19 @@ class MovieDetailsFragment : Fragment() {
     private val viewModel by viewModels<MovieDetailViewModel>()
     private val args: MovieDetailsFragmentArgs by navArgs()
     private lateinit var binding: FragmentMovieDetailsBinding
+    private val appBarScrollListener = AppBarLayout.OnOffsetChangedListener { _, offset ->
+        if (offset < -resources.getDimension(R.dimen.scrim_visible_height_trigger)) {
+            requireActivity().setTranslucentStatus(false)
+        } else {
+            requireActivity().setTranslucentStatus(true)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.movie_detail_enter)
-        returnTransition = inflater.inflateTransition(R.transition.movie_detail_exit)
+        returnTransition = inflater.inflateTransition(android.R.transition.fade)
     }
 
     override fun onCreateView(
@@ -67,6 +78,18 @@ class MovieDetailsFragment : Fragment() {
         viewModel.fetchMovieDetails(args.movieId)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        binding.appbar.addOnOffsetChangedListener(appBarScrollListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        binding.appbar.removeOnOffsetChangedListener(appBarScrollListener)
+    }
+
     private fun observeUI() {
         viewModel.movies.observe(viewLifecycleOwner) { presentMovieDetails(it) }
         viewModel.loading.observe(viewLifecycleOwner) {
@@ -80,7 +103,13 @@ class MovieDetailsFragment : Fragment() {
     private fun presentMovieDetails(movieDetails: MovieDetails) {
         binding.movieDetailsReleaseDate.text =
             getString(R.string.movie_detail_release_date, movieDetails.releaseDate)
-        binding.movieDetailsOverview.text = movieDetails.overview
+
+        var res = ""
+        repeat(50) {
+            res = res.plus(movieDetails.overview)
+        }
+
+        binding.movieDetailsOverview.text = res
         binding.toolbar.title = movieDetails.title
     }
 
@@ -93,6 +122,11 @@ class MovieDetailsFragment : Fragment() {
     private fun setSharedElementTransition() {
         sharedElementEnterTransition = TransitionInflater.from(context)
             .inflateTransition(R.transition.shared_element_transition)
+            .addListener(object : TransitionListenerAdapter() {
+                override fun onTransitionEnd(transition: Transition) {
+                    exitTransition = null
+                }
+            })
     }
 
     private fun startEnterTransitionAfterLoadingImage(uri: String, imageView: ImageView) {
