@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
-    android:transitionOrdering="together">
-    <slide android:slideEdge="bottom" />
-    <fade android:fadingMode="fade_in" />
-
-    <targets>
-        <target android:excludeId="@id/appbar" />
-        <target android:excludeId="@android:id/statusBarBackground"/>
-        <target android:excludeId="@android:id/navigationBarBackground"/>
-    </targets>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
+    <slide android:slideEdge="bottom">
+        <targets>
+            <target android:targetId="@id/movie_details_container" />
+        </targets>
+    </slide>
+    <fade/>
 </transitionSet>

@@ -9,17 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
-import com.google.android.material.transition.MaterialFadeThrough
 import com.timgortworst.cleanarchitecture.domain.model.state.State
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
-import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
-import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
-import com.timgortworst.cleanarchitecture.presentation.model.EventObserver
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,36 +43,21 @@ class MovieListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
-        val navController = findNavController()
-        binding.collapsingToolbarLayout.setupWithNavController(
-            binding.toolbar,
-            navController,
-            AppBarConfiguration(navController.graph)
-        )
-
         setupMovieList()
         observeUI()
+
+        binding.recyclerView.doOnPreDraw { startPostponedEnterTransition() }
     }
 
     private fun observeUI() {
-        listViewModel.movies.observe(viewLifecycleOwner, { response ->
-            response?.let {
-                if (it is Error) {
-                    binding.noResults.visibility = View.VISIBLE
-                } else if(it is State.Success) {
-                    binding.noResults.visibility = View.GONE
-                    adapter.addMoviesToList(it.data.toMutableList())
-                }
+        listViewModel.movies.observe(viewLifecycleOwner, {
+            binding.noResults.visibility = View.GONE
+            binding.swiperefresh.isRefreshing = false
+            when (it) {
+                is State.Error -> binding.noResults.visibility = View.VISIBLE
+                State.Loading -> binding.swiperefresh.isRefreshing = true
+                is State.Success -> adapter.addMoviesToList(it.data.toMutableList())
             }
-            binding.recyclerView.doOnPreDraw { startPostponedEnterTransition() }
-        })
-
-        listViewModel.loading.observe(viewLifecycleOwner, {
-//            swiperefresh.isRefreshing = it
-        })
-
-        listViewModel.error.observe(viewLifecycleOwner, EventObserver {
-            view?.snackbar(it)
         })
     }
 
