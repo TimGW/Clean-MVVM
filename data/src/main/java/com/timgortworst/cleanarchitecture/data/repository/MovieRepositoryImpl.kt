@@ -13,6 +13,7 @@ import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 /**
  * Lazy cache repository for fetching videos from the network and storing them on disk
@@ -20,7 +21,7 @@ import kotlinx.coroutines.flow.map
  * @property remoteDataSourceMovie
  * @property localDataSourceMovie
  */
-class MovieRepositoryImpl(
+class MovieRepositoryImpl @Inject constructor(
     private val remoteDataSourceMovie: RemoteDataSourceMovie,
     private val localDataSourceMovie: LocalDataSourceMovie,
     private val errorHandler: ErrorHandler

@@ -1,35 +1,28 @@
 package com.timgortworst.cleanarchitecture.presentation.di
 
-import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
-import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
 import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCaseImpl
 import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesUseCaseImpl
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object UseCaseModule {
+abstract class UseCaseModule {
 
-    @Provides
+    @Binds
     @ViewModelScoped
-    fun provideGetMoviesUseCase(
-        movieRepository: MovieRepository,
-        errorHandler: ErrorHandler
-    ): GetMoviesUseCase {
-        return GetMoviesUseCaseImpl(movieRepository, errorHandler)
-    }
+    abstract fun provideGetMoviesUseCase(
+        getMoviesUseCaseImpl: GetMoviesUseCaseImpl
+    ): GetMoviesUseCase
 
-    @Provides
+    @Binds
     @ViewModelScoped
-    fun provideGetMovieDetailsUseCase(
-        movieRepository: MovieRepository
-    ): GetMovieDetailsUseCase {
-        return GetMovieDetailsUseCaseImpl(movieRepository)
-    }
+    abstract fun provideGetMovieDetailsUseCase(
+        getMovieDetailsUseCaseImpl: GetMovieDetailsUseCaseImpl
+    ): GetMovieDetailsUseCase
 }

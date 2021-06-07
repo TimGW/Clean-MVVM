@@ -7,8 +7,9 @@ import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class GetMoviesUseCaseImpl(
+class GetMoviesUseCaseImpl @Inject constructor(
     private val movieRepository: MovieRepository,
     private val errorHandler: ErrorHandler
 ) : GetMoviesUseCase {

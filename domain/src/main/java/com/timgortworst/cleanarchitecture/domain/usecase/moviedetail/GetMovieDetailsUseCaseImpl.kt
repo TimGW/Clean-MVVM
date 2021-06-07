@@ -3,8 +3,9 @@ package com.timgortworst.cleanarchitecture.domain.usecase.moviedetail
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.State
 import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
+import javax.inject.Inject
 
-class GetMovieDetailsUseCaseImpl(
+class GetMovieDetailsUseCaseImpl @Inject constructor(
     private val movieRepository: MovieRepository
 ) : GetMovieDetailsUseCase {
 
