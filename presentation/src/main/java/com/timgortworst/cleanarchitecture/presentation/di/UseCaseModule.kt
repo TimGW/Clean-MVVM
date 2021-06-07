@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.domain.di
+package com.timgortworst.cleanarchitecture.presentation.di
 
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
