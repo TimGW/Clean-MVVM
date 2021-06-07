@@ -26,4 +26,16 @@ class ErrorHandlerImpl @Inject constructor() : ErrorHandler {
             else -> ErrorEntity.Unknown()
         }
     }
+
+    override fun getMessage(errorEntity: ErrorEntity): String {
+        return when(errorEntity) {
+            is ErrorEntity.DatabaseError -> "error Message"
+            is ErrorEntity.HttpErrors.BadGateWay -> "error Message"
+            is ErrorEntity.HttpErrors.InternalServerError -> "error Message"
+            is ErrorEntity.HttpErrors.ResourceForbidden -> "error Message"
+            is ErrorEntity.HttpErrors.ResourceNotFound -> "error Message"
+            is ErrorEntity.NetworkException -> "error Message"
+            is ErrorEntity.Unknown -> "error Message"
+        }
+    }
 }

@@ -8,7 +8,7 @@ import com.timgortworst.cleanarchitecture.data.network.RemoteDataSourceMovie
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
-import com.timgortworst.cleanarchitecture.domain.model.state.State
+import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
@@ -42,18 +42,18 @@ class MovieRepositoryImpl @Inject constructor(
 
     }.asFlow().flowOn(Dispatchers.IO)
 
-    override suspend fun getMovieDetails(movieId: Int): State<MovieDetails> {
+    override suspend fun getMovieDetails(movieId: Int): Resource<MovieDetails> {
         return try {
             val apiResponse = remoteDataSourceMovie.getMovieDetails(movieId)
             val data = apiResponse.body()
 
             if (apiResponse.isSuccessful && data != null) {
-                State.Success(data.asDomainModel())
+                Resource.Success(data.asDomainModel())
             } else {
-                State.Error(errorHandler.getError(apiResponse.code()))
+                Resource.Error(errorHandler.getError(apiResponse.code()))
             }
         } catch (e: Throwable) {
-            State.Error(errorHandler.getError(e))
+            Resource.Error(errorHandler.getError(e))
         }
     }
 }

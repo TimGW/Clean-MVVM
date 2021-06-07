@@ -11,7 +11,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
-import com.timgortworst.cleanarchitecture.domain.model.state.State
+import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,9 +54,9 @@ class MovieListFragment : Fragment() {
             binding.noResults.visibility = View.GONE
             binding.swiperefresh.isRefreshing = false
             when (it) {
-                is State.Error -> binding.noResults.visibility = View.VISIBLE
-                State.Loading -> binding.swiperefresh.isRefreshing = true
-                is State.Success -> adapter.addMoviesToList(it.data.toMutableList())
+                is Resource.Error -> binding.noResults.visibility = View.VISIBLE
+                Resource.Loading -> binding.swiperefresh.isRefreshing = true
+                is Resource.Success -> adapter.addMoviesToList(it.data.toMutableList())
             }
         })
     }

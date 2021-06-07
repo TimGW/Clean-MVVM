@@ -23,30 +23,6 @@ fun View.snackbar(
     return snackbar
 }
 
-fun Activity.setLightStatusBar(isLightStatusBar: Boolean) {
-    if (isLightStatusBar) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance(
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                } else {
-                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                }
-        }
-    } else {
-        window.insetsController?.setSystemBarsAppearance(
-            0,
-            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-        )
-    }
-}
-
 fun Activity.setTranslucentStatus(isTranslucent: Boolean) {
     if (isTranslucent) {
         window.setFlags(

@@ -21,7 +21,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.google.android.material.appbar.AppBarLayout
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
-import com.timgortworst.cleanarchitecture.domain.model.state.State
+import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
@@ -91,9 +91,9 @@ class MovieDetailsFragment : Fragment() {
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.INVISIBLE
             when(it) {
-                is State.Error -> presentError(R.string.generic_error)
-                State.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is State.Success -> presentMovieDetails(it.data)
+                is Resource.Error -> presentError(R.string.generic_error)
+                Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is Resource.Success -> presentMovieDetails(it.data)
             }
         }
     }
