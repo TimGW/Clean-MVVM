@@ -13,6 +13,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,6 +28,11 @@ abstract class AppModule {
 
     @Binds
     abstract fun bindErrorHandler(errorHandlerImpl: ErrorHandlerImpl): ErrorHandler
+
+    @Binds
+    abstract fun provideAuthHeaderInterceptor(
+        authInterceptor: AuthHeaderInterceptor
+    ): Interceptor
 
     companion object {
 
@@ -46,13 +52,8 @@ abstract class AppModule {
         }
 
         @Provides
-        fun provideOkHttpClient(authInterceptor: AuthHeaderInterceptor): OkHttpClient {
-            return OkHttpClient().newBuilder().addInterceptor(authInterceptor).build()
-        }
-
-        @Provides
-        fun provideAuthHeaderInterceptor(): AuthHeaderInterceptor {
-            return AuthHeaderInterceptor(BuildConfig.API_KEY)
+        fun provideOkHttpClient(interceptor: Interceptor): OkHttpClient {
+            return OkHttpClient().newBuilder().addInterceptor(interceptor).build()
         }
     }
 }
