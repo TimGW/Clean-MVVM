@@ -10,12 +10,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
-    private val getMovieDetailsUseCase: GetMovieDetailsUseCase
+    private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val movieId = MutableLiveData<Int>()
     val movieDetails: LiveData<Resource<MovieDetails>> =
-        Transformations.switchMap(movieId) { movieId ->
+        savedStateHandle.getLiveData<Int>(STATE_ID_MOVIE).switchMap { movieId ->
             liveData {
                 when (val res =
                     getMovieDetailsUseCase.execute(GetMovieDetailsUseCaseImpl.Params(movieId))) {
@@ -31,6 +31,10 @@ class MovieDetailViewModel @Inject constructor(
         }
 
     fun setMovieId(movieId: Int) {
-        this.movieId.value = movieId
+        savedStateHandle[STATE_ID_MOVIE] = movieId
+    }
+
+    companion object {
+        private const val STATE_ID_MOVIE = "movieId"
     }
 }
