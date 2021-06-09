@@ -1,12 +1,9 @@
 package com.timgortworst.cleanarchitecture.presentation.extension
 
 import android.app.Activity
-import android.graphics.Color
-import android.os.Build
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowInsetsController
 import android.view.WindowManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 
 fun View.snackbar(
@@ -32,4 +29,10 @@ fun Activity.setTranslucentStatus(isTranslucent: Boolean) {
     } else {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     }
+}
+
+fun RecyclerView.addSingleScrollDirectionListener() {
+    val listener = SingleScrollDirectionListener()
+    addOnItemTouchListener(listener)
+    addOnScrollListener(listener)
 }
