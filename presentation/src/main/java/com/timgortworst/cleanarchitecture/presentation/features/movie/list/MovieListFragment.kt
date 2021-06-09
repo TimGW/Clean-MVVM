@@ -9,17 +9,22 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionInflater
+import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
+import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.MovieListAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.NestedRecyclerAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.HorizontalListMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
     private val listViewModel by viewModels<MovieListViewModel>()
-    private lateinit var adapter: MovieListAdapter
     private lateinit var binding: FragmentMovieListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,27 +61,49 @@ class MovieListFragment : Fragment() {
             when (it) {
                 is Resource.Error -> binding.noResults.visibility = View.VISIBLE
                 Resource.Loading -> binding.swiperefresh.isRefreshing = true
-                is Resource.Success -> adapter.addMoviesToList(it.data.toMutableList())
+                is Resource.Success -> setupAdapter(it.data)
             }
         })
     }
 
     private fun setupMovieList() {
-        val columns = resources.getInteger(R.integer.gallery_columns)
-        val orientation = resources.getInteger(R.integer.gallery_orientation)
-        val padding = resources.getDimension(R.dimen.default_padding).toInt()
-
-        adapter = MovieListAdapter { movie, imageView ->
-            val directions =
-                MovieListFragmentDirections.showMovieDetails(movie.title, movie.id, movie.highResImage)
-            val extras = FragmentNavigatorExtras(imageView to movie.highResImage)
-            findNavController().navigate(directions, extras)
-        }
+//        val orientation = resources.getInteger(R.integer.gallery_orientation)
+//        val padding = resources.getDimension(R.dimen.default_padding).toInt()
+//        val spanLookup = MovieListSpanSizeLookup(resources, concatAdapter)
+//        val gridLayoutManager = GridLayoutManager(
+//            activity, spanLookup.spanSize, orientation, false
+//        ).apply { spanSizeLookup = spanLookup }
 
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(activity, columns, orientation, false)
-            adapter = this@MovieListFragment.adapter
-            addItemDecoration(GridMarginDecoration(columns, padding))
+            layoutManager = LinearLayoutManager(requireContext())
+//            addItemDecoration(GridMarginDecoration(spanLookup, padding))
+            addSingleScrollDirectionListener()
         }
+    }
+
+    private fun setupAdapter(movies: List<Movie>) {
+        val padding = resources.getDimension(R.dimen.default_padding).toInt()
+        val itemDecoration = HorizontalListMarginDecoration(padding)
+
+        val movieListAdapter = MovieListAdapter(movies)
+        val nestedMovieList = NestedRecyclerAdapter(movieListAdapter, itemDecoration)
+        val concatAdapter = ConcatAdapter(nestedMovieList)
+        movieListAdapter.clickListener = { movie, view -> navigateToDetails(movie, view) }
+
+        if (binding.recyclerView.adapter == null) {
+            binding.recyclerView.adapter = concatAdapter
+        }
+    }
+
+    private fun navigateToDetails(movie: Movie, sharedView: View) {
+        val directions =
+            MovieListFragmentDirections.showMovieDetails(
+                movie.title,
+                movie.id,
+                movie.highResImage
+            )
+
+        val extras = FragmentNavigatorExtras(sharedView to movie.highResImage)
+        findNavController().navigate(directions, extras)
     }
 }
