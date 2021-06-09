@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
-import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListWrapperBinding
+import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListNestedBinding
 
 class NestedRecyclerAdapter<T : RecyclerView.Adapter<*>>(
     private val listItemAdapter: T,
@@ -31,7 +31,7 @@ class NestedRecyclerAdapter<T : RecyclerView.Adapter<*>>(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        MovieListWrapperBinding.inflate(
+        MovieListNestedBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -45,7 +45,7 @@ class NestedRecyclerAdapter<T : RecyclerView.Adapter<*>>(
     }
 
     inner class ViewHolder(
-        binding: MovieListWrapperBinding
+        binding: MovieListNestedBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         val rv = binding.recyclerView
         private val lm = LinearLayoutManager(rv.context, HORIZONTAL, false).apply {
