@@ -12,6 +12,7 @@ import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decor
 
 class NestedRecyclerAdapter<T : RecyclerView.Adapter<*>>(
     private val listItemAdapter: T,
+    private val itemDecoration: RecyclerView.ItemDecoration
 ) : RecyclerView.Adapter<NestedRecyclerAdapter<T>.ViewHolder>() {
     private val scrollStates: MutableMap<String, Parcelable?> = mutableMapOf()
     private val viewPool = RecyclerView.RecycledViewPool()
@@ -69,8 +70,7 @@ class NestedRecyclerAdapter<T : RecyclerView.Adapter<*>>(
             if (state != null) {
                 rv.layoutManager?.onRestoreInstanceState(state)
             } else {
-                val padding = rv.resources.getDimension(R.dimen.default_padding).toInt()
-                rv.addItemDecoration(HorizontalListMarginDecoration(padding))
+                rv.addItemDecoration(itemDecoration)
                 rv.layoutManager?.scrollToPosition(0)
             }
         }
