@@ -19,7 +19,7 @@ import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovie
 import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.MovieListAdapter
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.NestedRecyclerAdapter
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.HorizontalListMarginDecoration
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.NestedListMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -83,7 +83,7 @@ class MovieListFragment : Fragment() {
 
     private fun setupAdapter(movies: List<Movie>) {
         val padding = resources.getDimension(R.dimen.default_padding).toInt()
-        val itemDecoration = HorizontalListMarginDecoration(padding)
+        val itemDecoration = NestedListMarginDecoration(padding)
 
         val movieListAdapter = MovieListAdapter(movies)
         val nestedMovieList = NestedRecyclerAdapter(movieListAdapter, itemDecoration)

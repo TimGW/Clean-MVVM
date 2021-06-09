@@ -6,9 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
-import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListWrapperBinding
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.HorizontalListMarginDecoration
 
 class NestedRecyclerAdapter<T : RecyclerView.Adapter<*>>(
     private val listItemAdapter: T,
