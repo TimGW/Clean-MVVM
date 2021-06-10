@@ -75,6 +75,7 @@ class MovieDetailsFragment : Fragment() {
 
         observeUI()
         viewModel.setMovieId(args.movieId)
+        requireActivity().setTranslucentStatus(true)
     }
 
     override fun onResume() {
