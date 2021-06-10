@@ -4,21 +4,20 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
-import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListNestedBinding
-
-class NestedRecyclerAdapter(
-    private val movies: List<Movie>,
-    private val movieListAdapter: MovieListAdapter,
-    private val itemDecoration: RecyclerView.ItemDecoration,
-) : RecyclerView.Adapter<NestedRecyclerAdapter.ViewHolder>() {
+class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
+    private val items: List<T>,
+    private val itemAdapter: A,
+    private vararg val itemDecorations: RecyclerView.ItemDecoration,
+) : RecyclerView.Adapter<NestedRecyclerAdapter<T, A>.ViewHolder>() {
     private val scrollStates: MutableMap<String, Parcelable?> = mutableMapOf()
     private val viewPool = RecyclerView.RecycledViewPool()
 
     private fun getSectionID(position: Int): String {
-        return movies[position].id.toString()
+        return items[position].hashCode().toString()
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
@@ -36,10 +35,10 @@ class NestedRecyclerAdapter(
         )
     )
 
-    override fun getItemCount(): Int = if (movies.isEmpty()) 0 else 1
+    override fun getItemCount(): Int = if (items.isEmpty()) 0 else 1
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(movies)
+        holder.bind(items)
     }
 
     inner class ViewHolder(
@@ -48,14 +47,14 @@ class NestedRecyclerAdapter(
 
         val recyclerView = binding.recyclerView.apply {
             setRecycledViewPool(viewPool)
-            adapter = movieListAdapter
+            adapter = itemAdapter
             layoutManager = LinearLayoutManager(
                 binding.recyclerView.context, HORIZONTAL, false
             ).apply { initialPrefetchItemCount = 4 }
         }
 
-        fun bind(items: List<Movie>) {
-            movieListAdapter.submitList(items)
+        fun bind(items: List<T>) {
+            itemAdapter.submitList(items)
             restoreState()
         }
 
@@ -65,7 +64,7 @@ class NestedRecyclerAdapter(
             if (state != null) {
                 recyclerView.layoutManager?.onRestoreInstanceState(state)
             } else {
-                recyclerView.addItemDecoration(itemDecoration)
+                itemDecorations.forEach { recyclerView.addItemDecoration(it) }
                 recyclerView.layoutManager?.scrollToPosition(0)
             }
         }

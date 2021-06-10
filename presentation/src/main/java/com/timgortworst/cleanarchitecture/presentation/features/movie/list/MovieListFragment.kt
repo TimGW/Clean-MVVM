@@ -17,8 +17,8 @@ import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.MovieListAdapter
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.NestedRecyclerAdapter
+import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.*
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.NestedListMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,6 +52,7 @@ class MovieListFragment : Fragment() {
         observeUI()
 
         binding.recyclerView.doOnPreDraw { startPostponedEnterTransition() }
+        requireActivity().setTranslucentStatus(false)
     }
 
     private fun observeUI() {
@@ -85,14 +86,16 @@ class MovieListFragment : Fragment() {
         val padding = resources.getDimension(R.dimen.default_padding).toInt()
         val itemDecoration = NestedListMarginDecoration(padding)
 
-        val movieListAdapter = MovieListAdapter(movies)
-        val nestedMovieList = NestedRecyclerAdapter(movieListAdapter, itemDecoration)
-        val concatAdapter = ConcatAdapter(nestedMovieList)
-        movieListAdapter.clickListener = { movie, view -> navigateToDetails(movie, view) }
-
-        if (binding.recyclerView.adapter == null) {
-            binding.recyclerView.adapter = concatAdapter
+        val movieListAdapter = MovieListAdapter().apply {
+            clickListener = { movie, view -> navigateToDetails(movie, view) }
         }
+        val horizontalMovieListAdapter = NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration)
+        val headerAdapter = HeaderAdapter("Hello world")
+        val movieFeaturedAdapter = MovieFeaturedAdapter(movies.last())
+
+        binding.recyclerView.adapter = ConcatAdapter(
+            movieFeaturedAdapter, headerAdapter, horizontalMovieListAdapter
+        )
     }
 
     private fun navigateToDetails(movie: Movie, sharedView: View) {
