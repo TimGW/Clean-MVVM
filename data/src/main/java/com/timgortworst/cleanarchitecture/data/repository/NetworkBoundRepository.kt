@@ -1,5 +1,7 @@
 package com.timgortworst.cleanarchitecture.data.repository
 
+import androidx.annotation.MainThread
+import androidx.annotation.WorkerThread
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import kotlinx.coroutines.flow.*
@@ -16,28 +18,34 @@ abstract class NetworkBoundRepository<NETWORK, DOMAIN> {
 
     fun asFlow() = flow {
         emit(Resource.Loading)
-        emit(Resource.Success(fetchFromLocal().first())) // Emit Database content first
 
-        val apiResponse = fetchFromRemote()
-        val remotePosts = apiResponse.body()
+        try {
+            emit(Resource.Success(fetchFromLocal().first()))
 
-        if (apiResponse.isSuccessful && remotePosts != null) {
-            saveRemoteData(remotePosts)
-        } else {
-            emit(Resource.Error(getErrorHandler().getError(apiResponse.code())))
+            val apiResponse = fetchFromRemote()
+            val remoteResponse = apiResponse.body()
+
+            if (apiResponse.isSuccessful && remoteResponse != null) {
+                saveRemoteData(remoteResponse)
+            } else {
+                emit(Resource.Error(getErrorHandler().getError(apiResponse.code())))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(getErrorHandler().getError(e)))
+            e.printStackTrace()
         }
 
         emitAll(fetchFromLocal().map { Resource.Success(it) })
-    }.catch { e ->
-        emit(Resource.Error(getErrorHandler().getError(e)))
-        e.printStackTrace()
     }
 
     protected abstract suspend fun getErrorHandler() : ErrorHandler
 
+    @WorkerThread
     protected abstract suspend fun saveRemoteData(response: NETWORK)
 
+    @MainThread
     protected abstract fun fetchFromLocal(): Flow<DOMAIN>
 
+    @MainThread
     protected abstract suspend fun fetchFromRemote(): Response<NETWORK>
 }

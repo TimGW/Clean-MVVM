@@ -11,5 +11,5 @@ class MovieListViewModel @Inject constructor(
    getMoviesUseCase: GetMoviesUseCase
 ) : ViewModel() {
 
-    val movies = getMoviesUseCase.execute(Unit).asLiveData()
+    val movies = getMoviesUseCase.execute().asLiveData()
 }
