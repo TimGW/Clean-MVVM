@@ -41,11 +41,6 @@ class MovieListAdapter: ListAdapter<Movie, MovieListAdapter.ViewHolder>(DiffUtil
         holder.bind(getItem(position))
     }
 
-    private class DiffUtilMovieItem : DiffUtil.ItemCallback<Movie>() {
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie) = oldItem == newItem
-    }
-
     inner class ViewHolder(
         binding: MovieListItemNestedBinding
     ) : RecyclerView.ViewHolder(binding.root) {
