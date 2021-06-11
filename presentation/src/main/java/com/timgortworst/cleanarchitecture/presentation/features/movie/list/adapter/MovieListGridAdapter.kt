@@ -11,8 +11,8 @@ import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemBinding
 
-class MovieListAdapterGrid :
-    ListAdapter<Movie, MovieListAdapterGrid.ViewHolder>(DiffUtilMovieItem()) {
+class MovieListGridAdapter :
+    ListAdapter<Movie, MovieListGridAdapter.ViewHolder>(DiffUtilMovieItem()) {
     var clickListener: ((Movie, ImageView) -> Unit)? = null
 
     override fun getItemId(position: Int): Long {
