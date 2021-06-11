@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
+import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListNestedBinding
 class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
     private val items: List<T>,
@@ -17,8 +18,10 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
     private val viewPool = RecyclerView.RecycledViewPool()
 
     private fun getSectionID(position: Int): String {
-        return items[position].hashCode().toString()
+        return items.getOrNull(position)?.hashCode()?.toString().orEmpty()
     }
+
+    override fun getItemViewType(position: Int): Int = R.layout.movie_list_nested
 
     override fun onViewRecycled(holder: ViewHolder) {
         super.onViewRecycled(holder)
@@ -50,7 +53,10 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
             adapter = itemAdapter
             layoutManager = LinearLayoutManager(
                 binding.recyclerView.context, HORIZONTAL, false
-            ).apply { initialPrefetchItemCount = 4 }
+            ).apply {
+                initialPrefetchItemCount = 4
+                itemDecorations.forEach { addItemDecoration(it) }
+            }
         }
 
         fun bind(items: List<T>) {
@@ -64,7 +70,6 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
             if (state != null) {
                 recyclerView.layoutManager?.onRestoreInstanceState(state)
             } else {
-                itemDecorations.forEach { recyclerView.addItemDecoration(it) }
                 recyclerView.layoutManager?.scrollToPosition(0)
             }
         }
