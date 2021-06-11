@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
@@ -19,6 +19,8 @@ import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovie
 import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.*
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridMarginDecoration
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.NestedListMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,6 +28,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MovieListFragment : Fragment() {
     private val listViewModel by viewModels<MovieListViewModel>()
     private lateinit var binding: FragmentMovieListBinding
+    private val concatAdapter by lazy {
+        ConcatAdapter(ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,16 +73,14 @@ class MovieListFragment : Fragment() {
     }
 
     private fun setupMovieList() {
-//        val orientation = resources.getInteger(R.integer.gallery_orientation)
-//        val padding = resources.getDimension(R.dimen.default_padding).toInt()
-//        val spanLookup = MovieListSpanSizeLookup(resources, concatAdapter)
-//        val gridLayoutManager = GridLayoutManager(
-//            activity, spanLookup.spanSize, orientation, false
-//        ).apply { spanSizeLookup = spanLookup }
+        val padding = resources.getDimension(R.dimen.default_padding).toInt()
+        val spanLookup = MovieListSpanSizeLookup(resources, concatAdapter)
 
         binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-//            addItemDecoration(GridMarginDecoration(spanLookup, padding))
+            layoutManager = GridLayoutManager(activity, spanLookup.spanSize).apply {
+                spanSizeLookup = spanLookup
+            }
+            addItemDecoration(GridMarginDecoration(spanLookup, padding))
             addSingleScrollDirectionListener()
         }
     }
@@ -89,13 +92,20 @@ class MovieListFragment : Fragment() {
         val movieListAdapter = MovieListAdapter().apply {
             clickListener = { movie, view -> navigateToDetails(movie, view) }
         }
-        val horizontalMovieListAdapter = NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration)
-        val headerAdapter = HeaderAdapter("Hello world")
-        val movieFeaturedAdapter = MovieFeaturedAdapter(movies.last())
 
-        binding.recyclerView.adapter = ConcatAdapter(
-            movieFeaturedAdapter, headerAdapter, horizontalMovieListAdapter
-        )
+        concatAdapter.addAdapter(HeaderAdapter("Featured"))
+        concatAdapter.addAdapter(MovieFeaturedAdapter(movies.last()))
+        concatAdapter.addAdapter(HeaderAdapter("List"))
+        concatAdapter.addAdapter(NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration))
+        concatAdapter.addAdapter(HeaderAdapter("Grid"))
+        concatAdapter.addAdapter(MovieListAdapterGrid().apply { submitList(movies.take(6)) })
+        concatAdapter.addAdapter(HeaderAdapter("Featured"))
+        concatAdapter.addAdapter(MovieFeaturedAdapter(movies.last()))
+        concatAdapter.addAdapter(HeaderAdapter("List"))
+        concatAdapter.addAdapter(NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration))
+        concatAdapter.addAdapter(HeaderAdapter("Grid"))
+        concatAdapter.addAdapter(MovieListAdapterGrid().apply { submitList(movies.take(6)) })
+        binding.recyclerView.adapter = concatAdapter
     }
 
     private fun navigateToDetails(movie: Movie, sharedView: View) {

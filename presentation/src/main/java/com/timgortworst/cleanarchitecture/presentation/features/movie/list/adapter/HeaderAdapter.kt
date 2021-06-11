@@ -17,7 +17,7 @@ class HeaderAdapter(
 
     override fun getItemViewType(position: Int): Int = R.layout.movie_list_header
 
-    override fun getItemCount() = if (headerText.isNullOrEmpty()) 0 else 1
+    override fun getItemCount() = if (headerText.isBlank()) 0 else 1
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(headerText)
