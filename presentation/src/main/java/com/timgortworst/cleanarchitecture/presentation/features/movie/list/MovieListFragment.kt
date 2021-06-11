@@ -80,7 +80,7 @@ class MovieListFragment : Fragment() {
             layoutManager = GridLayoutManager(activity, spanLookup.spanSize).apply {
                 spanSizeLookup = spanLookup
             }
-            addItemDecoration(GridMarginDecoration(spanLookup, padding))
+            addItemDecoration(GridMarginDecoration(padding))
             addSingleScrollDirectionListener()
         }
     }
@@ -93,18 +93,18 @@ class MovieListFragment : Fragment() {
             clickListener = { movie, view -> navigateToDetails(movie, view) }
         }
 
+        concatAdapter.addAdapter(HeaderAdapter("Grid"))
+        concatAdapter.addAdapter(MovieListGridAdapter().apply { submitList(movies.take(11)) })
         concatAdapter.addAdapter(HeaderAdapter("Featured"))
-        concatAdapter.addAdapter(MovieFeaturedAdapter(movies.last()))
+        concatAdapter.addAdapter(MovieFeaturedAdapter(movies.first()))
         concatAdapter.addAdapter(HeaderAdapter("List"))
         concatAdapter.addAdapter(NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration))
-        concatAdapter.addAdapter(HeaderAdapter("Grid"))
-        concatAdapter.addAdapter(MovieListAdapterGrid().apply { submitList(movies.take(6)) })
         concatAdapter.addAdapter(HeaderAdapter("Featured"))
         concatAdapter.addAdapter(MovieFeaturedAdapter(movies.last()))
+        concatAdapter.addAdapter(HeaderAdapter("Grid"))
+        concatAdapter.addAdapter(MovieListGridAdapter().apply { submitList(movies.take(6)) })
         concatAdapter.addAdapter(HeaderAdapter("List"))
         concatAdapter.addAdapter(NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration))
-        concatAdapter.addAdapter(HeaderAdapter("Grid"))
-        concatAdapter.addAdapter(MovieListAdapterGrid().apply { submitList(movies.take(6)) })
         binding.recyclerView.adapter = concatAdapter
     }
 

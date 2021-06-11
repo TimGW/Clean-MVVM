@@ -5,7 +5,6 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/default_padding"
     android:clickable="true"
     android:focusable="true"
     app:cardCornerRadius="10dp">
@@ -17,7 +16,7 @@
         <ImageView
             android:id="@+id/featured_image"
             android:layout_width="0dp"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:foreground="@drawable/gradient_bottom"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
