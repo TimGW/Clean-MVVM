@@ -56,7 +56,10 @@ class MovieListFragment : Fragment() {
         setupMovieList()
         observeUI()
 
-        binding.recyclerView.doOnPreDraw { startPostponedEnterTransition() }
+        binding.recyclerView.doOnPreDraw {
+            startPostponedEnterTransition()
+            binding.recyclerView.invalidateItemDecorations()
+        }
         requireActivity().setTranslucentStatus(false)
     }
 

@@ -25,9 +25,8 @@ object AdapterFactory {
         return listOf(
             HeaderAdapter("Grid", MovieListSpanSizeLookup.FULL_WIDTH, padding),
             MovieListGridAdapter(MovieListSpanSizeLookup.COLUMNS_SINGLE, padding).apply {
-                submitList(
-                    movies.take(11)
-                )
+                submitList(movies.take(11))
+                clickListener = clickAction
             },
             HeaderAdapter("Featured", MovieListSpanSizeLookup.FULL_WIDTH, padding),
             MovieFeaturedAdapter(movies.first(), MovieListSpanSizeLookup.HALF_WIDTH, padding),
@@ -43,9 +42,8 @@ object AdapterFactory {
             MovieFeaturedAdapter(movies.last(), MovieListSpanSizeLookup.FULL_WIDTH, padding),
             HeaderAdapter("Grid", MovieListSpanSizeLookup.FULL_WIDTH, padding),
             MovieListGridAdapter(MovieListSpanSizeLookup.COLUMNS_SINGLE, padding).apply {
-                submitList(
-                    movies.take(6)
-                )
+                submitList(movies.take(6))
+                clickListener = clickAction
             },
             HeaderAdapter("List", MovieListSpanSizeLookup.FULL_WIDTH, padding),
             NestedRecyclerAdapter(
