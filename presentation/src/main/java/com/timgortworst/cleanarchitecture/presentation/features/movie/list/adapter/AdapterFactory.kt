@@ -32,12 +32,7 @@ object AdapterFactory {
             MovieFeaturedAdapter(movies.first(), MovieListSpanSizeLookup.HALF_WIDTH, padding),
             MovieFeaturedAdapter(movies.last(), MovieListSpanSizeLookup.HALF_WIDTH, padding),
             HeaderAdapter("List", MovieListSpanSizeLookup.FULL_WIDTH, padding),
-            NestedRecyclerAdapter(
-                movies,
-                movieListAdapter,
-                MovieListSpanSizeLookup.FULL_WIDTH,
-                itemDecoration
-            ),
+            NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration),
             HeaderAdapter("Featured", MovieListSpanSizeLookup.FULL_WIDTH, padding),
             MovieFeaturedAdapter(movies.last(), MovieListSpanSizeLookup.FULL_WIDTH, padding),
             HeaderAdapter("Grid", MovieListSpanSizeLookup.FULL_WIDTH, padding),
@@ -46,12 +41,7 @@ object AdapterFactory {
                 clickListener = clickAction
             },
             HeaderAdapter("List", MovieListSpanSizeLookup.FULL_WIDTH, padding),
-            NestedRecyclerAdapter(
-                movies,
-                movieListAdapter,
-                MovieListSpanSizeLookup.FULL_WIDTH,
-                itemDecoration
-            ),
+            NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration),
         )
     }
 }
