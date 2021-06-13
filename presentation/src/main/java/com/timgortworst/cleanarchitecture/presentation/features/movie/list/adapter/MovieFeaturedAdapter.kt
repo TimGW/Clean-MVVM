@@ -1,6 +1,8 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter
 
+import android.graphics.Rect
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,13 +13,13 @@ import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemFeaturedBinding
 
 class MovieFeaturedAdapter(
-    private val movie: Movie
-) : RecyclerView.Adapter<MovieFeaturedAdapter.ViewHolder>() {
+    private val movie: Movie,
+    private val spanSize: Int,
+    private val itemPadding: Int,
+) : BaseGridAdapter<MovieFeaturedAdapter.ViewHolder>() {
     var clickListener: ((Movie, ImageView) -> Unit)? = null
 
-    override fun getItemViewType(position: Int): Int {
-        return R.layout.movie_list_item_featured
-    }
+    override fun provideItemViewType() = R.layout.movie_list_item_featured
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -25,7 +27,16 @@ class MovieFeaturedAdapter(
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = 1
+    override fun getItemCount() = 1
+
+    override fun getSpanSize() = spanSize
+
+    override fun getItemOffset(parent: RecyclerView, view: View): Rect {
+        return Rect().apply {
+            left = itemPadding
+            right = itemPadding
+        }
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(movie)

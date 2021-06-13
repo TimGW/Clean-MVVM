@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class NestedListMarginDecoration(
+class NestedListItemDecoration(
     private val spacing: Int
 ) : RecyclerView.ItemDecoration() {
 

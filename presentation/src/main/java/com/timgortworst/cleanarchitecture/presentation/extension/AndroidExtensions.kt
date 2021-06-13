@@ -36,3 +36,12 @@ fun RecyclerView.addSingleScrollDirectionListener() {
     addOnItemTouchListener(listener)
     addOnScrollListener(listener)
 }
+
+fun RecyclerView.getRelativeItemPosition(
+    adapterPosition: Int,
+    viewType: Int
+): Int {
+    return generateSequence(adapterPosition - 1) { it.dec() }
+        .takeWhile { adapter?.getItemViewType(it) == viewType }
+        .count()
+}

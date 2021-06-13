@@ -1,29 +1,27 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration
 
-import android.content.res.Resources
 import androidx.recyclerview.widget.ConcatAdapter
-import com.timgortworst.cleanarchitecture.presentation.R
+import androidx.recyclerview.widget.GridLayoutManager
 
 class MovieListSpanSizeLookup(
-    resources: Resources,
-    private val adapter: ConcatAdapter,
-) : MaxSizeLookup() {
-    val spanSize = resources.getInteger(R.integer.gallery_columns)
+    private val adapter: ConcatAdapter
+) : GridLayoutManager.SpanSizeLookup() {
 
     override fun getSpanSize(position: Int): Int {
         val type = adapter.getItemViewType(position)
-        return if (
-            type == R.layout.movie_list_header ||
-            type == R.layout.movie_list_item_featured ||
-            type == R.layout.movie_list_nested
-        ) {
-            spanSize // take full width
-        } else {
-            1
+
+        adapter.adapters.forEachIndexed { index, adapter ->
+            if (type == adapter.getItemViewType(index)) {
+                return (adapter as? AdapterSpanSize)?.getSpanSize() ?: COLUMNS_SINGLE
+            }
         }
+        return COLUMNS_SINGLE
     }
 
-    override fun getMaxSpanSize(): Int {
-        return spanSize
+    companion object {
+        const val TOTAL_COLUMNS_GRID = 4
+        const val FULL_WIDTH = TOTAL_COLUMNS_GRID
+        const val HALF_WIDTH = FULL_WIDTH / 2
+        const val COLUMNS_SINGLE = 1
     }
 }

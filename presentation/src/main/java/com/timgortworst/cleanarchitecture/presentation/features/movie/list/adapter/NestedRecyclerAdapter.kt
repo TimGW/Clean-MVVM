@@ -9,11 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListNestedBinding
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterSpanSize
+
 class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
     private val items: List<T>,
     private val itemAdapter: A,
+    private val spanCount: Int,
     private vararg val itemDecorations: RecyclerView.ItemDecoration,
-) : RecyclerView.Adapter<NestedRecyclerAdapter<T, A>.ViewHolder>() {
+) : RecyclerView.Adapter<NestedRecyclerAdapter<T, A>.ViewHolder>(), AdapterSpanSize {
     private val scrollStates: MutableMap<String, Parcelable?> = mutableMapOf()
     private val viewPool = RecyclerView.RecycledViewPool()
 
@@ -39,6 +42,8 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
     )
 
     override fun getItemCount(): Int = if (items.isEmpty()) 0 else 1
+
+    override fun getSpanSize() = spanCount
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items)
