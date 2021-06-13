@@ -22,24 +22,16 @@ object AdapterFactory {
             clickListener = clickAction
         }
 
+        val grid = listOf(movies, movies, movies, movies, movies, movies).flatten()
+
         return listOf(
             HeaderAdapter("Grid", MovieListSpanSizeLookup.FULL_WIDTH, padding),
             MovieListGridAdapter(MovieListSpanSizeLookup.COLUMNS_SINGLE, padding).apply {
-                submitList(movies.take(11))
+                submitList(grid)
                 clickListener = clickAction
             },
-            HeaderAdapter("Featured", MovieListSpanSizeLookup.FULL_WIDTH, padding),
-            MovieFeaturedAdapter(movies.first(), MovieListSpanSizeLookup.HALF_WIDTH, padding),
-            MovieFeaturedAdapter(movies.last(), MovieListSpanSizeLookup.HALF_WIDTH, padding),
-            HeaderAdapter("List", MovieListSpanSizeLookup.FULL_WIDTH, padding),
-            NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration),
             HeaderAdapter("Featured", MovieListSpanSizeLookup.FULL_WIDTH, padding),
             MovieFeaturedAdapter(movies.last(), MovieListSpanSizeLookup.FULL_WIDTH, padding),
-            HeaderAdapter("Grid", MovieListSpanSizeLookup.FULL_WIDTH, padding),
-            MovieListGridAdapter(MovieListSpanSizeLookup.COLUMNS_SINGLE, padding).apply {
-                submitList(movies.take(6))
-                clickListener = clickAction
-            },
             HeaderAdapter("List", MovieListSpanSizeLookup.FULL_WIDTH, padding),
             NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration),
         )
