@@ -29,7 +29,7 @@ class MovieListAdapter: BaseListAdapter<Movie, MovieListItemNestedBinding>(DiffU
         MovieListItemNestedBinding::inflate
 
     override fun bind(binding: MovieListItemNestedBinding, item: Movie, position: Int) {
-        val transName = item.highResImage + this::class.java.hashCode()
+        val transName = item.highResImage + getItemViewType(position)
 
         binding.moveListItemImage.apply {
             Glide.with(context)

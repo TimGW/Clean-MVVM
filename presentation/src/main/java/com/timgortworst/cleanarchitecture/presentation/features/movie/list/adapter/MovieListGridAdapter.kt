@@ -51,7 +51,7 @@ class MovieListGridAdapter(
         MovieListItemBinding::inflate
 
     override fun bind(binding: MovieListItemBinding, item: Movie, position: Int) {
-        val transName = item.highResImage + this::class.java.hashCode()
+        val transName = item.highResImage + getItemViewType(position)
 
         binding.moveListItemImage.apply {
             Glide.with(context)

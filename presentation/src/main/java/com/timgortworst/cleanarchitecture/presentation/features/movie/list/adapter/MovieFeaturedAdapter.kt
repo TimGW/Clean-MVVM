@@ -36,7 +36,7 @@ class MovieFeaturedAdapter(
     }
 
     override fun bind(binding: MovieListItemFeaturedBinding, item: Movie, position: Int) {
-        val transName = item.highResImage + this::class.java.hashCode()
+        val transName = item.highResImage + getItemViewType(position)
 
         binding.featuredImage.apply {
             Glide.with(context)
