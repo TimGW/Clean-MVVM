@@ -14,7 +14,7 @@ import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListHead
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemBinding
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemNestedBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.getRelativeItemPosition
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.base.BaseListAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BaseListAdapter
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup.Companion.TOTAL_COLUMNS_GRID
 
 class MovieListGridAdapter(

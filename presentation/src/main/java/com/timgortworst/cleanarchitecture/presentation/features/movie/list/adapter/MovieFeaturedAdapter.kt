@@ -12,7 +12,7 @@ import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListHeaderBinding
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemFeaturedBinding
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.base.BaseGridAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BaseGridAdapter
 
 class MovieFeaturedAdapter(
     movie: Movie,

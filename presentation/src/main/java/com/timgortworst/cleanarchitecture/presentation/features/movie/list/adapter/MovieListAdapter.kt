@@ -8,7 +8,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemNestedBinding
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.base.BaseListAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BaseListAdapter
 
 class MovieListAdapter: BaseListAdapter<Movie, MovieListItemNestedBinding>(DiffUtilMovieItem()) {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null

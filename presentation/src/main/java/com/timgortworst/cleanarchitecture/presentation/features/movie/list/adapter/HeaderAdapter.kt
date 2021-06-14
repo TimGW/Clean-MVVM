@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListHeaderBinding
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.base.BaseGridAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BaseGridAdapter
 
 class HeaderAdapter(
     text: String,

@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.base
+package com.timgortworst.cleanarchitecture.presentation.features.movie.base
 
 import android.graphics.Rect
 import android.view.LayoutInflater
