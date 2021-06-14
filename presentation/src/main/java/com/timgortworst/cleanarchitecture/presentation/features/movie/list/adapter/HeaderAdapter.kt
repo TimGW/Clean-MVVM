@@ -1,19 +1,21 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter
 
 import android.graphics.Rect
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.timgortworst.cleanarchitecture.presentation.R
+import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListHeaderBinding
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.base.BaseGridAdapter
 
 class HeaderAdapter(
     text: String,
     private val spanSize: Int,
     private val itemPadding: Int,
-) : BaseGridAdapter<String>(text) {
+) : BaseGridAdapter<String, MovieListHeaderBinding>(text) {
 
-    override fun provideLayout() = R.layout.movie_list_header
+    override val itemViewType = R.layout.movie_list_header
 
     override fun getSpanSize() = spanSize
 
@@ -24,7 +26,10 @@ class HeaderAdapter(
         }
     }
 
-    override fun bind(itemView: View, item: String, position: Int) {
-        itemView.findViewById<TextView>(R.id.header_text)?.text = item
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> MovieListHeaderBinding =
+        MovieListHeaderBinding::inflate
+
+    override fun bind(binding: MovieListHeaderBinding, item: String, position: Int) {
+        binding.headerText.text = item
     }
 }

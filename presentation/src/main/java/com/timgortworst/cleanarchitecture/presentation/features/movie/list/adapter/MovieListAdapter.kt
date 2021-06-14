@@ -1,14 +1,16 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter
 
-import android.view.View
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
+import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemNestedBinding
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.base.BaseListAdapter
 
-class MovieListAdapter: BaseListAdapter<Movie>(DiffUtilMovieItem()) {
+class MovieListAdapter: BaseListAdapter<Movie, MovieListItemNestedBinding>(DiffUtilMovieItem()) {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
     init {
@@ -19,15 +21,17 @@ class MovieListAdapter: BaseListAdapter<Movie>(DiffUtilMovieItem()) {
         return getItem(position).id.toLong()
     }
 
-    override fun provideLayout() = R.layout.movie_list_item_nested
+    override val itemViewType = R.layout.movie_list_item_nested
 
     override fun getItemCount() = if(currentList.isEmpty()) 0 else currentList.size
 
-    override fun bind(itemView: View, item: Movie, position: Int) {
-        val moviePoster = itemView.findViewById<ImageView?>(R.id.move_list_item_image)
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> MovieListItemNestedBinding =
+        MovieListItemNestedBinding::inflate
+
+    override fun bind(binding: MovieListItemNestedBinding, item: Movie, position: Int) {
         val transName = item.highResImage + this::class.java.hashCode()
 
-        moviePoster?.apply {
+        binding.moveListItemImage.apply {
             Glide.with(context)
                 .load(item.lowResImage)
                 .placeholder(R.drawable.movie_placeholder)
@@ -36,8 +40,8 @@ class MovieListAdapter: BaseListAdapter<Movie>(DiffUtilMovieItem()) {
 
             transitionName = transName
         }
-        moviePoster?.setOnClickListener {
-            clickListener?.invoke(item, moviePoster, transName)
+        binding.moveListItemImage.setOnClickListener {
+            clickListener?.invoke(item, binding.moveListItemImage, transName)
         }
     }
 }

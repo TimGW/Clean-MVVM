@@ -5,23 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterDecoration
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterSpanSize
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup
 
-abstract class BaseGridAdapter<T>(
+abstract class BaseGridAdapter<T, VB : ViewBinding>(
     private vararg val items: T
 ) : RecyclerView.Adapter<BaseViewHolder<T>>(), AdapterSpanSize, AdapterDecoration {
 
-    abstract fun provideLayout(): Int
-
+    abstract val itemViewType: Int
+    abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
+    abstract fun bind(binding: VB, item: T, position: Int)
     abstract override fun getItemOffset(parent: RecyclerView, view: View): Rect
 
-    abstract fun bind(itemView: View, item: T, position: Int)
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<T> {
-        val view = LayoutInflater.from(parent.context).inflate(provideLayout(), parent, false)
-        return BaseViewHolderImpl(view)
+        val binding = bindingInflater.invoke(LayoutInflater.from(parent.context), parent, false)
+        return BaseViewHolderImpl(binding)
     }
 
     override fun getItemCount(): Int {
@@ -30,7 +30,7 @@ abstract class BaseGridAdapter<T>(
 
     // combine the layout and spansize to provide a unique but re-usable integer for the concatadapter
     // recycling between different adapters with the same layout
-    override fun getItemViewType(position: Int): Int = provideLayout() * getSpanSize()
+    override fun getItemViewType(position: Int): Int = itemViewType * getSpanSize()
 
     override fun getSpanSize(): Int = MovieListSpanSizeLookup.COLUMNS_SINGLE
 
@@ -38,9 +38,9 @@ abstract class BaseGridAdapter<T>(
         holder.bind(items[position], position)
     }
 
-    inner class BaseViewHolderImpl(itemView: View) : BaseViewHolder<T>(itemView) {
+    inner class BaseViewHolderImpl(private val binding: VB) : BaseViewHolder<T>(binding) {
         override fun bind(item: T, position: Int) {
-            this@BaseGridAdapter.bind(itemView, item, position)
+            this@BaseGridAdapter.bind(binding, item, position)
         }
     }
 }

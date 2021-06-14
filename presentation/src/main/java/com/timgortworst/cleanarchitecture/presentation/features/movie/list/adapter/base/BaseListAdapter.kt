@@ -7,19 +7,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterDecoration
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterSpanSize
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup
 
-abstract class BaseListAdapter<T>(
+abstract class BaseListAdapter<T, VB: ViewBinding>(
     diffCallback: DiffUtil.ItemCallback<T>,
 ) : ListAdapter<T, BaseViewHolder<T>>(diffCallback), AdapterSpanSize, AdapterDecoration {
 
-    abstract fun provideLayout(): Int
+    abstract val itemViewType: Int
+    abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
+    abstract fun bind(binding: VB, item: T, position: Int)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<T> {
-        val view = LayoutInflater.from(parent.context).inflate(provideLayout(), parent, false)
-        return BaseViewHolderImpl(view)
+        val binding = bindingInflater.invoke(LayoutInflater.from(parent.context), parent, false)
+        return BaseViewHolderImpl(binding)
     }
 
     override fun getItemOffset(parent: RecyclerView, view: View): Rect? {
@@ -28,7 +31,7 @@ abstract class BaseListAdapter<T>(
 
     // combine the layout and spansize to provide a unique but re-usable integer for the concatadapter
     // recycling between different adapters with the same layout
-    override fun getItemViewType(position: Int): Int = provideLayout() * getSpanSize()
+    override fun getItemViewType(position: Int): Int = itemViewType * getSpanSize()
 
     override fun getSpanSize(): Int = MovieListSpanSizeLookup.COLUMNS_SINGLE
 
@@ -36,11 +39,10 @@ abstract class BaseListAdapter<T>(
         holder.bind(getItem(position), position)
     }
 
-    inner class BaseViewHolderImpl(itemView: View) : BaseViewHolder<T>(itemView) {
+    inner class BaseViewHolderImpl(private val binding: VB) : BaseViewHolder<T>(binding) {
         override fun bind(item: T, position: Int) {
-            this@BaseListAdapter.bind(itemView, item, position)
+            this@BaseListAdapter.bind(binding, item, position)
         }
     }
 
-    abstract fun bind(itemView: View, item: T, position: Int)
 }

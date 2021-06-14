@@ -1,25 +1,32 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter
 
 import android.graphics.Rect
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
+import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListHeaderBinding
+import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemFeaturedBinding
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.base.BaseGridAdapter
 
 class MovieFeaturedAdapter(
     movie: Movie,
     private val spanSize: Int,
     private val itemPadding: Int,
-) : BaseGridAdapter<Movie>(movie) {
+) : BaseGridAdapter<Movie, MovieListItemFeaturedBinding>(movie) {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
-    override fun provideLayout() = R.layout.movie_list_item_featured
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
+    MovieListItemFeaturedBinding = MovieListItemFeaturedBinding::inflate
 
     override fun getSpanSize() = spanSize
+
+    override val itemViewType = R.layout.movie_list_item_featured
 
     override fun getItemOffset(parent: RecyclerView, view: View): Rect {
         return Rect().apply {
@@ -28,12 +35,10 @@ class MovieFeaturedAdapter(
         }
     }
 
-    override fun bind(itemView: View, item: Movie, position: Int) {
-        val image = itemView.findViewById<ImageView?>(R.id.featured_image)
-        val title = itemView.findViewById<TextView?>(R.id.featured_title)
+    override fun bind(binding: MovieListItemFeaturedBinding, item: Movie, position: Int) {
         val transName = item.highResImage + this::class.java.hashCode()
 
-        image?.apply {
+        binding.featuredImage.apply {
             Glide.with(context)
                 .load(item.highResImage)
                 .into(this)
@@ -41,10 +46,10 @@ class MovieFeaturedAdapter(
             transitionName = transName
         }
 
-        title?.text = item.title
+        binding.featuredTitle.text = item.title
 
-        itemView.setOnClickListener {
-            clickListener?.invoke(item, image, transName)
+        binding.featuredTitle.setOnClickListener {
+            clickListener?.invoke(item, binding.featuredImage, transName)
         }
     }
 }
