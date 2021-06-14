@@ -24,7 +24,7 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
         return items.getOrNull(position)?.hashCode()?.toString().orEmpty()
     }
 
-    override fun getItemViewType(position: Int): Int = R.layout.layout_recyclerview
+    override fun getItemViewType(position: Int): Int = R.layout.layout_recyclerview * getSpanSize()
 
     override fun onViewRecycled(holder: ViewHolder) {
         super.onViewRecycled(holder)
