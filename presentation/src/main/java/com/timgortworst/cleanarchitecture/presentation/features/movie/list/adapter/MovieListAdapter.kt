@@ -1,18 +1,14 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.view.View
 import android.widget.ImageView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
-import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemNestedBinding
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.base.BaseListAdapter
 
-class MovieListAdapter: ListAdapter<Movie, MovieListAdapter.ViewHolder>(DiffUtilMovieItem()) {
+class MovieListAdapter: BaseListAdapter<Movie>(DiffUtilMovieItem()) {
     var clickListener: ((Movie, ImageView) -> Unit)? = null
 
     init {
@@ -23,42 +19,24 @@ class MovieListAdapter: ListAdapter<Movie, MovieListAdapter.ViewHolder>(DiffUtil
         return getItem(position).id.toLong()
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return R.layout.movie_list_item_nested
-    }
+    override fun provideLayout() = R.layout.movie_list_item_nested
 
     override fun getItemCount() = if(currentList.isEmpty()) 0 else currentList.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        MovieListItemNestedBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-    )
+    override fun bind(itemView: View, item: Movie, position: Int) {
+        val moviePoster = itemView.findViewById<ImageView?>(R.id.move_list_item_image)
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
+        moviePoster?.apply {
+            Glide.with(context)
+                .load(item.lowResImage)
+                .placeholder(R.drawable.movie_placeholder)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(this)
 
-    inner class ViewHolder(
-        binding: MovieListItemNestedBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-        private val moviePoster: ImageView = binding.moveListItemImage
-
-        fun bind(movie: Movie) {
-            moviePoster.apply {
-                Glide.with(context)
-                    .load(movie.lowResImage)
-                    .placeholder(R.drawable.movie_placeholder)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(this)
-
-                transitionName = movie.highResImage
-            }
-            moviePoster.setOnClickListener {
-                clickListener?.invoke(movie, moviePoster)
-            }
+            transitionName = item.highResImage
+        }
+        moviePoster?.setOnClickListener {
+            clickListener?.invoke(item, moviePoster)
         }
     }
 }
