@@ -13,7 +13,7 @@ object AdapterFactory {
     fun createAdapters(
         resources: Resources,
         movies: List<Movie>,
-        clickAction: (Movie, View) -> Unit,
+        clickAction: (Movie, View, String) -> Unit,
     ): List<RecyclerView.Adapter<*>> {
         val padding = resources.getDimension(R.dimen.default_padding).toInt()
         val itemDecoration = NestedListItemDecoration(padding)
@@ -30,9 +30,6 @@ object AdapterFactory {
                 clickListener = clickAction
             },
 
-            HeaderAdapter("List", MovieListSpanSizeLookup.FULL_WIDTH, padding),
-            NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration),
-
             HeaderAdapter("Grid", MovieListSpanSizeLookup.FULL_WIDTH, padding),
             MovieListGridAdapter(MovieListSpanSizeLookup.COLUMNS_SINGLE, padding).apply {
                 submitList(grid)
@@ -43,9 +40,6 @@ object AdapterFactory {
             MovieFeaturedAdapter(movies.last(), MovieListSpanSizeLookup.FULL_WIDTH, padding).apply {
                 clickListener = clickAction
             },
-
-            HeaderAdapter("List", MovieListSpanSizeLookup.FULL_WIDTH, padding),
-            NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration),
 
             HeaderAdapter("List", MovieListSpanSizeLookup.FULL_WIDTH, padding),
             NestedRecyclerAdapter(movies, movieListAdapter, itemDecoration),

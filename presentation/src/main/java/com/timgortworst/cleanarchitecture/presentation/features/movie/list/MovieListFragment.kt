@@ -93,22 +93,23 @@ class MovieListFragment : Fragment() {
 
         concatAdapter.adapters.forEach { concatAdapter.removeAdapter(it) }
 
-        val adapters = AdapterFactory.createAdapters(resources, movies) { movie, view ->
-            navigateToDetails(movie, view)
+        val adapters = AdapterFactory.createAdapters(resources, movies) { movie, view, transitionName ->
+            navigateToDetails(movie, view, transitionName)
         }
 
         adapters.forEach { concatAdapter.addAdapter(it) }
     }
 
-    private fun navigateToDetails(movie: Movie, sharedView: View) {
+    private fun navigateToDetails(movie: Movie, sharedView: View, transitionName: String) {
         val directions =
             MovieListFragmentDirections.showMovieDetails(
                 movie.title,
                 movie.id,
-                movie.highResImage
+                movie.highResImage,
+                transitionName,
             )
 
-        val extras = FragmentNavigatorExtras(sharedView to movie.highResImage)
+        val extras = FragmentNavigatorExtras(sharedView to transitionName)
         findNavController().navigate(directions, extras)
     }
 }

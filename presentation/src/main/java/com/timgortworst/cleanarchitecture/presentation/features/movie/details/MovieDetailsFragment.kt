@@ -69,8 +69,8 @@ class MovieDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.movieDetailsImage.apply {
-            transitionName = args.uri
-            startEnterTransitionAfterLoadingImage(args.uri, this)
+            transitionName = args.transitionName
+            startEnterTransitionAfterLoadingImage(args.movieImage, this)
         }
 
         observeUI()

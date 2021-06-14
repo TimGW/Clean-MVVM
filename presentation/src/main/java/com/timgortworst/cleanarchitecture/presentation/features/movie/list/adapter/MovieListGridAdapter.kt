@@ -19,7 +19,7 @@ class MovieListGridAdapter(
     private val spanSize: Int,
     private val itemPadding: Int,
 ) : BaseListAdapter<Movie>(DiffUtilMovieItem()) {
-    var clickListener: ((Movie, ImageView) -> Unit)? = null
+    var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
     override fun getItemId(position: Int): Long {
         return getItem(position).id.toLong()
@@ -47,6 +47,7 @@ class MovieListGridAdapter(
 
     override fun bind(itemView: View, item: Movie, position: Int) {
         val moviePoster = itemView.findViewById<ImageView?>(R.id.move_list_item_image)
+        val transName = item.highResImage + this::class.java.hashCode()
 
         moviePoster?.apply {
             Glide.with(context)
@@ -55,10 +56,10 @@ class MovieListGridAdapter(
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(this)
 
-            transitionName = item.highResImage
+            transitionName = transName
         }
         moviePoster?.setOnClickListener {
-            clickListener?.invoke(item, moviePoster)
+            clickListener?.invoke(item, moviePoster, transName)
         }
     }
 }

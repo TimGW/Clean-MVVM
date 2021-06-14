@@ -15,7 +15,7 @@ class MovieFeaturedAdapter(
     private val spanSize: Int,
     private val itemPadding: Int,
 ) : BaseGridAdapter<Movie>(movie) {
-    var clickListener: ((Movie, ImageView) -> Unit)? = null
+    var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
     override fun provideLayout() = R.layout.movie_list_item_featured
 
@@ -31,19 +31,20 @@ class MovieFeaturedAdapter(
     override fun bind(itemView: View, item: Movie, position: Int) {
         val image = itemView.findViewById<ImageView?>(R.id.featured_image)
         val title = itemView.findViewById<TextView?>(R.id.featured_title)
+        val transName = item.highResImage + this::class.java.hashCode()
 
         image?.apply {
             Glide.with(context)
                 .load(item.highResImage)
                 .into(this)
 
-            transitionName = item.highResImage
+            transitionName = transName
         }
 
         title?.text = item.title
 
         itemView.setOnClickListener {
-            clickListener?.invoke(item, image)
+            clickListener?.invoke(item, image, transName)
         }
     }
 }
