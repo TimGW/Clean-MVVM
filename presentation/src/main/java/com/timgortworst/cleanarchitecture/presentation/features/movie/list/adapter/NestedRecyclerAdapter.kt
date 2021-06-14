@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import com.timgortworst.cleanarchitecture.presentation.R
-import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListNestedBinding
+import com.timgortworst.cleanarchitecture.presentation.databinding.LayoutRecyclerviewBinding
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterSpanSize
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup.Companion.FULL_WIDTH
 
@@ -24,7 +24,7 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
         return items.getOrNull(position)?.hashCode()?.toString().orEmpty()
     }
 
-    override fun getItemViewType(position: Int): Int = R.layout.movie_list_nested
+    override fun getItemViewType(position: Int): Int = R.layout.layout_recyclerview
 
     override fun onViewRecycled(holder: ViewHolder) {
         super.onViewRecycled(holder)
@@ -34,7 +34,7 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        MovieListNestedBinding.inflate(
+        LayoutRecyclerviewBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -50,7 +50,7 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
     }
 
     inner class ViewHolder(
-        binding: MovieListNestedBinding
+        binding: LayoutRecyclerviewBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         val recyclerView = binding.recyclerView.apply {
