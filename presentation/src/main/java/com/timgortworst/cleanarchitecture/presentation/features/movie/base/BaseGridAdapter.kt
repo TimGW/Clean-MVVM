@@ -1,8 +1,6 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.base
 
-import android.graphics.Rect
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -12,12 +10,11 @@ import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decor
 
 abstract class BaseGridAdapter<T, VB : ViewBinding>(
     private vararg val items: T
-) : RecyclerView.Adapter<BaseViewHolder<T>>(), AdapterSpanSize, AdapterDecoration {
+) : RecyclerView.Adapter<BaseViewHolder<T>>(), AdapterSpanSize {
 
     abstract val itemViewType: Int
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
     abstract fun bind(binding: VB, item: T, position: Int)
-    abstract override fun getItemOffset(parent: RecyclerView, view: View): Rect
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<T> {
         val binding = bindingInflater.invoke(LayoutInflater.from(parent.context), parent, false)

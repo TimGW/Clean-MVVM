@@ -4,13 +4,15 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import com.timgortworst.cleanarchitecture.presentation.R
 
 /**
- * Item decorations are delegated to the adapters that implement the AdapterDecoration interface
+ * Decoration for adding margin between blocks when used with a grid layout.
  */
-class GridMarginDecoration : RecyclerView.ItemDecoration() {
+class GridMarginDecoration(
+    private val spacing: Int
+) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -19,21 +21,46 @@ class GridMarginDecoration : RecyclerView.ItemDecoration() {
         state: RecyclerView.State
     ) {
         val layoutManager = parent.layoutManager as? GridLayoutManager
-        val adapterPosition: Int = parent.getChildAdapterPosition(view)
-
-        if (layoutManager == null ||
-            layoutManager.orientation != VERTICAL ||
-            adapterPosition == NO_POSITION
-        ) {
+        if (layoutManager == null || layoutManager.orientation != VERTICAL) {
             return super.getItemOffsets(outRect, view, parent, state)
         }
 
-        val vh = parent.findViewHolderForAdapterPosition(adapterPosition)
-        val decoration = (vh?.bindingAdapter as? AdapterDecoration)?.getItemOffset(parent, view)
+        val adapterPosition: Int = parent.getChildAdapterPosition(view)
+        val maxSpanCount = layoutManager.spanCount
 
-        outRect.bottom = decoration?.bottom ?: 0
-        outRect.left = decoration?.left ?: 0
-        outRect.top = decoration?.top ?: 0
-        outRect.right = decoration?.right ?: 0
+        when (val viewType = parent.adapter?.getItemViewType(adapterPosition)) {
+            R.layout.movie_list_item_featured * maxSpanCount,
+            R.layout.movie_list_header * maxSpanCount -> {
+                outRect.left = spacing
+                outRect.right = spacing
+            }
+            R.layout.movie_list_item  -> {
+                outRect.addGridMargin(parent, adapterPosition, maxSpanCount, viewType)
+            }
+        }
+    }
+
+    private fun Rect.addGridMargin(
+        parent: RecyclerView,
+        adapterPosition: Int,
+        maxSpanCount: Int,
+        viewType: Int
+    ) {
+        val position = parent.getRelativeItemPosition(adapterPosition, viewType)
+        val column = position % maxSpanCount
+
+        left = spacing - column * spacing / maxSpanCount
+        right = (column + 1) * spacing / maxSpanCount
+        if (position < maxSpanCount) top = spacing
+        bottom = spacing
+    }
+
+    private fun RecyclerView.getRelativeItemPosition(
+        adapterPosition: Int,
+        childViewType: Int
+    ): Int {
+        return generateSequence(adapterPosition - 1) { it.dec() }
+            .takeWhile { adapter?.getItemViewType(it) == childViewType }
+            .count()
     }
 }

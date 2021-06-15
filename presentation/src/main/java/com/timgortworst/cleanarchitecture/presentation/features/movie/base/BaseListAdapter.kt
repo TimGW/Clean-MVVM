@@ -1,20 +1,16 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.base
 
-import android.graphics.Rect
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterDecoration
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterSpanSize
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup
 
 abstract class BaseListAdapter<T, VB: ViewBinding>(
     diffCallback: DiffUtil.ItemCallback<T>,
-) : ListAdapter<T, BaseViewHolder<T>>(diffCallback), AdapterSpanSize, AdapterDecoration {
+) : ListAdapter<T, BaseViewHolder<T>>(diffCallback), AdapterSpanSize {
 
     abstract val itemViewType: Int
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
@@ -23,10 +19,6 @@ abstract class BaseListAdapter<T, VB: ViewBinding>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<T> {
         val binding = bindingInflater.invoke(LayoutInflater.from(parent.context), parent, false)
         return BaseViewHolderImpl(binding)
-    }
-
-    override fun getItemOffset(parent: RecyclerView, view: View): Rect? {
-        return null
     }
 
     // combine the layout and spansize to provide a unique but re-usable integer for the concatadapter

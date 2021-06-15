@@ -60,7 +60,7 @@ class MovieListFragment : Fragment() {
 
         binding.recyclerView.doOnPreDraw {
             startPostponedEnterTransition()
-            binding.recyclerView.invalidateItemDecorations()
+//            binding.recyclerView.invalidateItemDecorations()
         }
         requireActivity().setTranslucentStatus(false)
 
@@ -86,13 +86,14 @@ class MovieListFragment : Fragment() {
 
     private fun setupMovieList() {
         val spanLookup = MovieListSpanSizeLookup(concatAdapter)
+        val padding = resources.getDimension(R.dimen.default_padding).toInt()
 
         binding.recyclerView.apply {
             layoutManager = GridLayoutManager(activity, TOTAL_COLUMNS_GRID).apply {
                 spanSizeLookup = spanLookup
                 adapter = concatAdapter
             }
-            addItemDecoration(GridMarginDecoration())
+            addItemDecoration(GridMarginDecoration(padding))
             addSingleScrollDirectionListener()
         }
     }
