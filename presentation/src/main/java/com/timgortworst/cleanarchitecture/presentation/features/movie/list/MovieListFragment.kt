@@ -1,6 +1,7 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.transition.Transition
 import androidx.transition.TransitionInflater
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
@@ -18,7 +20,8 @@ import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.*
+import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.AdapterFactory
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridMarginDecoration
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup.Companion.TOTAL_COLUMNS_GRID
@@ -26,7 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
-    private val listViewModel by viewModels<MovieListViewModel>()
+    private val viewModel by viewModels<MovieListViewModel>()
     private lateinit var binding: FragmentMovieListBinding
     private val concatAdapter by lazy {
         ConcatAdapter(ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build())
@@ -45,7 +48,6 @@ class MovieListFragment : Fragment() {
     ): View {
         binding = FragmentMovieListBinding.inflate(layoutInflater, container, false)
         sharedElementReturnTransition = TransitionInflater.from(context)
-                .inflateTransition(R.transition.shared_element_transition)
         return binding.root
     }
 
@@ -61,14 +63,21 @@ class MovieListFragment : Fragment() {
             binding.recyclerView.invalidateItemDecorations()
         }
         requireActivity().setTranslucentStatus(false)
+
+        binding.swiperefresh.setOnRefreshListener {
+            viewModel.reload()
+        }
     }
 
     private fun observeUI() {
-        listViewModel.movies.observe(viewLifecycleOwner, {
+        viewModel.movies.observe(viewLifecycleOwner, {
             binding.noResults.visibility = View.GONE
             binding.swiperefresh.isRefreshing = false
             when (it) {
-                is Resource.Error -> binding.noResults.visibility = View.VISIBLE
+                is Resource.Error -> {
+                    it.errorEntity?.message?.let { msg -> view?.snackbar(msg) }
+                    binding.noResults.visibility = View.VISIBLE
+                }
                 Resource.Loading -> binding.swiperefresh.isRefreshing = true
                 is Resource.Success -> setupAdapters(it.data)
             }

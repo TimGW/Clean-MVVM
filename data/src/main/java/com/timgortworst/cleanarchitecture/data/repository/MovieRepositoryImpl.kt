@@ -50,7 +50,10 @@ class MovieRepositoryImpl @Inject constructor(
             if (apiResponse.isSuccessful && data != null) {
                 Resource.Success(data.asDomainModel())
             } else {
-                Resource.Error(errorHandler.getError(apiResponse.code()))
+                Resource.Error(errorHandler.getApiError(
+                    statusCode = apiResponse.code(),
+                    message = apiResponse.message()
+                ))
             }
         } catch (e: Throwable) {
             Resource.Error(errorHandler.getError(e))

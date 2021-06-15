@@ -1,6 +1,7 @@
 package com.timgortworst.cleanarchitecture.domain.usecase.movielist
 
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
+import com.timgortworst.cleanarchitecture.domain.model.state.ErrorEntity
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
@@ -10,7 +11,6 @@ import javax.inject.Inject
 
 class GetMoviesUseCaseImpl @Inject constructor(
     private val movieRepository: MovieRepository,
-    private val errorHandler: ErrorHandler
 ) : GetMoviesUseCase {
 
     override fun execute(params: Unit?): Flow<Resource<List<Movie>>> {

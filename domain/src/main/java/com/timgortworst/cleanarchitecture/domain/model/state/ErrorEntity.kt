@@ -1,16 +1,16 @@
 package com.timgortworst.cleanarchitecture.domain.model.state
 
 sealed class ErrorEntity {
-    abstract val throwable: Throwable?
+    abstract val message: String
 
-    data class DatabaseError(override val throwable: Throwable? = null) : ErrorEntity()
-    data class NetworkException(override val throwable: Throwable? = null) : ErrorEntity()
-    data class Unknown(override val throwable: Throwable? = null) : ErrorEntity()
+    data class DatabaseError(val throwable: Throwable? = null, override val message: String) : ErrorEntity()
+    data class NetworkException(val throwable: Throwable? = null, override val message: String) : ErrorEntity()
+    data class Unknown(val throwable: Throwable? = null, override val message: String) : ErrorEntity()
 
     sealed class HttpErrors : ErrorEntity() {
-        data class ResourceForbidden(override val throwable: Throwable? = null) : HttpErrors()
-        data class ResourceNotFound(override val throwable: Throwable? = null) : HttpErrors()
-        data class InternalServerError(override val throwable: Throwable? = null) : HttpErrors()
-        data class BadGateWay(override val throwable: Throwable? = null) : HttpErrors()
+        data class ResourceForbidden(override val message: String) : HttpErrors()
+        data class ResourceNotFound(override val message: String) : HttpErrors()
+        data class InternalServerError(override val message: String) : HttpErrors()
+        data class BadGateWay(override val message: String) : HttpErrors()
     }
 }

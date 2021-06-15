@@ -28,11 +28,14 @@ abstract class NetworkBoundRepository<NETWORK, DOMAIN> {
             if (apiResponse.isSuccessful && remoteResponse != null) {
                 saveRemoteData(remoteResponse)
             } else {
-                emit(Resource.Error(getErrorHandler().getError(apiResponse.code())))
+                val error = getErrorHandler().getApiError(
+                    statusCode = apiResponse.code(),
+                    message = apiResponse.message()
+                )
+                emit(Resource.Error(error))
             }
         } catch (e: Exception) {
             emit(Resource.Error(getErrorHandler().getError(e)))
-            e.printStackTrace()
         }
 
         emitAll(fetchFromLocal().map { Resource.Success(it) })
