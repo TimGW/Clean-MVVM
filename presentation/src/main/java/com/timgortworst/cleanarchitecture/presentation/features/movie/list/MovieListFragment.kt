@@ -30,6 +30,10 @@ class MovieListFragment : Fragment() {
     private val viewModel by viewModels<MovieListViewModel>()
     private lateinit var binding: FragmentMovieListBinding
     private val concatAdapter by lazy {
+        // If your Adapters share the same view types, and can support sharing ViewHolders between
+        // added adapters, provide an instance of Config where you set Config#isolateViewTypes
+        // to false. A common usage pattern for this is to return the R.layout.<layout_name> from
+        // the Adapter#getItemViewType(int) method.
         ConcatAdapter(ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build())
     }
 
@@ -58,7 +62,6 @@ class MovieListFragment : Fragment() {
 
         binding.recyclerView.doOnPreDraw {
             startPostponedEnterTransition()
-//            binding.recyclerView.invalidateItemDecorations()
         }
         requireActivity().setTranslucentStatus(false)
 

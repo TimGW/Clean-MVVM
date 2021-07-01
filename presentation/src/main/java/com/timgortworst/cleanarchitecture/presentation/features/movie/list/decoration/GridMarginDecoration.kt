@@ -36,7 +36,7 @@ class GridMarginDecoration(
                 outRect.right = spacing
                 outRect.bottom = spacing
             }
-            R.layout.movie_list_item * spanCount  -> {
+            R.layout.movie_list_item * spanCount -> {
                 outRect.addGridMargin(parent, adapterPosition, maxSpanCount / spanCount, viewType)
             }
         }

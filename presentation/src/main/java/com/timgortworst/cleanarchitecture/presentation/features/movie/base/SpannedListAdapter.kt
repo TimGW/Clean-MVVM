@@ -23,6 +23,9 @@ abstract class SpannedListAdapter<T, VB: ViewBinding>(
 
     // combine the layout and spansize to provide a unique but re-usable integer for the concatadapter
     // recycling between different adapters with the same layout
+    //
+    // for example, otherwise a HALF_WIDTH Adapter that has the same ViewHolder as a
+    // FULL_WIDTH adapter will recycle the items when that is not desirable
     override fun getItemViewType(position: Int): Int = itemViewType * columnSpans
 
     override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {
