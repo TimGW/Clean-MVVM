@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="grid_columns">6</integer>
+    <integer name="break_2_span">4</integer>
+    <integer name="featured_1_3_item_count">12</integer>
+    <integer name="featured_2_3_item_count">6</integer>
+    <integer name="featured_3_3_item_count">8</integer>
+</resources>

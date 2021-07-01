@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.LayoutRecyclerviewBinding
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterSpanSize
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup.Companion.FULL_WIDTH
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.FULL_WIDTH
 
 class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
     private val items: List<T>,
     private val itemAdapter: A,
     private vararg val itemDecorations: RecyclerView.ItemDecoration,
-) : RecyclerView.Adapter<NestedRecyclerAdapter<T, A>.ViewHolder>(), AdapterSpanSize {
+) : RecyclerView.Adapter<NestedRecyclerAdapter<T, A>.ViewHolder>() {
     private val scrollStates: MutableMap<String, Parcelable?> = mutableMapOf()
     private val viewPool = RecyclerView.RecycledViewPool()
 
@@ -24,7 +24,7 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
         return items.getOrNull(position)?.hashCode()?.toString().orEmpty()
     }
 
-    override fun getItemViewType(position: Int): Int = R.layout.layout_recyclerview * getSpanSize()
+    override fun getItemViewType(position: Int): Int = R.layout.layout_recyclerview
 
     override fun onViewRecycled(holder: ViewHolder) {
         super.onViewRecycled(holder)
@@ -42,8 +42,6 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
     )
 
     override fun getItemCount(): Int = if (items.isEmpty()) 0 else 1
-
-    override fun getSpanSize() = FULL_WIDTH
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items)

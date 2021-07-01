@@ -8,11 +8,11 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemBinding
-import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BaseListAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.SpannedListAdapter
 
 class MovieListGridAdapter(
-    private val spanSize: Int,
-) : BaseListAdapter<Movie, MovieListItemBinding>(DiffUtilMovieItem()) {
+    spanWidth: Int,
+) : SpannedListAdapter<Movie, MovieListItemBinding>(DiffUtilMovieItem()) {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
     override fun getItemId(position: Int): Long {
@@ -21,7 +21,7 @@ class MovieListGridAdapter(
 
     override val itemViewType = R.layout.movie_list_item
 
-    override fun getSpanSize() = spanSize
+    override val columnSpans = spanWidth
 
     override fun getItemCount() = if (currentList.isEmpty()) 0 else currentList.size
 

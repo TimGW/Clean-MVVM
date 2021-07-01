@@ -2,23 +2,37 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adap
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListHeaderBinding
-import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BaseGridAdapter
 
 class HeaderAdapter(
-    text: String,
-    private val spanSize: Int,
-) : BaseGridAdapter<String, MovieListHeaderBinding>(text) {
+    private val text: String = "",
+) : RecyclerView.Adapter<HeaderAdapter.ViewHolder>() {
 
-    override val itemViewType = R.layout.movie_list_header
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        MovieListHeaderBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+    )
 
-    override fun getSpanSize() = spanSize
-
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> MovieListHeaderBinding =
-        MovieListHeaderBinding::inflate
-
-    override fun bind(binding: MovieListHeaderBinding, item: String, position: Int) {
-        binding.headerText.text = item
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(text)
     }
+
+    override fun getItemViewType(position: Int) = R.layout.movie_list_header
+
+    override fun getItemCount() = 1
+
+    inner class ViewHolder(
+        private val binding: MovieListHeaderBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(text: String) {
+            binding.headerText.text = text
+        }
+    }
+
 }

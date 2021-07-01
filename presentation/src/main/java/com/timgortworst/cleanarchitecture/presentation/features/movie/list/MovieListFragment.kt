@@ -1,7 +1,6 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.transition.Transition
 import androidx.transition.TransitionInflater
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
@@ -23,8 +21,8 @@ import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentS
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.AdapterFactory
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridMarginDecoration
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup.Companion.TOTAL_COLUMNS_GRID
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.FULL_WIDTH
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -85,14 +83,13 @@ class MovieListFragment : Fragment() {
     }
 
     private fun setupMovieList() {
-        val spanLookup = MovieListSpanSizeLookup(concatAdapter)
         val padding = resources.getDimension(R.dimen.default_padding).toInt()
 
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(activity, TOTAL_COLUMNS_GRID).apply {
-                spanSizeLookup = spanLookup
-                adapter = concatAdapter
+            layoutManager = GridLayoutManager(activity, FULL_WIDTH).apply {
+                spanSizeLookup = GridSpanSizeLookup(concatAdapter)
             }
+            adapter = concatAdapter
             addItemDecoration(GridMarginDecoration(padding))
             addSingleScrollDirectionListener()
         }
