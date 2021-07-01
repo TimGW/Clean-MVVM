@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter
+package com.timgortworst.cleanarchitecture.presentation.features.movie.list.nested
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,8 +10,11 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemNestedBinding
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.DiffUtilMovieItem
 
-class NestedMovieListAdapter : ListAdapter<Movie, NestedMovieListAdapter.ViewHolder>(DiffUtilMovieItem()) {
+class NestedMovieListAdapter : ListAdapter<Movie, NestedMovieListAdapter.ViewHolder>(
+    DiffUtilMovieItem()
+) {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
     override fun getItemId(position: Int): Long {
@@ -24,7 +27,7 @@ class NestedMovieListAdapter : ListAdapter<Movie, NestedMovieListAdapter.ViewHol
         MovieListItemNestedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
-    override fun onBindViewHolder(holder: NestedMovieListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
     }

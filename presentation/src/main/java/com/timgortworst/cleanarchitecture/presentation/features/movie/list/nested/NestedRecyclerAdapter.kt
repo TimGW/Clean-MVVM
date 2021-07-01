@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter
+package com.timgortworst.cleanarchitecture.presentation.features.movie.list.nested
 
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.LayoutRecyclerviewBinding
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterSpanSize
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.FULL_WIDTH
 
 class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
     private val items: List<T>,

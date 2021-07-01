@@ -9,7 +9,9 @@ import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decor
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.HALF_WIDTH
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.calculateRelativeSpanWidth
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.calculateSpanWidth
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.NestedListItemDecoration
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.nested.NestedListItemDecoration
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.nested.NestedMovieListAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.nested.NestedRecyclerAdapter
 
 object AdapterFactory {
 
