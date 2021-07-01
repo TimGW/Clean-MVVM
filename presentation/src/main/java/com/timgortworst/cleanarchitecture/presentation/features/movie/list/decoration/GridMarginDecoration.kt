@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.timgortworst.cleanarchitecture.presentation.R
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.FULL_WIDTH
 
 /**
  * Decoration for adding margin between blocks when used with a grid layout.
@@ -30,13 +31,20 @@ class GridMarginDecoration(
         val spanCount = layoutManager.spanSizeLookup.getSpanSize(adapterPosition)
 
         when (val viewType = parent.adapter?.getItemViewType(adapterPosition)) {
-            R.layout.movie_list_item_featured * spanCount,
-            R.layout.movie_list_header * spanCount -> {
+            R.layout.movie_list_item_featured + FULL_WIDTH,
+            R.layout.movie_list_header -> {
                 outRect.left = spacing
                 outRect.right = spacing
                 outRect.bottom = spacing
             }
-            R.layout.movie_list_item * spanCount -> {
+            R.layout.movie_list_item_featured + GridSpanSizeLookup.HALF_WIDTH -> {
+                val position = parent.getRelativeItemPosition(adapterPosition, viewType)
+
+                if(position == 0) outRect.left = spacing
+                outRect.right = spacing
+                outRect.bottom = spacing
+            }
+            R.layout.movie_list_item + spanCount -> {
                 outRect.addGridMargin(parent, adapterPosition, maxSpanCount / spanCount, viewType)
             }
         }
