@@ -39,21 +39,21 @@ object AdapterFactory {
             HeaderAdapter(),
 
             // uitgelichte items 1/3
-            MovieListGridAdapter(calculateSpanWidth(totalGridColumns)).apply {
+            MovieListAdapter(calculateSpanWidth(totalGridColumns)).apply {
                 submitList(movies.take(featured1))
                 clickListener = clickAction
             },
 
             // break 1
             HeaderAdapter("Kijken"),
-            NestedRecyclerAdapter(movies, MovieListAdapter().apply {
+            NestedRecyclerAdapter(movies, NestedMovieListAdapter().apply {
                 clickListener = clickAction
             }, itemDecoration),
 
             HeaderAdapter(),
 
             // uitgelichte items 2/3 met break 2
-            MovieListGridAdapter(calculateSpanWidth(totalGridColumns)).apply {
+            MovieListAdapter(calculateSpanWidth(totalGridColumns)).apply {
                 submitList(movies.takeLast(featured2))
                 clickListener = clickAction
             },
@@ -62,22 +62,22 @@ object AdapterFactory {
             MovieFeaturedAdapter(movies[3], calculateRelativeSpanWidth(totalGridColumns, break2Columns)),
 
             // uitgelichte items 3/3
-            MovieListGridAdapter(calculateSpanWidth(totalGridColumns)).apply {
+            MovieListAdapter(calculateSpanWidth(totalGridColumns)).apply {
                 submitList(movies.take(featured3))
                 clickListener = clickAction
             },
 
             // sliders
             HeaderAdapter("Uitgelegd"),
-            NestedRecyclerAdapter(movies, MovieListAdapter().apply {
+            NestedRecyclerAdapter(movies, NestedMovieListAdapter().apply {
                 clickListener = clickAction
             }, itemDecoration),
             HeaderAdapter("Collecties"),
-            NestedRecyclerAdapter(movies, MovieListAdapter().apply {
+            NestedRecyclerAdapter(movies, NestedMovieListAdapter().apply {
                 clickListener = clickAction
             }, itemDecoration),
             HeaderAdapter("Sport"),
-            NestedRecyclerAdapter(movies, MovieListAdapter().apply {
+            NestedRecyclerAdapter(movies, NestedMovieListAdapter().apply {
                 clickListener = clickAction
             }, itemDecoration),
 
