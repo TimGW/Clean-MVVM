@@ -42,7 +42,7 @@ object AdapterFactory {
 
             // uitgelichte items 1/3
             MovieListAdapter(calculateSpanWidth(totalGridColumns)).apply {
-                submitList(movies.take(featured1))
+                submitList(listOf(movies, movies, movies, movies, movies, movies).flatten())
                 clickListener = clickAction
             },
 

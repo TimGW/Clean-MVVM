@@ -1,14 +1,15 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration
 
+import android.content.res.Resources
 import android.graphics.Rect
-import android.view.View
-import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.RecyclerView
 
 interface AdapterDecoration {
 
-    fun getItemOffset(
-        parent: RecyclerView,
-        view: View,
+    // forced to only use RecyclerView.ItemDecoration for item margins
+    fun getItemDecoration(
+        resources: Resources,
+        adapterPosition: Int,
+        relativePosition: Int
     ): Rect?
 }

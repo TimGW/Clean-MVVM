@@ -86,14 +86,12 @@ class MovieListFragment : Fragment() {
     }
 
     private fun setupMovieList() {
-        val padding = resources.getDimension(R.dimen.default_padding).toInt()
-
         binding.recyclerView.apply {
             layoutManager = GridLayoutManager(activity, FULL_WIDTH).apply {
                 spanSizeLookup = GridSpanSizeLookup(concatAdapter)
             }
             adapter = concatAdapter
-            addItemDecoration(GridMarginDecoration(padding))
+            addItemDecoration(GridMarginDecoration())
             addSingleScrollDirectionListener()
         }
     }

@@ -2,18 +2,10 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie.list.deco
 
 import android.graphics.Rect
 import android.view.View
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import com.timgortworst.cleanarchitecture.presentation.R
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.FULL_WIDTH
 
-/**
- * Decoration for adding margin between blocks when used with a grid layout.
- */
-class GridMarginDecoration(
-    private val spacing: Int
-) : RecyclerView.ItemDecoration() {
+class GridMarginDecoration : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -21,56 +13,30 @@ class GridMarginDecoration(
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        val layoutManager = parent.layoutManager as? GridLayoutManager
-        if (layoutManager == null || layoutManager.orientation != VERTICAL) {
-            return super.getItemOffsets(outRect, view, parent, state)
-        }
+        val position: Int = parent.getChildAdapterPosition(view)
+        val adapter = (parent.adapter as? ConcatAdapter) ?: return
+        val decoration = adapter.getDecoration(parent, position) ?: return
 
-        val adapterPosition: Int = parent.getChildAdapterPosition(view)
-        val maxSpanCount = layoutManager.spanCount
-        val spanCount = layoutManager.spanSizeLookup.getSpanSize(adapterPosition)
-
-        when (val viewType = parent.adapter?.getItemViewType(adapterPosition)) {
-            R.layout.movie_list_item_featured + FULL_WIDTH,
-            R.layout.movie_list_header -> {
-                outRect.left = spacing
-                outRect.right = spacing
-                outRect.bottom = spacing
-            }
-            R.layout.movie_list_item_featured + GridSpanSizeLookup.HALF_WIDTH -> {
-                val position = parent.getRelativeItemPosition(adapterPosition, viewType)
-
-                if(position == 0) outRect.left = spacing
-                outRect.right = spacing
-                outRect.bottom = spacing
-            }
-            R.layout.movie_list_item + spanCount -> {
-                outRect.addGridMargin(parent, adapterPosition, maxSpanCount / spanCount, viewType)
-            }
-        }
+        outRect.left = decoration.left
+        outRect.top = decoration.top
+        outRect.right = decoration.right
+        outRect.bottom = decoration.bottom
     }
 
-    private fun Rect.addGridMargin(
-        parent: RecyclerView,
-        adapterPosition: Int,
-        maxSpanCount: Int,
-        viewType: Int
-    ) {
-        val position = parent.getRelativeItemPosition(adapterPosition, viewType)
-        val column = position % maxSpanCount
+    private fun ConcatAdapter.getDecoration(parent: RecyclerView, adapterPosition: Int): Rect? {
+        val currentItemType = getItemViewType(adapterPosition)
+        val adapter = adapters.find { it.getItemViewType(adapterPosition) == currentItemType }
+        val relativePosition = parent.findViewHolderForAdapterPosition(adapterPosition)
+            ?.bindingAdapterPosition ?: return null
 
-        left = spacing - column * spacing / maxSpanCount
-        right = (column + 1) * spacing / maxSpanCount
-        if (position < maxSpanCount) top = spacing
-        bottom = spacing
-    }
+        return (adapter as? AdapterDecoration)?.getItemDecoration(
+            parent.resources,
+            adapterPosition,
+            relativePosition
+        )
 
-    private fun RecyclerView.getRelativeItemPosition(
-        adapterPosition: Int,
-        childViewType: Int
-    ): Int {
-        return generateSequence(adapterPosition - 1) { it.dec() }
-            .takeWhile { adapter?.getItemViewType(it) == childViewType }
-            .count()
+        // this causes recycling issues
+//        val adapter = recyclerView.findViewHolderForAdapterPosition(position)?.bindingAdapter
+//        return (adapter as? AdapterDecoration)?.getItemDecoration(recyclerView.resources, position)
     }
 }
