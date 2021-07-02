@@ -37,11 +37,6 @@ fun RecyclerView.addSingleScrollDirectionListener() {
     addOnScrollListener(listener)
 }
 
-fun RecyclerView.getRelativeItemPosition(
-    adapterPosition: Int,
-    viewType: Int
-): Int {
-    return generateSequence(adapterPosition - 1) { it.dec() }
-        .takeWhile { adapter?.getItemViewType(it) == viewType }
-        .count()
+fun Int.safeDiv(other: Int): Int {
+    return if (other == 0) 1 else this / other
 }

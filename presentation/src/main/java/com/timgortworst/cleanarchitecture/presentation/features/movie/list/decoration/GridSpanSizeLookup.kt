@@ -26,6 +26,7 @@ class GridSpanSizeLookup(
         // For example you have a grid of 3 columns and you want to add an item
         // that spans 2 columns of the total of 3
         fun calculateRelativeSpanWidth(totalColumns: Int, totalSubColumns: Int): Int {
+            if (totalColumns == 0 || totalSubColumns == 0) return FULL_WIDTH
             return (FULL_WIDTH.toFloat() / (totalColumns.toFloat() / totalSubColumns.toFloat())).roundToInt()
         }
     }

@@ -6,6 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
+import com.timgortworst.cleanarchitecture.presentation.extension.safeDiv
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterDecoration
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.FULL_WIDTH
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.HALF_WIDTH
@@ -26,9 +27,8 @@ object AdapterFactory {
         val itemDecoration = NestedListItemDecoration(padding)
         val totalGridColumns = resources.getInteger(R.integer.grid_columns)
 
-        val break2Columns = resources.getInteger(R.integer.break_2_span)
+        val break2Columns = resources.getInteger(R.integer.break_2_columns)
         val break2FillerColumns = totalGridColumns - break2Columns
-        val break2FillerItems = movies.take(break2FillerColumns)
 
         return listOf(
             // topstory
@@ -56,7 +56,7 @@ object AdapterFactory {
 
             // uitgelichte items boven break 2
             MovieListAdapter(calculateSpanWidth(totalGridColumns)).apply {
-                submitList(movies.takeLast(totalGridColumns))
+                submitList(movies.takeLast(resources.getInteger(R.integer.featured_item_count_above_break_2)))
             },
 
             // break 2
@@ -65,7 +65,10 @@ object AdapterFactory {
                 calculateRelativeSpanWidth(totalGridColumns, break2Columns)
             ),
             // break 2 filler items
-            MovieListAdapter(calculateRelativeSpanWidth(totalGridColumns, break2FillerColumns) / break2FillerColumns,
+            MovieListAdapter(
+                calculateRelativeSpanWidth(totalGridColumns, break2FillerColumns).safeDiv(
+                    break2FillerColumns
+                ),
                 object : AdapterDecoration {
                     override fun getItemDecoration(
                         resources: Resources,
@@ -73,16 +76,16 @@ object AdapterFactory {
                         relativePosition: Int
                     ): Rect {
                         val spacing = resources.getDimension(R.dimen.default_padding).toInt()
-                        return Rect().apply { right = spacing}
+                        return Rect().apply { right = spacing }
                     }
                 }
             ).apply {
-                submitList(break2FillerItems)
+                submitList(movies.take(resources.getInteger(R.integer.featured_item_count_next_break_2)))
             },
 
             // uitgelichte items 3/3
             MovieListAdapter(calculateSpanWidth(totalGridColumns)).apply {
-                submitList(movies.take(totalGridColumns))
+                submitList(movies.take(resources.getInteger(R.integer.featured_item_count_below_break_2)))
             },
 
             // sliders
