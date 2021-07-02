@@ -17,6 +17,7 @@ import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decor
 
 class MovieListAdapter(
     spanWidth: Int,
+    private val decoration: AdapterDecoration? = null
 ) : SpannedListAdapter<Movie, MovieListItemBinding>(DiffUtilMovieItem()), AdapterDecoration {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
@@ -35,16 +36,18 @@ class MovieListAdapter(
         adapterPosition: Int,
         relativePosition: Int
     ): Rect {
-        val spacing = resources.getDimension(R.dimen.default_padding).toInt()
-        val maxSpanCount = FULL_WIDTH / columnSpans
-        val rect = Rect()
-        val column = relativePosition % maxSpanCount
+        return decoration?.getItemDecoration(resources, adapterPosition, relativePosition) ?: run {
+            val spacing = resources.getDimension(R.dimen.default_padding).toInt()
+            val maxSpanCount = FULL_WIDTH / columnSpans
+            val rect = Rect()
+            val column = relativePosition % maxSpanCount
 
-        rect.left = spacing - column * spacing / maxSpanCount
-        rect.right = (column + 1) * spacing / maxSpanCount
-        if (relativePosition < maxSpanCount) rect.top = spacing
-        rect.bottom = spacing
-        return rect
+            rect.left = spacing - column * spacing / maxSpanCount
+            rect.right = (column + 1) * spacing / maxSpanCount
+            if (relativePosition < maxSpanCount) rect.top = spacing
+            rect.bottom = spacing
+            return rect
+        }
     }
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> MovieListItemBinding =

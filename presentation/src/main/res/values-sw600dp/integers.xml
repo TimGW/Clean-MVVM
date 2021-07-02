@@ -2,8 +2,6 @@
 <resources>
     <integer name="grid_columns">4</integer>
     <integer name="break_2_span">3</integer>
-    <integer name="featured_1_3_item_count">8</integer>
-    <integer name="featured_2_3_item_count">4</integer>
-    <integer name="featured_3_3_item_count">5</integer>
+    <integer name="featured_item_count">8</integer>
 
 </resources>

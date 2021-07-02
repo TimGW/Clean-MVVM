@@ -1,10 +1,12 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter
 
 import android.content.res.Resources
+import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterDecoration
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.FULL_WIDTH
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.HALF_WIDTH
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.calculateRelativeSpanWidth
@@ -23,10 +25,10 @@ object AdapterFactory {
         val padding = resources.getDimension(R.dimen.default_padding).toInt()
         val itemDecoration = NestedListItemDecoration(padding)
         val totalGridColumns = resources.getInteger(R.integer.grid_columns)
+
         val break2Columns = resources.getInteger(R.integer.break_2_span)
-        val featured1 = resources.getInteger(R.integer.featured_1_3_item_count)
-        val featured2 = resources.getInteger(R.integer.featured_2_3_item_count)
-        val featured3 = resources.getInteger(R.integer.featured_3_3_item_count)
+        val break2FillerColumns = totalGridColumns - break2Columns
+        val break2FillerItems = movies.take(break2FillerColumns)
 
         return listOf(
             // topstory
@@ -42,47 +44,54 @@ object AdapterFactory {
 
             // uitgelichte items 1/3
             MovieListAdapter(calculateSpanWidth(totalGridColumns)).apply {
-                submitList(listOf(movies, movies, movies, movies, movies, movies).flatten())
-                clickListener = clickAction
+//                submitList(listOf(movies, movies, movies, movies, movies, movies).flatten())
+                submitList(movies.take(resources.getInteger(R.integer.featured_item_count)))
             },
 
             // break 1
             HeaderAdapter("Kijken"),
-            NestedRecyclerAdapter(movies, NestedMovieListAdapter().apply {
-                clickListener = clickAction
-            }, itemDecoration),
+            NestedRecyclerAdapter(movies, NestedMovieListAdapter(), itemDecoration),
 
             HeaderAdapter(),
 
-            // uitgelichte items 2/3 met break 2
+            // uitgelichte items boven break 2
             MovieListAdapter(calculateSpanWidth(totalGridColumns)).apply {
-                submitList(movies.takeLast(featured2))
-                clickListener = clickAction
+                submitList(movies.takeLast(totalGridColumns))
             },
 
             // break 2
-            MovieFeaturedAdapter(movies[3], calculateRelativeSpanWidth(totalGridColumns, break2Columns)),
+            MovieFeaturedAdapter(
+                movies[3],
+                calculateRelativeSpanWidth(totalGridColumns, break2Columns)
+            ),
+            // break 2 filler items
+            MovieListAdapter(calculateRelativeSpanWidth(totalGridColumns, break2FillerColumns) / break2FillerColumns,
+                object : AdapterDecoration {
+                    override fun getItemDecoration(
+                        resources: Resources,
+                        adapterPosition: Int,
+                        relativePosition: Int
+                    ): Rect {
+                        val spacing = resources.getDimension(R.dimen.default_padding).toInt()
+                        return Rect().apply { right = spacing}
+                    }
+                }
+            ).apply {
+                submitList(break2FillerItems)
+            },
 
             // uitgelichte items 3/3
             MovieListAdapter(calculateSpanWidth(totalGridColumns)).apply {
-                submitList(movies.take(featured3))
-                clickListener = clickAction
+                submitList(movies.take(totalGridColumns))
             },
 
             // sliders
             HeaderAdapter("Uitgelegd"),
-            NestedRecyclerAdapter(movies, NestedMovieListAdapter().apply {
-                clickListener = clickAction
-            }, itemDecoration),
+            NestedRecyclerAdapter(movies, NestedMovieListAdapter(), itemDecoration),
             HeaderAdapter("Collecties"),
-            NestedRecyclerAdapter(movies, NestedMovieListAdapter().apply {
-                clickListener = clickAction
-            }, itemDecoration),
+            NestedRecyclerAdapter(movies, NestedMovieListAdapter(), itemDecoration),
             HeaderAdapter("Sport"),
-            NestedRecyclerAdapter(movies, NestedMovieListAdapter().apply {
-                clickListener = clickAction
-            }, itemDecoration),
-
+            NestedRecyclerAdapter(movies, NestedMovieListAdapter(), itemDecoration),
         )
     }
 }
