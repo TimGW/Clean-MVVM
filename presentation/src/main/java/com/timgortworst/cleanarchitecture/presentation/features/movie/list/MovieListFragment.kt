@@ -12,10 +12,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
+import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
+import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
+import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
+import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.AdapterFactory
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridMarginDecoration
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup.Companion.TOTAL_COLUMNS_GRID
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
