@@ -9,24 +9,22 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.transition.Transition
 import androidx.transition.TransitionInflater
-import androidx.transition.TransitionListenerAdapter
-import com.timgortworst.cleanarchitecture.domain.model.state.State
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
-import com.timgortworst.cleanarchitecture.presentation.model.EventObserver
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
-    private val listViewModel by viewModels<MovieListViewModel>()
-    private lateinit var adapter: MovieListAdapter
+    private val viewModel by viewModels<MovieListViewModel>()
     private lateinit var binding: FragmentMovieListBinding
+    private val concatAdapter by lazy {
+        ConcatAdapter(ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,15 +47,18 @@ class MovieListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
-        val navController = findNavController()
-        binding.collapsingToolbarLayout.setupWithNavController(
-            binding.toolbar,
-            navController,
-            AppBarConfiguration(navController.graph)
-        )
-
         setupMovieList()
         observeUI()
+
+        binding.recyclerView.doOnPreDraw {
+            startPostponedEnterTransition()
+//            binding.recyclerView.invalidateItemDecorations()
+        }
+        requireActivity().setTranslucentStatus(false)
+
+        binding.swiperefresh.setOnRefreshListener {
+            viewModel.reload()
+        }
     }
 
     override fun onResume() {
@@ -66,34 +67,48 @@ class MovieListFragment : Fragment() {
     }
 
     private fun observeUI() {
-        listViewModel.movies.observe(viewLifecycleOwner, { response ->
-            response?.let {
-                if (it is Error) {
+        viewModel.movies.observe(viewLifecycleOwner, {
+            binding.noResults.visibility = View.GONE
+            binding.swiperefresh.isRefreshing = false
+            when (it) {
+                is Resource.Error -> {
+                    it.errorEntity?.message?.let { msg -> view?.snackbar(msg) }
                     binding.noResults.visibility = View.VISIBLE
-                } else if(it is State.Success) {
-                    binding.noResults.visibility = View.GONE
-                    adapter.addMoviesToList(it.data.toMutableList())
                 }
+                Resource.Loading -> binding.swiperefresh.isRefreshing = true
+                is Resource.Success -> setupAdapters(it.data)
             }
-            binding.recyclerView.doOnPreDraw { startPostponedEnterTransition() }
-        })
-
-        listViewModel.loading.observe(viewLifecycleOwner, {
-//            swiperefresh.isRefreshing = it
-        })
-
-        listViewModel.error.observe(viewLifecycleOwner, EventObserver {
-            view?.snackbar(it)
         })
     }
 
     private fun setupMovieList() {
-        val columns = resources.getInteger(R.integer.gallery_columns)
-        val orientation = resources.getInteger(R.integer.gallery_orientation)
+        val spanLookup = MovieListSpanSizeLookup(concatAdapter)
         val padding = resources.getDimension(R.dimen.default_padding).toInt()
 
-        adapter = MovieListAdapter { movie, imageView ->
-            // this prevents a bug where the toolbar title already has the name of the next fragment
+        binding.recyclerView.apply {
+            layoutManager = GridLayoutManager(activity, TOTAL_COLUMNS_GRID).apply {
+                spanSizeLookup = spanLookup
+                adapter = concatAdapter
+            }
+            addItemDecoration(GridMarginDecoration(padding))
+            addSingleScrollDirectionListener()
+        }
+    }
+
+    private fun setupAdapters(movies: List<Movie>) {
+        if (movies.isEmpty()) return
+
+        concatAdapter.adapters.forEach { concatAdapter.removeAdapter(it) }
+
+        val adapters = AdapterFactory.createAdapters(resources, movies) { movie, view, transitionName ->
+            navigateToDetails(movie, view, transitionName)
+        }
+
+        adapters.forEach { concatAdapter.addAdapter(it) }
+    }
+
+    private fun navigateToDetails(movie: Movie, sharedView: View, transitionName: String) {
+        // this prevents a bug where the toolbar title already has the name of the next fragment
             binding.collapsingToolbarLayout.visibility = View.INVISIBLE
 
             val directions =
@@ -101,15 +116,11 @@ class MovieListFragment : Fragment() {
                     movie.title,
                     movie.id,
                     movie.highResImage
-                )
-            val extras = FragmentNavigatorExtras(imageView to movie.highResImage)
-            findNavController().navigate(directions, extras)
-        }
+                ,
+                transitionName,
+            )
 
-        binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(activity, columns, orientation, false)
-            adapter = this@MovieListFragment.adapter
-            addItemDecoration(GridMarginDecoration(columns, padding))
-        }
+        val extras = FragmentNavigatorExtras(sharedView to transitionName)
+        findNavController().navigate(directions, extras)
     }
 }

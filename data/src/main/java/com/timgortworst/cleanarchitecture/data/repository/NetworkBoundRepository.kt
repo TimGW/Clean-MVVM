@@ -1,7 +1,9 @@
 package com.timgortworst.cleanarchitecture.data.repository
 
+import androidx.annotation.MainThread
+import androidx.annotation.WorkerThread
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
-import com.timgortworst.cleanarchitecture.domain.model.state.State
+import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import kotlinx.coroutines.flow.*
 import retrofit2.Response
 
@@ -15,29 +17,38 @@ import retrofit2.Response
 abstract class NetworkBoundRepository<NETWORK, DOMAIN> {
 
     fun asFlow() = flow {
-        emit(State.Loading)
-        emit(State.Success(fetchFromLocal().first())) // Emit Database content first
+        emit(Resource.Loading)
 
-        val apiResponse = fetchFromRemote()
-        val remotePosts = apiResponse.body()
+        try {
+            emit(Resource.Success(fetchFromLocal().first()))
 
-        if (apiResponse.isSuccessful && remotePosts != null) {
-            saveRemoteData(remotePosts)
-        } else {
-            emit(State.Error(getErrorHandler().getError(apiResponse.code())))
+            val apiResponse = fetchFromRemote()
+            val remoteResponse = apiResponse.body()
+
+            if (apiResponse.isSuccessful && remoteResponse != null) {
+                saveRemoteData(remoteResponse)
+            } else {
+                val error = getErrorHandler().getApiError(
+                    statusCode = apiResponse.code(),
+                    message = apiResponse.message()
+                )
+                emit(Resource.Error(error))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(getErrorHandler().getError(e)))
         }
 
-        emitAll(fetchFromLocal().map { State.Success(it) })
-    }.catch { e ->
-        emit(State.Error(getErrorHandler().getError(e)))
-        e.printStackTrace()
+        emitAll(fetchFromLocal().map { Resource.Success(it) })
     }
 
     protected abstract suspend fun getErrorHandler() : ErrorHandler
 
+    @WorkerThread
     protected abstract suspend fun saveRemoteData(response: NETWORK)
 
+    @MainThread
     protected abstract fun fetchFromLocal(): Flow<DOMAIN>
 
+    @MainThread
     protected abstract suspend fun fetchFromRemote(): Response<NETWORK>
 }

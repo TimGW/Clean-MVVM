@@ -11,19 +11,19 @@ class ErrorHandlerImpl @Inject constructor() : ErrorHandler {
 
     override fun getError(throwable: Throwable): ErrorEntity {
         return when (throwable) {
-            is IOException -> ErrorEntity.NetworkException(throwable)
-            is HttpException -> getError(throwable.code(), throwable)
-            else -> ErrorEntity.Unknown(throwable)
+            is IOException -> ErrorEntity.NetworkException(throwable, "a network error occurred")
+            is HttpException -> getApiError(throwable, throwable.code(), "a server error occurred")
+            else -> ErrorEntity.Unknown(throwable, "an error occurred")
         }
     }
 
-    override fun getError(statusCode: Int, throwable: Throwable?): ErrorEntity {
+    override fun getApiError(throwable: Throwable?, statusCode: Int, message: String): ErrorEntity {
         return when(statusCode) {
-            HttpURLConnection.HTTP_NOT_FOUND -> ErrorEntity.HttpErrors.ResourceNotFound(throwable)
-            HttpURLConnection.HTTP_FORBIDDEN -> ErrorEntity.HttpErrors.ResourceForbidden(throwable)
-            HttpURLConnection.HTTP_INTERNAL_ERROR -> ErrorEntity.HttpErrors.InternalServerError(throwable)
-            HttpURLConnection.HTTP_BAD_GATEWAY -> ErrorEntity.HttpErrors.BadGateWay(throwable)
-            else -> ErrorEntity.Unknown()
+            HttpURLConnection.HTTP_NOT_FOUND -> ErrorEntity.HttpErrors.ResourceNotFound(message)
+            HttpURLConnection.HTTP_FORBIDDEN -> ErrorEntity.HttpErrors.ResourceForbidden(message)
+            HttpURLConnection.HTTP_INTERNAL_ERROR -> ErrorEntity.HttpErrors.InternalServerError(message)
+            HttpURLConnection.HTTP_BAD_GATEWAY -> ErrorEntity.HttpErrors.BadGateWay(message)
+            else -> ErrorEntity.Unknown(throwable, message)
         }
     }
 }

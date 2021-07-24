@@ -3,8 +3,9 @@ package com.timgortworst.cleanarchitecture.presentation.extension
 import android.app.Activity
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.*
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import android.view.animation.*
 
 
 fun View.snackbar(
@@ -59,4 +60,19 @@ fun View.animateSlideFade(duration: Long, visibility: Int) {
     animSet.addAnimation(translateAnim)
     animSet.addAnimation(alphaAnimation)
     startAnimation(animSet)
+}
+
+fun RecyclerView.addSingleScrollDirectionListener() {
+    val listener = SingleScrollDirectionListener()
+    addOnItemTouchListener(listener)
+    addOnScrollListener(listener)
+}
+
+fun RecyclerView.getRelativeItemPosition(
+    adapterPosition: Int,
+    viewType: Int
+): Int {
+    return generateSequence(adapterPosition - 1) { it.dec() }
+        .takeWhile { adapter?.getItemViewType(it) == viewType }
+        .count()
 }

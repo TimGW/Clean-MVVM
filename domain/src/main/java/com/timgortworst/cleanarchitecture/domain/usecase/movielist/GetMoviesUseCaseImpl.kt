@@ -1,22 +1,22 @@
 package com.timgortworst.cleanarchitecture.domain.usecase.movielist
 
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
+import com.timgortworst.cleanarchitecture.domain.model.state.ErrorEntity
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
-import com.timgortworst.cleanarchitecture.domain.model.state.State
+import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class GetMoviesUseCaseImpl(
+class GetMoviesUseCaseImpl @Inject constructor(
     private val movieRepository: MovieRepository,
-    private val errorHandler: ErrorHandler
 ) : GetMoviesUseCase {
 
-    override fun execute(params: Unit): Flow<State<List<Movie>>> {
+    override fun execute(params: Unit?): Flow<Resource<List<Movie>>> {
         return movieRepository.getMoviesFlow().map { response ->
             when (response) {
-                is State.Success -> {
+                is Resource.Success -> {
                     val mappedResult = response.data
                             .filterNot { it.adult }
                             .sortedBy { it.popularity }
@@ -26,13 +26,11 @@ class GetMoviesUseCaseImpl(
                                 it
                             }
 
-                    State.Success(mappedResult)
+                    Resource.Success(mappedResult)
                 }
-                is State.Error -> State.Error(response.errorEntity)
-                is State.Loading -> State.Loading
+                is Resource.Error -> Resource.Error(response.errorEntity)
+                is Resource.Loading -> Resource.Loading
             }
-        }.catch { cause ->
-            emit(State.Error(errorHandler.getError(cause)))
         }
     }
 }

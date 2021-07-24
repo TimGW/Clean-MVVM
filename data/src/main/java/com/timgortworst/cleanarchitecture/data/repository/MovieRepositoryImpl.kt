@@ -8,11 +8,12 @@ import com.timgortworst.cleanarchitecture.data.network.RemoteDataSourceMovie
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
-import com.timgortworst.cleanarchitecture.domain.model.state.State
+import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 /**
  * Lazy cache repository for fetching videos from the network and storing them on disk
@@ -20,7 +21,7 @@ import kotlinx.coroutines.flow.map
  * @property remoteDataSourceMovie
  * @property localDataSourceMovie
  */
-class MovieRepositoryImpl(
+class MovieRepositoryImpl @Inject constructor(
     private val remoteDataSourceMovie: RemoteDataSourceMovie,
     private val localDataSourceMovie: LocalDataSourceMovie,
     private val errorHandler: ErrorHandler
@@ -41,18 +42,21 @@ class MovieRepositoryImpl(
 
     }.asFlow().flowOn(Dispatchers.IO)
 
-    override suspend fun getMovieDetails(movieId: Int): State<MovieDetails> {
+    override suspend fun getMovieDetails(movieId: Int): Resource<MovieDetails> {
         return try {
             val apiResponse = remoteDataSourceMovie.getMovieDetails(movieId)
             val data = apiResponse.body()
 
             if (apiResponse.isSuccessful && data != null) {
-                State.Success(data.asDomainModel())
+                Resource.Success(data.asDomainModel())
             } else {
-                State.Error(errorHandler.getError(apiResponse.code()))
+                Resource.Error(errorHandler.getApiError(
+                    statusCode = apiResponse.code(),
+                    message = apiResponse.message()
+                ))
             }
         } catch (e: Throwable) {
-            State.Error(errorHandler.getError(e))
+            Resource.Error(errorHandler.getError(e))
         }
     }
 }

@@ -21,13 +21,13 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.google.android.material.appbar.AppBarLayout
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
+import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.animateSlideFade
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
-
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
     private val viewModel by viewModels<MovieDetailViewModel>()
@@ -71,6 +71,14 @@ class MovieDetailsFragment : Fragment() {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.movie_detail_enter)
         returnTransition = inflater.inflateTransition(android.R.transition.fade)
+        sharedElementEnterTransition = TransitionInflater.from(context)
+            .inflateTransition(R.transition.shared_element_transition)
+            .addListener(object : TransitionListenerAdapter() {
+                override fun onTransitionEnd(transition: Transition) {
+                    exitTransition = null
+                }
+            })
+        postponeEnterTransition()
     }
 
     override fun onCreateView(
@@ -78,51 +86,42 @@ class MovieDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMovieDetailsBinding.inflate(layoutInflater, container, false)
-        setSharedElementTransition()
-        postponeEnterTransition()
+        binding = FragmentMovieDetailsBinding.inflate(layoutInflater)
+        setupToolbar()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val navController = findNavController()
-        binding.collapsingToolbarLayout.setupWithNavController(
-            binding.toolbar,
-            navController,
-            AppBarConfiguration(navController.graph)
-        )
-
         binding.movieDetailsImage.apply {
-            transitionName = args.uri
-            startEnterTransitionAfterLoadingImage(args.uri, this)
+            transitionName = args.transitionName
+            startEnterTransitionAfterLoadingImage(args.movieImage, this)
         }
 
         observeUI()
-
-        viewModel.fetchMovieDetails(args.movieId)
+        viewModel.setMovieId(args.movieId)
+        requireActivity().setTranslucentStatus(true)
     }
 
     override fun onResume() {
         super.onResume()
-
         binding.appbar.addOnOffsetChangedListener(appBarScrollListener)
     }
 
     override fun onPause() {
         super.onPause()
-
         binding.appbar.removeOnOffsetChangedListener(appBarScrollListener)
     }
 
     private fun observeUI() {
-        viewModel.movies.observe(viewLifecycleOwner) { presentMovieDetails(it) }
-        viewModel.loading.observe(viewLifecycleOwner) {
-            binding.progressBar.visibility = if (it) View.VISIBLE else View.INVISIBLE
-        }
-        viewModel.error.observe(viewLifecycleOwner) {
-            presentError(R.string.generic_error)
+        viewModel.movieDetails.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = View.INVISIBLE
+            when(it) {
+                is Resource.Error -> presentError(R.string.generic_error)
+                Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is Resource.Success -> presentMovieDetails(it.data)
+            }
         }
     }
 
@@ -144,16 +143,6 @@ class MovieDetailsFragment : Fragment() {
         binding.errorMessage.visibility = View.VISIBLE
         binding.errorMessage.text =
             getString(R.string.no_internet_placeholder_text, getString(errorMessage))
-    }
-
-    private fun setSharedElementTransition() {
-        sharedElementEnterTransition = TransitionInflater.from(context)
-            .inflateTransition(R.transition.shared_element_transition)
-            .addListener(object : TransitionListenerAdapter() {
-                override fun onTransitionEnd(transition: Transition) {
-                    exitTransition = null
-                }
-            })
     }
 
     private fun startEnterTransitionAfterLoadingImage(uri: String, imageView: ImageView) {
@@ -183,5 +172,14 @@ class MovieDetailsFragment : Fragment() {
                 }
             })
             .into(imageView)
+    }
+
+    private fun setupToolbar() {
+        val navController = findNavController()
+        binding.collapsingToolbarLayout.setupWithNavController(
+            binding.toolbar,
+            navController,
+            AppBarConfiguration(navController.graph)
+        )
     }
 }
