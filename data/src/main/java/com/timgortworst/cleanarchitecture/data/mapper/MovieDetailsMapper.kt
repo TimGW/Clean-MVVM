@@ -1,10 +1,10 @@
 package com.timgortworst.cleanarchitecture.data.mapper
 
+import com.timgortworst.cleanarchitecture.data.model.DbMovieDetails
 import com.timgortworst.cleanarchitecture.data.model.NetworkMovieDetails
-import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 
-fun NetworkMovieDetails.asDomainModel() = with(this) {
+fun DbMovieDetails.asDomainModel() = with(this) {
     MovieDetails(
         adult,
         backdropPath,
@@ -18,12 +18,9 @@ fun NetworkMovieDetails.asDomainModel() = with(this) {
         overview,
         popularity,
         posterPath,
-        productionCompanies.map { it.asDomainModel() },
-        productionCountries.map { it.asDomainModel() },
         releaseDate,
         revenue,
         runtime,
-        spokenLanguages.map { it.asDomainModel() },
         status,
         tagline,
         title,
@@ -33,32 +30,39 @@ fun NetworkMovieDetails.asDomainModel() = with(this) {
     )
 }
 
-fun NetworkMovieDetails.Genre.asDomainModel() = with(this) {
+fun NetworkMovieDetails.asDatabaseModel() = with(this) {
+    DbMovieDetails(
+        id,
+        adult,
+        backdropPath,
+        originalLanguage,
+        originalTitle,
+        overview,
+        popularity,
+        posterPath,
+        releaseDate,
+        title,
+        video,
+        voteAverage,
+        voteCount,
+        budget,
+        genres.map { it.asDatabaseModel() },
+        homepage,
+        imdbId,
+        revenue,
+        runtime,
+        status,
+        tagline,
+    )
+}
+
+fun DbMovieDetails.Genre.asDomainModel() = with(this) {
     MovieDetails.Genre(
         id,
         name
     )
 }
 
-fun NetworkMovieDetails.ProductionCompany.asDomainModel() = with(this) {
-    MovieDetails.ProductionCompany(
-        id,
-        logoPath.orEmpty(),
-        name,
-        originCountry
-    )
-}
-
-fun NetworkMovieDetails.ProductionCountry.asDomainModel() = with(this) {
-    MovieDetails.ProductionCountry(
-        iso31661,
-        name
-    )
-}
-
-fun NetworkMovieDetails.SpokenLanguage.asDomainModel() = with(this) {
-    MovieDetails.SpokenLanguage(
-        iso6391,
-        name
-    )
+fun NetworkMovieDetails.Genre.asDatabaseModel() = with(this) {
+    DbMovieDetails.Genre(id, name)
 }

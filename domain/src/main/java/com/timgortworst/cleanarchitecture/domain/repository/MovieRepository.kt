@@ -6,14 +6,15 @@ import kotlinx.coroutines.flow.Flow
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 
 interface MovieRepository {
-    /**
-     * Fetch the movies from network and stored it in database. At the end, data from persistence
-     * storage is fetched and emitted.
-     */
-    fun getMoviesFlow(): Flow<Resource<List<Movie>>>
 
     /**
-     * one shot operation to fetch the movie details from network
+     * one shot operation to fetch the movies from network
      */
-    suspend fun getMovieDetails(movieId: Int): Resource<MovieDetails>
+    suspend fun getMovies(): Resource<List<Movie>>
+
+    /**
+     * Fetch the movie details from network and store it in database.
+     * At the end, data from persistence storage is fetched and emitted.
+     */
+    fun getMovieDetailFlow(movieId: Int): Flow<Resource<List<MovieDetails>>>
 }

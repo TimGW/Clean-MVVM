@@ -13,7 +13,7 @@ class MovieListViewModel @Inject constructor(
 ) : ViewModel() {
     private val reloadMovies = MutableLiveData<Boolean>()
     val movies: LiveData<Resource<List<Movie>>> = Transformations.switchMap(reloadMovies) {
-        getMoviesUseCase.execute().asLiveData()
+        liveData { emit(getMoviesUseCase.execute(Unit)) }
     }
 
     init {

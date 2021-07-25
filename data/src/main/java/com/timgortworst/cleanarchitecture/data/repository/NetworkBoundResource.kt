@@ -14,31 +14,39 @@ import retrofit2.Response
  * [NETWORK] represents the type for network.
  * [DOMAIN] represents the type for domain.
  */
-abstract class NetworkBoundRepository<NETWORK, DOMAIN> {
+abstract class NetworkBoundResource<NETWORK, DOMAIN> {
 
     fun asFlow() = flow {
         emit(Resource.Loading)
 
         try {
-            emit(Resource.Success(fetchFromLocal().first()))
+            val local = fetchFromLocal().first()
 
-            val apiResponse = fetchFromRemote()
-            val remoteResponse = apiResponse.body()
-
-            if (apiResponse.isSuccessful && remoteResponse != null) {
-                saveRemoteData(remoteResponse)
+            if (shouldFetch(local)) {
+                fetchFromNetwork().collect()
             } else {
-                val error = getErrorHandler().getApiError(
-                    statusCode = apiResponse.code(),
-                    message = apiResponse.message()
-                )
-                emit(Resource.Error(error))
+                emit(Resource.Success(local))
             }
         } catch (e: Exception) {
             emit(Resource.Error(getErrorHandler().getError(e)))
         }
 
         emitAll(fetchFromLocal().map { Resource.Success(it) })
+    }
+
+    private fun fetchFromNetwork() = flow {
+        val apiResponse = fetchFromRemote()
+        val remoteResponse = apiResponse.body()
+
+        if (apiResponse.isSuccessful && remoteResponse != null) {
+            saveRemoteData(remoteResponse)
+        } else {
+            val error = getErrorHandler().getApiError(
+                statusCode = apiResponse.code(),
+                message = apiResponse.message()
+            )
+            emit(Resource.Error(error))
+        }
     }
 
     protected abstract suspend fun getErrorHandler() : ErrorHandler
@@ -51,4 +59,7 @@ abstract class NetworkBoundRepository<NETWORK, DOMAIN> {
 
     @MainThread
     protected abstract suspend fun fetchFromRemote(): Response<NETWORK>
+
+    @MainThread
+    protected abstract fun shouldFetch(data: DOMAIN?): Boolean
 }

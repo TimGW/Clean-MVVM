@@ -3,12 +3,12 @@ package com.timgortworst.cleanarchitecture.data.model
 import com.google.gson.annotations.SerializedName
 
 data class NetworkMovieDetails(
+    @SerializedName("id") val id: Int = 0,
     @SerializedName("adult") val adult: Boolean = false,
     @SerializedName("backdrop_path") val backdropPath: String = "",
     @SerializedName("budget") val budget: Int = 0,
     @SerializedName("genres") val genres: List<Genre> = listOf(),
     @SerializedName("homepage") val homepage: String = "",
-    @SerializedName("id") val id: Int = 0,
     @SerializedName("imdb_id") val imdbId: String = "",
     @SerializedName("original_language") val originalLanguage: String = "",
     @SerializedName("original_title") val originalTitle: String = "",

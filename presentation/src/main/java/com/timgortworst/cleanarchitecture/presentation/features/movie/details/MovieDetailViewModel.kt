@@ -16,9 +16,7 @@ class MovieDetailViewModel @Inject constructor(
 
     val movieDetails: LiveData<Resource<MovieDetails>> =
         savedStateHandle.getLiveData<Int>(STATE_ID_MOVIE).switchMap { movieId ->
-            liveData {
-                emit(getMovieDetailsUseCase.execute(GetMovieDetailsUseCaseImpl.Params(movieId)))
-            }
+           getMovieDetailsUseCase.execute(GetMovieDetailsUseCaseImpl.Params(movieId)).asLiveData()
         }
 
     fun setMovieId(movieId: Int) {

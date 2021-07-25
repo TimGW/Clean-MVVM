@@ -13,12 +13,9 @@ data class MovieDetails(
     val overview: String = "",
     val popularity: Double = 0.0,
     val posterPath: String? = null,
-    val productionCompanies: List<ProductionCompany> = listOf(),
-    val productionCountries: List<ProductionCountry> = listOf(),
     val releaseDate: String = "",
     val revenue: Int = 0,
     val runtime: Int = 0,
-    val spokenLanguages: List<SpokenLanguage> = listOf(),
     val status: String = "",
     val tagline: String = "",
     val title: String = "",
@@ -29,23 +26,6 @@ data class MovieDetails(
 
     data class Genre(
         val id: Int = 0,
-        val name: String = ""
-    )
-
-    data class ProductionCompany(
-        val id: Int = 0,
-        val logoPath: String = "",
-        val name: String = "",
-        val originCountry: String = ""
-    )
-
-    data class ProductionCountry(
-        val iso31661: String = "",
-        val name: String = ""
-    )
-
-    data class SpokenLanguage(
-        val iso6391: String = "",
         val name: String = ""
     )
 }

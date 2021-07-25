@@ -1,15 +1,17 @@
 package com.timgortworst.cleanarchitecture.data.database
 
 import androidx.room.*
-import com.timgortworst.cleanarchitecture.data.model.DbMovie
+import com.timgortworst.cleanarchitecture.data.model.DbMovieDetails
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Dao
 interface LocalDataSourceMovie {
 
-    @Query("SELECT * FROM DbMovie")
-    fun getMovies(): Flow<List<DbMovie>>
+    // TODO convert to single object instead of list
+    @Query("SELECT * FROM DbMovieDetails WHERE id = :movieId")
+    fun getMovieDetails(movieId: Int): Flow<List<DbMovieDetails>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMovies(dbMovies: List<DbMovie>)
+    fun insertMovieDetails(dbMovieDetails: DbMovieDetails)
 }

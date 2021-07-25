@@ -40,7 +40,7 @@ abstract class AppModule {
         @Singleton
         fun providesRoomDb(
             @ApplicationContext context: Context
-        ) = Room.databaseBuilder(context, AppDatabase::class.java, "movie_database")
+        ) = Room.databaseBuilder(context, AppDatabase::class.java, "tmdb")
             .fallbackToDestructiveMigration()
             .build()
 

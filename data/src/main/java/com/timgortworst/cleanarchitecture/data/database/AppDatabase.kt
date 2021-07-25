@@ -2,9 +2,11 @@ package com.timgortworst.cleanarchitecture.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.timgortworst.cleanarchitecture.data.model.DbMovie
+import androidx.room.TypeConverters
+import com.timgortworst.cleanarchitecture.data.model.DbMovieDetails
 
-@Database(entities = [DbMovie::class], version = 1)
+@Database(entities = [DbMovieDetails::class], version = 1)
+@TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun movieDao(): LocalDataSourceMovie
 }
