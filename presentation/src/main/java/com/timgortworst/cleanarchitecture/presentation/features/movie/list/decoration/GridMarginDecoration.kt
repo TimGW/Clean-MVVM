@@ -27,40 +27,11 @@ class GridMarginDecoration(
 
         val adapterPosition: Int = parent.getChildAdapterPosition(view)
         val maxSpanCount = layoutManager.spanCount
+        val column = adapterPosition % maxSpanCount
 
-        when (val viewType = parent.adapter?.getItemViewType(adapterPosition)) {
-            R.layout.movie_list_item_featured * maxSpanCount,
-            R.layout.movie_list_header * maxSpanCount -> {
-                outRect.left = spacing
-                outRect.right = spacing
-            }
-            R.layout.movie_list_item  -> {
-                outRect.addGridMargin(parent, adapterPosition, maxSpanCount, viewType)
-            }
-        }
-    }
-
-    private fun Rect.addGridMargin(
-        parent: RecyclerView,
-        adapterPosition: Int,
-        maxSpanCount: Int,
-        viewType: Int
-    ) {
-        val position = parent.getRelativeItemPosition(adapterPosition, viewType)
-        val column = position % maxSpanCount
-
-        left = spacing - column * spacing / maxSpanCount
-        right = (column + 1) * spacing / maxSpanCount
-        if (position < maxSpanCount) top = spacing
-        bottom = spacing
-    }
-
-    private fun RecyclerView.getRelativeItemPosition(
-        adapterPosition: Int,
-        childViewType: Int
-    ): Int {
-        return generateSequence(adapterPosition - 1) { it.dec() }
-            .takeWhile { adapter?.getItemViewType(it) == childViewType }
-            .count()
+        outRect.left = spacing - column * spacing / maxSpanCount
+        outRect.right = (column + 1) * spacing / maxSpanCount
+        if (adapterPosition < maxSpanCount) outRect.top = spacing
+        outRect.bottom = spacing
     }
 }

@@ -5,12 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterSpanSize
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup
 
-abstract class BaseListAdapter<T, VB: ViewBinding>(
+abstract class BaseListAdapter<T, VB : ViewBinding>(
     diffCallback: DiffUtil.ItemCallback<T>,
-) : ListAdapter<T, BaseViewHolder<T>>(diffCallback), AdapterSpanSize {
+) : ListAdapter<T, BaseViewHolder<T>>(diffCallback) {
 
     abstract val itemViewType: Int
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
@@ -21,11 +19,7 @@ abstract class BaseListAdapter<T, VB: ViewBinding>(
         return BaseViewHolderImpl(binding)
     }
 
-    // combine the layout and spansize to provide a unique but re-usable integer for the concatadapter
-    // recycling between different adapters with the same layout
-    override fun getItemViewType(position: Int): Int = itemViewType * getSpanSize()
-
-    override fun getSpanSize(): Int = MovieListSpanSizeLookup.COLUMNS_SINGLE
+    override fun getItemViewType(position: Int): Int = itemViewType
 
     override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {
         holder.bind(getItem(position), position)

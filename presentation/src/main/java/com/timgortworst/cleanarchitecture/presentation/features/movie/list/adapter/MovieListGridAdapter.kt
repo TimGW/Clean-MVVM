@@ -10,9 +10,7 @@ import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemBinding
 import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BaseListAdapter
 
-class MovieListGridAdapter(
-    private val spanSize: Int,
-) : BaseListAdapter<Movie, MovieListItemBinding>(DiffUtilMovieItem()) {
+class MovieListGridAdapter : BaseListAdapter<Movie, MovieListItemBinding>(DiffUtilMovieItem()) {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
     override fun getItemId(position: Int): Long {
@@ -20,8 +18,6 @@ class MovieListGridAdapter(
     }
 
     override val itemViewType = R.layout.movie_list_item
-
-    override fun getSpanSize() = spanSize
 
     override fun getItemCount() = if (currentList.isEmpty()) 0 else currentList.size
 

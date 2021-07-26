@@ -1,7 +1,6 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.transition.Transition
 import androidx.transition.TransitionInflater
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
@@ -21,18 +18,16 @@ import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovie
 import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.AdapterFactory
+import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.MovieListGridAdapter
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridMarginDecoration
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.MovieListSpanSizeLookup.Companion.TOTAL_COLUMNS_GRID
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
     private val viewModel by viewModels<MovieListViewModel>()
     private lateinit var binding: FragmentMovieListBinding
-    private val concatAdapter by lazy {
-        ConcatAdapter(ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build())
+    private val movieAdapter by lazy {
+        MovieListGridAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +55,6 @@ class MovieListFragment : Fragment() {
 
         binding.recyclerView.doOnPreDraw {
             startPostponedEnterTransition()
-//            binding.recyclerView.invalidateItemDecorations()
         }
         requireActivity().setTranslucentStatus(false)
 
@@ -85,14 +79,14 @@ class MovieListFragment : Fragment() {
     }
 
     private fun setupMovieList() {
-        val spanLookup = MovieListSpanSizeLookup(concatAdapter)
-        val padding = resources.getDimension(R.dimen.default_padding).toInt()
-
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(activity, TOTAL_COLUMNS_GRID).apply {
-                spanSizeLookup = spanLookup
-                adapter = concatAdapter
+            layoutManager = GridLayoutManager(activity, 4)
+            adapter = movieAdapter
+            movieAdapter.clickListener = { movie, view, transitionName ->
+                navigateToDetails(movie, view, transitionName)
             }
+
+            val padding = resources.getDimension(R.dimen.default_padding).toInt()
             addItemDecoration(GridMarginDecoration(padding))
             addSingleScrollDirectionListener()
         }
@@ -100,14 +94,7 @@ class MovieListFragment : Fragment() {
 
     private fun setupAdapters(movies: List<Movie>) {
         if (movies.isEmpty()) return
-
-        concatAdapter.adapters.forEach { concatAdapter.removeAdapter(it) }
-
-        val adapters = AdapterFactory.createAdapters(resources, movies) { movie, view, transitionName ->
-            navigateToDetails(movie, view, transitionName)
-        }
-
-        adapters.forEach { concatAdapter.addAdapter(it) }
+        movieAdapter.submitList(movies)
     }
 
     private fun navigateToDetails(movie: Movie, sharedView: View, transitionName: String) {
