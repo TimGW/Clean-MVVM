@@ -2,13 +2,13 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie.base
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseListAdapter<T, VB : ViewBinding>(
+abstract class BaseListAdapter<T : Any, VB : ViewBinding>(
     diffCallback: DiffUtil.ItemCallback<T>,
-) : ListAdapter<T, BaseViewHolder<T>>(diffCallback) {
+) : PagingDataAdapter<T, BaseViewHolder<T>>(diffCallback) {
 
     abstract val itemViewType: Int
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
@@ -22,7 +22,7 @@ abstract class BaseListAdapter<T, VB : ViewBinding>(
     override fun getItemViewType(position: Int): Int = itemViewType
 
     override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {
-        holder.bind(getItem(position), position)
+        getItem(position)?.let { holder.bind(it, position) }
     }
 
     inner class BaseViewHolderImpl(private val binding: VB) : BaseViewHolder<T>(binding) {
@@ -30,5 +30,4 @@ abstract class BaseListAdapter<T, VB : ViewBinding>(
             this@BaseListAdapter.bind(binding, item, position)
         }
     }
-
 }

@@ -13,13 +13,7 @@ import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BaseL
 class MovieListGridAdapter : BaseListAdapter<Movie, MovieListItemBinding>(DiffUtilMovieItem()) {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
-    override fun getItemId(position: Int): Long {
-        return getItem(position).id.toLong()
-    }
-
     override val itemViewType = R.layout.movie_list_item
-
-    override fun getItemCount() = if (currentList.isEmpty()) 0 else currentList.size
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> MovieListItemBinding =
         MovieListItemBinding::inflate

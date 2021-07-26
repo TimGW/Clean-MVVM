@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
-import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
@@ -21,6 +22,8 @@ import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.MovieListGridAdapter
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
@@ -59,23 +62,34 @@ class MovieListFragment : Fragment() {
         requireActivity().setTranslucentStatus(false)
 
         binding.swiperefresh.setOnRefreshListener {
-            viewModel.reload()
+            movieAdapter.refresh()
         }
     }
 
     private fun observeUI() {
-        viewModel.movies.observe(viewLifecycleOwner, {
-            binding.noResults.visibility = View.GONE
-            binding.swiperefresh.isRefreshing = false
-            when (it) {
-                is Resource.Error -> {
-                    it.errorEntity?.message?.let { msg -> view?.snackbar(msg) }
-                    binding.noResults.visibility = View.VISIBLE
-                }
-                Resource.Loading -> binding.swiperefresh.isRefreshing = true
-                is Resource.Success -> setupAdapters(it.data)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.moviesPaged.collectLatest {
+                movieAdapter.submitData(it)
             }
-        })
+        }
+
+        lifecycleScope.launch {
+            movieAdapter.loadStateFlow.collectLatest { loadStates ->
+                binding.noResults.visibility = View.GONE
+
+                when (loadStates.refresh) {
+                    is LoadState.NotLoading -> binding.swiperefresh.isRefreshing = false
+                    LoadState.Loading -> { }
+                    is LoadState.Error -> {
+                        binding.swiperefresh.isRefreshing = false
+                        view?.snackbar(getString(R.string.connection_error))
+                        if (movieAdapter.itemCount == 0) {
+                            binding.noResults.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setupMovieList() {
@@ -90,11 +104,6 @@ class MovieListFragment : Fragment() {
             addItemDecoration(GridMarginDecoration(padding))
             addSingleScrollDirectionListener()
         }
-    }
-
-    private fun setupAdapters(movies: List<Movie>) {
-        if (movies.isEmpty()) return
-        movieAdapter.submitList(movies)
     }
 
     private fun navigateToDetails(movie: Movie, sharedView: View, transitionName: String) {

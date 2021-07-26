@@ -1,5 +1,8 @@
 package com.timgortworst.cleanarchitecture.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.timgortworst.cleanarchitecture.data.database.MovieDao
 import com.timgortworst.cleanarchitecture.data.mapper.asDatabaseModel
 import com.timgortworst.cleanarchitecture.data.mapper.asDomainModel
@@ -11,6 +14,7 @@ import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -27,9 +31,15 @@ class MovieRepositoryImpl @Inject constructor(
     private val errorHandler: ErrorHandler
 ) : MovieRepository {
 
+    override fun getPagedMovies(): Flow<PagingData<Movie>> = Pager(
+        PagingConfig(pageSize = 100)
+    ) {
+        MoviePagingSource(movieService)
+    }.flow
+
     override suspend fun getMovies(): Resource<List<Movie>> {
         return try {
-            val apiResponse = movieService.getMovies()
+            val apiResponse = movieService.getMovies(1)
             val data = apiResponse.body()
 
             if (apiResponse.isSuccessful && data != null) {

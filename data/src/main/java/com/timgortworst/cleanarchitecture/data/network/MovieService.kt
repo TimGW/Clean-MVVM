@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface MovieService {
 
     @GET("discover/movie")
-    suspend fun getMovies(@Query("include_adult") includeAdult: Boolean = true): Response<NetworkMovies>
+    suspend fun getMovies(@Query("page") page: Int): Response<NetworkMovies>
 
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(@Path("movie_id") movieId: Int): Response<NetworkMovieDetails>

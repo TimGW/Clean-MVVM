@@ -2,8 +2,8 @@ package com.timgortworst.cleanarchitecture.presentation.di
 
 import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCaseImpl
-import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesUseCase
-import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesUseCaseImpl
+import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesPagedUseCase
+import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesPagedUseCaseImpl
 import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderRegionsUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderRegionsUseCaseImpl
 import dagger.Binds
@@ -18,9 +18,9 @@ abstract class UseCaseModule {
 
     @Binds
     @ViewModelScoped
-    abstract fun provideGetMoviesUseCase(
-        getMoviesUseCaseImpl: GetMoviesUseCaseImpl
-    ): GetMoviesUseCase
+    abstract fun provideGetMoviesPagedUseCase(
+        getMoviesPagedUseCaseImpl: GetMoviesPagedUseCaseImpl
+    ): GetMoviesPagedUseCase
 
     @Binds
     @ViewModelScoped
