@@ -26,9 +26,9 @@ data class NetworkMovieDetails(
     @SerializedName("title") val title: String = "",
     @SerializedName("video") val video: Boolean = false,
     @SerializedName("vote_average") val voteAverage: Double = 0.0,
-    @SerializedName("vote_count") val voteCount: Int = 0
+    @SerializedName("vote_count") val voteCount: Int = 0,
+    @SerializedName("watch/providers") val watchProviders: WatchProviders? = null,
 ) {
-
     data class Genre(
         @SerializedName("id") val id: Int = 0,
         @SerializedName("name") val name: String = ""
@@ -50,4 +50,30 @@ data class NetworkMovieDetails(
         @SerializedName("iso_639_1") val iso6391: String = "",
         @SerializedName("name") val name: String = ""
     )
+
+    data class WatchProviders(
+        @SerializedName("results")
+        val results: Map<String, Result>
+    ) {
+        data class Result(
+            @SerializedName("link")
+            val link: String,
+            @SerializedName("flatrate")
+            val flatRate: List<FlatRate>
+        ) {
+            data class FlatRate (
+                @SerializedName("display_priority")
+                val displayPriority: Long,
+
+                @SerializedName("logo_path")
+                val logoPath: String,
+
+                @SerializedName("provider_id")
+                val providerID: Long,
+
+                @SerializedName("provider_name")
+                val providerName: String
+            )
+        }
+    }
 }

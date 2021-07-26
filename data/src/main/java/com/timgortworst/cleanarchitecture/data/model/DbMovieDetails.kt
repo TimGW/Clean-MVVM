@@ -50,6 +50,8 @@ data class DbMovieDetails(
     val status: String = "",
     @ColumnInfo(name = "tagline")
     val tagline: String = "",
+    @ColumnInfo(name = "watch_providers")
+    val watchProviders: String = "",
 ) {
     data class Genre(
         @ColumnInfo(name = "id") val id: Int = 0,

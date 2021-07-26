@@ -26,7 +26,8 @@ fun DbMovieDetails.asDomainModel() = with(this) {
         title,
         video,
         voteAverage,
-        voteCount
+        voteCount,
+        watchProviders,
     )
 }
 
@@ -53,6 +54,7 @@ fun NetworkMovieDetails.asDatabaseModel() = with(this) {
         runtime,
         status,
         tagline,
+        watchProviders?.results?.get("NL")?.flatRate?.joinToString { it.providerName }.orEmpty(),
     )
 }
 

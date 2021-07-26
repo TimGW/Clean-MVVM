@@ -103,6 +103,8 @@ class MovieDetailsFragment : Fragment() {
         binding.movieDetailsReleaseDate.text =
             getString(R.string.movie_detail_release_date, movieDetails.releaseDate)
         binding.movieDetailsOverview.text = movieDetails.overview
+        binding.watchProviders.text =
+            getString(R.string.watch_provider_availability, movieDetails.watchProviders)
     }
 
     private fun presentError(errorMessage: Int) {
