@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.timgortworst.cleanarchitecture.data.BuildConfig
 import com.timgortworst.cleanarchitecture.data.database.AppDatabase
+import com.timgortworst.cleanarchitecture.data.database.SharedPrefManager
+import com.timgortworst.cleanarchitecture.data.database.SharedPrefs
 import com.timgortworst.cleanarchitecture.data.error.ErrorHandlerImpl
 import com.timgortworst.cleanarchitecture.data.network.AuthHeaderInterceptor
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
@@ -35,6 +37,11 @@ abstract class AppModule {
     ): Interceptor
 
     companion object {
+
+        @Provides
+        fun providesSharedPreferences(
+            sharedPrefManager: SharedPrefManager
+        ): SharedPrefs = SharedPrefs(sharedPrefManager)
 
         @Provides
         @Singleton

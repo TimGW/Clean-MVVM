@@ -2,8 +2,8 @@ package com.timgortworst.cleanarchitecture.domain.repository
 
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
-import kotlinx.coroutines.flow.Flow
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
+import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
 

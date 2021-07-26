@@ -8,5 +8,5 @@ import com.timgortworst.cleanarchitecture.data.model.DbMovieDetails
 @Database(entities = [DbMovieDetails::class], version = 1)
 @TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun movieDao(): LocalDataSourceMovie
+    abstract fun movieDao(): MovieDao
 }

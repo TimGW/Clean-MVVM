@@ -6,6 +6,8 @@
     <string name="no_internet_placeholder_text">%1$s Swipe down to retry.</string>
     <string name="no_results_placeholder_text">There are no results found.</string>
     <string name="movie_list_toolbar_title">Movies</string>
+    <string name="welcome_toolbar_title">Welcome</string>
+    <string name="welcome_toolbar_subtitle">Welcome</string>
     <string name="movie_details_toolbar_title">Details</string>
     <string name="header_trending">Trending</string>
 </resources>

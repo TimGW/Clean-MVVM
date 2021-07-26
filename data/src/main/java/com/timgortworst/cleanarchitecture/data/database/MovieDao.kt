@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Dao
-interface LocalDataSourceMovie {
+interface MovieDao {
 
     // TODO convert to single object instead of list
     @Query("SELECT * FROM DbMovieDetails WHERE id = :movieId")

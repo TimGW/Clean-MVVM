@@ -1,7 +1,7 @@
 package com.timgortworst.cleanarchitecture.data.di
 
 import com.timgortworst.cleanarchitecture.data.database.AppDatabase
-import com.timgortworst.cleanarchitecture.data.database.LocalDataSourceMovie
+import com.timgortworst.cleanarchitecture.data.database.MovieDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +15,7 @@ import dagger.hilt.components.SingletonComponent
 object DaoModule {
 
     @Provides
-    fun provideMovieDao(database: AppDatabase): LocalDataSourceMovie {
+    fun provideMovieDao(database: AppDatabase): MovieDao {
         return database.movieDao()
     }
 }

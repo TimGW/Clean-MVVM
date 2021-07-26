@@ -4,6 +4,8 @@ import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDet
 import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCaseImpl
 import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesUseCaseImpl
+import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderRegionsUseCase
+import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderRegionsUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,4 +27,10 @@ abstract class UseCaseModule {
     abstract fun provideGetMovieDetailsUseCase(
         getMovieDetailsUseCaseImpl: GetMovieDetailsUseCaseImpl
     ): GetMovieDetailsUseCase
+
+    @Binds
+    @ViewModelScoped
+    abstract fun provideGetWatchProviderRegionsUseCase(
+        getWatchProviderRegionsUseCaseImpl: GetWatchProviderRegionsUseCaseImpl
+    ): GetWatchProviderRegionsUseCase
 }
