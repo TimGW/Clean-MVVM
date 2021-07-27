@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.welcome
+package com.timgortworst.cleanarchitecture.presentation.features.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,17 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
-import com.timgortworst.cleanarchitecture.presentation.R
-import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentWelcomeBinding
+import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WelcomeFragment : Fragment() {
-    private val viewModel by viewModels<WelcomeViewModel>()
+class SettingsFragment : Fragment() {
+    private val viewModel by viewModels<SettingsViewModel>()
 
-    private var _binding: FragmentWelcomeBinding? = null
+    private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
     private val movieProviderAdapter by lazy {
@@ -28,7 +26,7 @@ class WelcomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentWelcomeBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -59,24 +57,22 @@ class WelcomeFragment : Fragment() {
                 is Resource.Success -> {
                     binding.watchProviderRv.adapter = movieProviderAdapter.apply {
                         submitList(it.data.map { watchProvider ->
-                            WatchProvidersAdapter.ViewItem(watchProvider, false)
-                        }.distinctBy { item -> item.watchProvider.providerName })
-                        onCheckedListener = { watchProvider, isChecked -> }
+
+                            val isChecked = viewModel.checkedProviders.value?.any { wp ->
+                                wp.providerId == watchProvider.providerId
+                            } ?: false
+
+                            WatchProvidersAdapter.ViewItem(watchProvider, isChecked)
+                        })
+                        onCheckedListener = { watchProvider, isChecked ->
+                            val providers = movieProviderAdapter.currentList
+                                .filter { it.isChecked }
+                                .map { it.watchProvider }
+                            viewModel.setWatchProviders(providers)
+                        }
                     }
                 }
             }
-        }
-
-        binding.buttonDone.setOnClickListener {
-            val providers = movieProviderAdapter.currentList
-                .filter { it.isChecked }
-                .map { it.watchProvider }
-
-            viewModel.setOnboardingDone(true)
-            viewModel.setWatchProviders(providers)
-
-            requireActivity().finish()
-            findNavController().navigate(R.id.MovieActivity)
         }
     }
 

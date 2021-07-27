@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.welcome
+package com.timgortworst.cleanarchitecture.presentation.features.settings
 
 import android.view.LayoutInflater
 import android.view.View

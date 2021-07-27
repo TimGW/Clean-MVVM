@@ -7,10 +7,12 @@
     <string name="no_internet_placeholder_text">%1$s Swipe down to retry.</string>
     <string name="no_results_placeholder_text">There are no results found.</string>
     <string name="movie_list_toolbar_title">Movies</string>
-    <string name="welcome_toolbar_title">Welcome</string>
-    <string name="welcome_toolbar_subtitle">Welcome</string>
+    <string name="settings_toolbar_title">Settings</string>
     <string name="movie_details_toolbar_title">Details</string>
     <string name="header_trending">Trending</string>
     <string name="watch_provider_availability">Available on: %1$s</string>
+    <string name="menu_movies">Movies</string>
+    <string name="menu_tv">Television</string>
+    <string name="menu_settings">Settings</string>
 
 </resources>

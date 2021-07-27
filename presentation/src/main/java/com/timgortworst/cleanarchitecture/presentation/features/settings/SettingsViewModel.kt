@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.welcome
+package com.timgortworst.cleanarchitecture.presentation.features.settings
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -13,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class WelcomeViewModel @Inject constructor(
+class SettingsViewModel @Inject constructor(
     getWatchProviderRegionsUseCase: GetWatchProviderRegionsUseCase,
     private val getWatchProviderMovieUseCase: GetWatchProviderMovieUseCase,
     private val sharedPrefs: SharedPrefs,
@@ -33,6 +33,10 @@ class WelcomeViewModel @Inject constructor(
         }
     }
 
+    val checkedProviders = liveData<List<WatchProvider>> {
+        sharedPrefs.getWatchProviders()
+    }
+
     init {
         load.value = Unit
     }
@@ -40,10 +44,6 @@ class WelcomeViewModel @Inject constructor(
     fun updateMovieProviders(isoValue: String) {
         sharedPrefs.setWatchProviderRegion(isoValue)
         iso.value = isoValue
-    }
-
-    fun setOnboardingDone(isDone: Boolean) {
-        sharedPrefs.setOnboardingDone(isDone)
     }
 
     fun setWatchProviders(providers: List<WatchProvider>) {

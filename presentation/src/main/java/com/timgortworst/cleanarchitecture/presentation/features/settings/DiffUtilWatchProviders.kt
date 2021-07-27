@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.welcome
+package com.timgortworst.cleanarchitecture.presentation.features.settings
 
 import androidx.recyclerview.widget.DiffUtil
 

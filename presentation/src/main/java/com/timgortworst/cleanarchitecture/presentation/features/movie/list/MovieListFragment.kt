@@ -68,9 +68,7 @@ class MovieListFragment : Fragment() {
 
     private fun observeUI() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.moviesPaged.collectLatest {
-                movieAdapter.submitData(it)
-            }
+            viewModel.moviesPaged.collectLatest { movieAdapter.submitData(it) }
         }
 
         lifecycleScope.launch {

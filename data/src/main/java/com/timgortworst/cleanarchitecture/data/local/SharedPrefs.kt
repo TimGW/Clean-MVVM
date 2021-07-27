@@ -13,12 +13,6 @@ class SharedPrefs(
     @ApplicationContext private val context: Context
 ) {
 
-    fun setOnboardingDone(isDone: Boolean) {
-        spm.setBoolValue(SHARED_PREF_ONBOARDING, isDone)
-    }
-
-    fun isOnboardingDone() = spm.getBoolValue(SHARED_PREF_ONBOARDING)
-
     fun setWatchProviderRegion(region: String) {
         spm.setStringValue(SHARED_PREF_WATCH_PROVIDER_REGION, region)
     }
@@ -37,7 +31,6 @@ class SharedPrefs(
     }
 
     companion object {
-        const val SHARED_PREF_ONBOARDING = "SHARED_PREF_ONBOARDING"
         const val SHARED_PREF_WATCH_PROVIDER_REGION = "SHARED_PREF_WATCH_PROVIDER_REGION"
         const val SHARED_PREF_WATCH_PROVIDER = "SHARED_PREF_WATCH_PROVIDER"
     }

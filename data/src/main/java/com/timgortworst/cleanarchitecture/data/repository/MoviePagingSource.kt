@@ -10,8 +10,8 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class MoviePagingSource @Inject constructor(
-    private val remoteDataSourceMovie: MovieService,
+class MoviePagingSource (
+    private val movieService: MovieService,
     private val sharedPrefs: SharedPrefs,
 ) : PagingSource<Int, Movie>() {
 
@@ -23,7 +23,7 @@ class MoviePagingSource @Inject constructor(
             val watchProviders = sharedPrefs.getWatchProviders()
 
             val nextPageNumber = params.key ?: 1
-            val response = remoteDataSourceMovie.getMovies(
+            val response = movieService.getMovies(
                 page = nextPageNumber,
                 providerIds = watchProviders.map { it.providerId }.joinToString(separator = "|"),
                 region = region

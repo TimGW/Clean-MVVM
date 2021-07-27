@@ -1,5 +1,9 @@
 package com.timgortworst.cleanarchitecture.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.filter
+import androidx.paging.map
 import com.timgortworst.cleanarchitecture.data.local.MovieDao
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.data.mapper.asDatabaseModel
@@ -24,11 +28,14 @@ class MovieRepositoryImpl @Inject constructor(
     private val movieService: MovieService,
     private val movieDao: MovieDao,
     private val errorHandler: ErrorHandler,
-    private val moviePagingSource: MoviePagingSource,
     private val sharedPrefs: SharedPrefs
 ) : MovieRepository {
 
-    override fun getPagedMovieSource() = moviePagingSource
+    override fun getPagedMovies() = Pager(
+        PagingConfig(pageSize = 100)
+    ) {
+        MoviePagingSource(movieService, sharedPrefs)
+    }.flow
 
     override fun getMovieDetailFlow(
         movieId: Int

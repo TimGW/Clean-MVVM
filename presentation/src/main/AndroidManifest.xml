@@ -28,10 +28,6 @@
             android:name=".features.movie.MovieActivity"
             android:exported="false" />
 
-        <activity
-            android:name=".features.welcome.WelcomeActivity"
-            android:exported="false" />
-
     </application>
 
 </manifest>

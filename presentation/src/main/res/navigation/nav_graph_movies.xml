@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentMovieList">
+    app:startDestination="@id/page_movies">
 
     <fragment
-        android:id="@+id/fragmentMovieList"
+        android:id="@+id/page_movies"
         android:name="com.timgortworst.cleanarchitecture.presentation.features.movie.list.MovieListFragment"
         android:label="@string/movie_list_toolbar_title"
         tools:layout="@layout/fragment_movie_list">
@@ -42,4 +42,10 @@
             app:argType="string" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/page_settings"
+        android:name="com.timgortworst.cleanarchitecture.presentation.features.settings.SettingsFragment"
+        android:label="@string/settings_toolbar_title"
+        tools:layout="@layout/fragment_settings"/>
 </navigation>
