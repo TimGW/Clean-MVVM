@@ -19,19 +19,31 @@ class SharedPrefs(
 
     fun getWatchProviderRegion() = spm.getStringValue(SHARED_PREF_WATCH_PROVIDER_REGION)
 
-    fun setWatchProviders(watchProviders: List<WatchProvider>) {
-        spm.setList(SHARED_PREF_WATCH_PROVIDER, watchProviders)
+    fun setWatchProvidersMovie(watchProviders: List<WatchProvider>) {
+        spm.setList(SHARED_PREF_WATCH_PROVIDER_MOVIE, watchProviders)
     }
 
-    fun getWatchProviders(): List<WatchProvider> {
+    fun getWatchProvidersMovie(): List<WatchProvider>? {
         val json = PreferenceManager.getDefaultSharedPreferences(context)
-            .getString(SHARED_PREF_WATCH_PROVIDER, null)
+            .getString(SHARED_PREF_WATCH_PROVIDER_MOVIE, null) ?: return null
+        val type: Type = object : TypeToken<List<WatchProvider>>() {}.type
+        return Gson().fromJson(json, type)
+    }
+
+    fun setWatchProvidersTv(watchProviders: List<WatchProvider>) {
+        spm.setList(SHARED_PREF_WATCH_PROVIDER_TV, watchProviders)
+    }
+
+    fun getWatchProvidersTv(): List<WatchProvider>? {
+        val json = PreferenceManager.getDefaultSharedPreferences(context)
+            .getString(SHARED_PREF_WATCH_PROVIDER_TV, null) ?: return null
         val type: Type = object : TypeToken<List<WatchProvider>>() {}.type
         return Gson().fromJson(json, type)
     }
 
     companion object {
         const val SHARED_PREF_WATCH_PROVIDER_REGION = "SHARED_PREF_WATCH_PROVIDER_REGION"
-        const val SHARED_PREF_WATCH_PROVIDER = "SHARED_PREF_WATCH_PROVIDER"
+        const val SHARED_PREF_WATCH_PROVIDER_MOVIE = "SHARED_PREF_WATCH_PROVIDER_MOVIE"
+        const val SHARED_PREF_WATCH_PROVIDER_TV = "SHARED_PREF_WATCH_PROVIDER_TV"
     }
 }

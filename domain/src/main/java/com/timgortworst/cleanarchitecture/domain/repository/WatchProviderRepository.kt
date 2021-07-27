@@ -8,5 +8,7 @@ interface WatchProviderRepository {
 
     suspend fun getWatchProviderRegions(): Resource<List<WatchProviderRegion>>
 
-    suspend fun getWatchProviders(region: String): Resource<List<WatchProvider>>
+    suspend fun getWatchProvidersMovie(region: String): Resource<List<WatchProvider>>
+
+    suspend fun getWatchProvidersTv(region: String): Resource<List<WatchProvider>>
 }

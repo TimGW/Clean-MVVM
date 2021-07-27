@@ -12,15 +12,10 @@ interface MovieService {
     @GET("discover/movie")
     suspend fun getMovies(
         @Query("page") page: Int,
-
-        // default is netflix OR amazon
-        @Query("with_watch_providers") providerIds: String = "8|9",
-
-        // Default region is NL
-        @Query("watch_region") region: String = "NL",
-
-        // flatrate, free, ads, rent, buy
-        @Query("with_watch_monetization_types") type: String = "flatrate|free|ads",
+        @Query("region") region: String? = null,
+        @Query("with_watch_providers") watchProviderIds: String? = null,
+        @Query("watch_region") watchProviderRegion: String? = null,
+        @Query("with_watch_monetization_types") monetizationTypes: String? = null,
     ): Response<NetworkMovies>
 
     @GET("movie/{movie_id}")

@@ -1,6 +1,7 @@
 package com.timgortworst.cleanarchitecture.presentation.features.settings
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.timgortworst.cleanarchitecture.domain.model.movie.WatchProvider
 import com.timgortworst.cleanarchitecture.presentation.R
@@ -19,12 +20,13 @@ class WatchProvidersAdapter :
     override fun bind(binding: WatchProviderListItemBinding, item: ViewItem, position: Int) {
         binding.watchProvider.apply {
             setOnCheckedChangeListener(null)
-            isChecked = item.isChecked
             text = item.watchProvider.providerName
             setOnCheckedChangeListener { _, isChecked ->
                 item.isChecked = isChecked
                 onCheckedListener?.invoke(item.watchProvider, isChecked)
+//                item.callback?.onCheckedListener(item.watchProvider)
             }
+            isChecked = item.isChecked
         }
     }
 
@@ -32,4 +34,11 @@ class WatchProvidersAdapter :
         val watchProvider: WatchProvider,
         var isChecked: Boolean,
     )
+//    {
+//        var callback: Callback? = null
+//    }
+//
+//    interface Callback {
+//        fun onCheckedListener(watchProvider: WatchProvider)
+//    }
 }

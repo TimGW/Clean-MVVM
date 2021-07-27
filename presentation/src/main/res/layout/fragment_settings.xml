@@ -45,7 +45,7 @@
             android:id="@+id/region_spinner_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Pick your region"
+            android:text="Watch region"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -54,32 +54,60 @@
             android:id="@+id/region_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:paddingVertical="16dp"
+            android:spinnerMode="dialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/region_spinner_title" />
 
         <TextView
-            android:id="@+id/providers_title"
+            android:id="@+id/providers_title_movie"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Pick your movie providers"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:text="Movie providers"
+            app:layout_constraintEnd_toEndOf="@+id/watch_provider_rv_movie"
+            app:layout_constraintStart_toStartOf="@+id/watch_provider_rv_movie"
             app:layout_constraintTop_toBottomOf="@id/region_spinner" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/watch_provider_rv"
+            android:id="@+id/watch_provider_rv_movie"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/watch_provider_rv_tv"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/providers_title_movie" />
+
+        <TextView
+            android:id="@+id/providers_title_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="TV providers"
+            app:layout_constraintEnd_toEndOf="@+id/watch_provider_rv_tv"
+            app:layout_constraintStart_toStartOf="@+id/watch_provider_rv_tv"
+            app:layout_constraintTop_toBottomOf="@+id/region_spinner" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/watch_provider_rv_tv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/providers_title" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/watch_provider_rv_movie"
+            app:layout_constraintTop_toBottomOf="@+id/providers_title_tv" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

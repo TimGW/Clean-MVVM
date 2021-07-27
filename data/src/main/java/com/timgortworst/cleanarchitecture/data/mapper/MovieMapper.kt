@@ -2,6 +2,8 @@ package com.timgortworst.cleanarchitecture.data.mapper
 
 import com.timgortworst.cleanarchitecture.data.model.NetworkMovies
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun NetworkMovies.asDomainModel(): List<Movie> = with(this) {
     results.map {
@@ -14,7 +16,10 @@ fun NetworkMovies.asDomainModel(): List<Movie> = with(this) {
             it.overview,
             it.popularity,
             it.posterPath,
-            it.releaseDate,
+            if (it.releaseDate.isNotBlank()) SimpleDateFormat(
+                "yyyy-MM-dd",
+                Locale.getDefault()
+            ).parse(it.releaseDate) else null,
             it.title,
             it.video,
             it.voteAverage,

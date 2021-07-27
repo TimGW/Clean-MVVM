@@ -31,7 +31,7 @@ fun DbMovieDetails.asDomainModel() = with(this) {
     )
 }
 
-fun NetworkMovieDetails.asDatabaseModel(region: String) = with(this) {
+fun NetworkMovieDetails.asDatabaseModel(region: String?) = with(this) {
     DbMovieDetails(
         id,
         adult,

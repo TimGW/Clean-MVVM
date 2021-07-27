@@ -6,16 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.domain.model.movie.WatchProvider
-import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderMovieUseCase
-import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderMovieUseCaseImpl
-import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderRegionsUseCase
+import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     getWatchProviderRegionsUseCase: GetWatchProviderRegionsUseCase,
-    private val getWatchProviderMovieUseCase: GetWatchProviderMovieUseCase,
+    private val getWatchProvidersMovieUseCase: GetWatchProvidersMovieUseCase,
+    private val getWatchProvidersTvUseCase: GetWatchProvidersTvUseCase,
     private val sharedPrefs: SharedPrefs,
 ) : ViewModel() {
 
@@ -26,27 +25,35 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private val iso = MutableLiveData<String>()
-    val movieProviders = Transformations.switchMap(iso) {
+    private val isoMovie = MutableLiveData<String>()
+    val movieProviders = Transformations.switchMap(isoMovie) {
         liveData {
-            emit(getWatchProviderMovieUseCase.execute(GetWatchProviderMovieUseCaseImpl.Params(it)))
+            emit(getWatchProvidersMovieUseCase.execute(GetWatchProvidersMovieUseCaseImpl.Params(it)))
         }
     }
 
-    val checkedProviders = liveData<List<WatchProvider>> {
-        sharedPrefs.getWatchProviders()
+    private val isoTv = MutableLiveData<String>()
+    val tvProviders = Transformations.switchMap(isoTv) {
+        liveData {
+            emit(getWatchProvidersTvUseCase.execute(GetWatchProvidersTvUseCaseImpl.Params(it)))
+        }
     }
 
     init {
         load.value = Unit
     }
 
-    fun updateMovieProviders(isoValue: String) {
+    fun updateProviders(isoValue: String) {
         sharedPrefs.setWatchProviderRegion(isoValue)
-        iso.value = isoValue
+        isoMovie.value = isoValue
+        isoTv.value = isoValue
     }
 
-    fun setWatchProviders(providers: List<WatchProvider>) {
-        sharedPrefs.setWatchProviders(providers)
+    fun setWatchProvidersMovie(providers: List<WatchProvider>) {
+        sharedPrefs.setWatchProvidersMovie(providers)
+    }
+
+    fun setWatchProvidersTv(providers: List<WatchProvider>) {
+        sharedPrefs.setWatchProvidersTv(providers)
     }
 }

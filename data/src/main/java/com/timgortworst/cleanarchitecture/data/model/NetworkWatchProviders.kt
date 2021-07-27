@@ -2,7 +2,7 @@ package com.timgortworst.cleanarchitecture.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class NetworkWatchProvidersMovie(
+data class NetworkWatchProviders(
     @SerializedName("results")
     val results: ArrayList<Result>,
 ) {

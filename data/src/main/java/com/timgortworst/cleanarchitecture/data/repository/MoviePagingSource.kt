@@ -8,7 +8,7 @@ import com.timgortworst.cleanarchitecture.data.remote.MovieService
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import retrofit2.HttpException
 import java.io.IOException
-import javax.inject.Inject
+import java.util.*
 
 class MoviePagingSource (
     private val movieService: MovieService,
@@ -20,13 +20,15 @@ class MoviePagingSource (
     ): LoadResult<Int, Movie> {
         return try {
             val region = sharedPrefs.getWatchProviderRegion()
-            val watchProviders = sharedPrefs.getWatchProviders()
+            val watchProviders = sharedPrefs.getWatchProvidersMovie()
 
             val nextPageNumber = params.key ?: 1
             val response = movieService.getMovies(
                 page = nextPageNumber,
-                providerIds = watchProviders.map { it.providerId }.joinToString(separator = "|"),
-                region = region
+                region = region,
+                watchProviderIds = watchProviders?.map { it.providerId }?.joinToString(separator = "|"),
+                watchProviderRegion = region,
+                monetizationTypes = "flatrate|free|ads"
             ).body()!!
             val nextPage = if (response.page < response.totalPages) response.page + 1 else null
 

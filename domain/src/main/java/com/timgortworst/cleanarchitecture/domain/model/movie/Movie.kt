@@ -1,5 +1,7 @@
 package com.timgortworst.cleanarchitecture.domain.model.movie
 
+import java.util.*
+
 data class Movie(
     val adult: Boolean = false,
     val backdropPath: String? = "",
@@ -9,7 +11,7 @@ data class Movie(
     val overview: String = "",
     val popularity: Double = 0.0,
     val posterPath: String? = null,
-    val releaseDate: String = "",
+    val releaseDate: Date? = null,
     val title: String = "",
     val video: Boolean = false,
     val voteAverage: Double = 0.0,

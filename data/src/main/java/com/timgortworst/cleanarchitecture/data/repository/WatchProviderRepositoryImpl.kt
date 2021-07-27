@@ -9,6 +9,7 @@ import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.repository.WatchProviderRepository
 import javax.inject.Inject
 
+// TODO caching
 class WatchProviderRepositoryImpl @Inject constructor(
     private val service: WatchProviderService,
     private val errorHandler: ErrorHandler
@@ -34,9 +35,29 @@ class WatchProviderRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getWatchProviders(region: String): Resource<List<WatchProvider>> {
+    override suspend fun getWatchProvidersMovie(region: String): Resource<List<WatchProvider>> {
         return try {
             val apiResponse = service.getWatchProvidersMovie(region)
+            val data = apiResponse.body()
+
+            if (apiResponse.isSuccessful && data != null) {
+                Resource.Success(data.asDomainModel())
+            } else {
+                Resource.Error(
+                    errorHandler.getApiError(
+                        statusCode = apiResponse.code(),
+                        message = apiResponse.message()
+                    )
+                )
+            }
+        } catch (e: Throwable) {
+            Resource.Error(errorHandler.getError(e))
+        }
+    }
+
+    override suspend fun getWatchProvidersTv(region: String): Resource<List<WatchProvider>> {
+        return try {
+            val apiResponse = service.getWatchProvidersTv(region)
             val data = apiResponse.body()
 
             if (apiResponse.isSuccessful && data != null) {
