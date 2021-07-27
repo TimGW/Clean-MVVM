@@ -25,7 +25,7 @@
         </activity>
 
         <activity
-            android:name=".features.movie.MovieActivity"
+            android:name=".features.MainActivity"
             android:exported="false" />
 
     </application>
