@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.data.network
+package com.timgortworst.cleanarchitecture.data.remote
 
 import com.timgortworst.cleanarchitecture.data.BuildConfig
 import okhttp3.Interceptor

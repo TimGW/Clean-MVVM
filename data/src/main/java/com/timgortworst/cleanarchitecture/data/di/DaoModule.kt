@@ -1,7 +1,7 @@
 package com.timgortworst.cleanarchitecture.data.di
 
-import com.timgortworst.cleanarchitecture.data.database.AppDatabase
-import com.timgortworst.cleanarchitecture.data.database.MovieDao
+import com.timgortworst.cleanarchitecture.data.local.AppDatabase
+import com.timgortworst.cleanarchitecture.data.local.MovieDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

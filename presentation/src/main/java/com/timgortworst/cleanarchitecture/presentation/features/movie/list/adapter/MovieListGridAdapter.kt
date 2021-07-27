@@ -9,8 +9,9 @@ import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemBinding
 import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BaseListAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BasePagingAdapter
 
-class MovieListGridAdapter : BaseListAdapter<Movie, MovieListItemBinding>(DiffUtilMovieItem()) {
+class MovieListGridAdapter : BasePagingAdapter<Movie, MovieListItemBinding>(DiffUtilMovieItem()) {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
     override val itemViewType = R.layout.movie_list_item

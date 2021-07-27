@@ -31,7 +31,7 @@ fun DbMovieDetails.asDomainModel() = with(this) {
     )
 }
 
-fun NetworkMovieDetails.asDatabaseModel() = with(this) {
+fun NetworkMovieDetails.asDatabaseModel(region: String) = with(this) {
     DbMovieDetails(
         id,
         adult,
@@ -54,7 +54,7 @@ fun NetworkMovieDetails.asDatabaseModel() = with(this) {
         runtime,
         status,
         tagline,
-        watchProviders?.results?.get("NL")?.flatRate?.joinToString { it.providerName }.orEmpty(),
+        watchProviders?.results?.get(region)?.flatRate?.joinToString { it.providerName }.orEmpty(),
     )
 }
 

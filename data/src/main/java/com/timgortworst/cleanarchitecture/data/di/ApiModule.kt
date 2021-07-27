@@ -1,7 +1,7 @@
 package com.timgortworst.cleanarchitecture.data.di
 
-import com.timgortworst.cleanarchitecture.data.network.MovieService
-import com.timgortworst.cleanarchitecture.data.network.WatchProviderService
+import com.timgortworst.cleanarchitecture.data.remote.MovieService
+import com.timgortworst.cleanarchitecture.data.remote.WatchProviderService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

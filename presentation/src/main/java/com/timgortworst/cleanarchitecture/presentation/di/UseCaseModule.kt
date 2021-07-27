@@ -4,6 +4,8 @@ import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDet
 import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCaseImpl
 import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesPagedUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesPagedUseCaseImpl
+import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderMovieUseCase
+import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderMovieUseCaseImpl
 import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderRegionsUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderRegionsUseCaseImpl
 import dagger.Binds
@@ -33,4 +35,10 @@ abstract class UseCaseModule {
     abstract fun provideGetWatchProviderRegionsUseCase(
         getWatchProviderRegionsUseCaseImpl: GetWatchProviderRegionsUseCaseImpl
     ): GetWatchProviderRegionsUseCase
+
+    @Binds
+    @ViewModelScoped
+    abstract fun provideGetWatchProviderMovieUseCase(
+        GetWatchProviderMovieUseCase: GetWatchProviderMovieUseCaseImpl
+    ): GetWatchProviderMovieUseCase
 }

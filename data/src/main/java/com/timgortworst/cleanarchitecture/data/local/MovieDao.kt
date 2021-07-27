@@ -1,9 +1,8 @@
-package com.timgortworst.cleanarchitecture.data.database
+package com.timgortworst.cleanarchitecture.data.local
 
 import androidx.room.*
 import com.timgortworst.cleanarchitecture.data.model.DbMovieDetails
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Dao
 interface MovieDao {

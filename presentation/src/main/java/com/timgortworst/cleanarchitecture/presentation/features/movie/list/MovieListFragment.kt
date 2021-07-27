@@ -94,7 +94,7 @@ class MovieListFragment : Fragment() {
 
     private fun setupMovieList() {
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(activity, 4)
+            layoutManager = GridLayoutManager(activity, resources.getInteger(R.integer.movie_columns))
             adapter = movieAdapter
             movieAdapter.clickListener = { movie, view, transitionName ->
                 navigateToDetails(movie, view, transitionName)

@@ -3,11 +3,11 @@ package com.timgortworst.cleanarchitecture.data.di
 import android.content.Context
 import androidx.room.Room
 import com.timgortworst.cleanarchitecture.data.BuildConfig
-import com.timgortworst.cleanarchitecture.data.database.AppDatabase
-import com.timgortworst.cleanarchitecture.data.database.SharedPrefManager
-import com.timgortworst.cleanarchitecture.data.database.SharedPrefs
+import com.timgortworst.cleanarchitecture.data.local.AppDatabase
+import com.timgortworst.cleanarchitecture.data.local.SharedPrefManager
+import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.data.error.ErrorHandlerImpl
-import com.timgortworst.cleanarchitecture.data.network.AuthHeaderInterceptor
+import com.timgortworst.cleanarchitecture.data.remote.AuthHeaderInterceptor
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import dagger.Binds
 import dagger.Module
@@ -40,8 +40,9 @@ abstract class AppModule {
 
         @Provides
         fun providesSharedPreferences(
-            sharedPrefManager: SharedPrefManager
-        ): SharedPrefs = SharedPrefs(sharedPrefManager)
+            sharedPrefManager: SharedPrefManager,
+            @ApplicationContext context: Context
+        ): SharedPrefs = SharedPrefs(sharedPrefManager, context)
 
         @Provides
         @Singleton
