@@ -8,8 +8,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemBinding
-import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BaseListAdapter
-import com.timgortworst.cleanarchitecture.presentation.features.movie.base.BasePagingAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.base.BaseListAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.base.BasePagingAdapter
 
 class MovieListGridAdapter : BasePagingAdapter<Movie, MovieListItemBinding>(DiffUtilMovieItem()) {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null

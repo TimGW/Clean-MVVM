@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.base
+package com.timgortworst.cleanarchitecture.presentation.features.base
 
 import android.view.View
 import android.view.ViewGroup
