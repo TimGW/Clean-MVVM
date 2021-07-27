@@ -16,6 +16,7 @@ import androidx.transition.TransitionInflater
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
+import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentSettingsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
@@ -28,7 +29,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
     private val viewModel by viewModels<MovieListViewModel>()
-    private lateinit var binding: FragmentMovieListBinding
+    private var _binding: FragmentMovieListBinding? = null
+    private val binding get() = _binding!!
+
     private val movieAdapter by lazy {
         MovieListGridAdapter()
     }
@@ -44,7 +47,7 @@ class MovieListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMovieListBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentMovieListBinding.inflate(layoutInflater, container, false)
         sharedElementReturnTransition = TransitionInflater.from(context)
         return binding.root
     }
@@ -64,6 +67,11 @@ class MovieListFragment : Fragment() {
         binding.swiperefresh.setOnRefreshListener {
             movieAdapter.refresh()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun observeUI() {

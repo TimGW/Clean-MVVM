@@ -24,6 +24,7 @@ import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieDetailsBinding
+import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,7 +32,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
     private val viewModel by viewModels<MovieDetailViewModel>()
     private val args: MovieDetailsFragmentArgs by navArgs()
-    private lateinit var binding: FragmentMovieDetailsBinding
+    private var _binding: FragmentMovieDetailsBinding? = null
+    private val binding get() = _binding!!
     private val appBarScrollListener = AppBarLayout.OnOffsetChangedListener { _, offset ->
         if (offset < -resources.getDimension(R.dimen.scrim_visible_height_trigger)) {
             requireActivity().setTranslucentStatus(false)
@@ -60,7 +62,7 @@ class MovieDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMovieDetailsBinding.inflate(layoutInflater)
+        _binding = FragmentMovieDetailsBinding.inflate(layoutInflater)
         setupToolbar()
         return binding.root
     }
@@ -86,6 +88,11 @@ class MovieDetailsFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         binding.appbar.removeOnOffsetChangedListener(appBarScrollListener)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun observeUI() {
