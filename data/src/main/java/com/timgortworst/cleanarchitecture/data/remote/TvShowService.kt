@@ -1,26 +1,26 @@
 package com.timgortworst.cleanarchitecture.data.remote
 
-import com.timgortworst.cleanarchitecture.data.model.movie.NetworkMovieDetails
-import com.timgortworst.cleanarchitecture.data.model.movie.NetworkMovies
+import com.timgortworst.cleanarchitecture.data.model.tv.NetworkTvShowDetails
+import com.timgortworst.cleanarchitecture.data.model.tv.NetworkTvShows
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface MovieService {
+interface TvShowService {
 
-    @GET("discover/movie")
-    suspend fun getMovies(
+    @GET("discover/tv")
+    suspend fun getTvShows(
         @Query("page") page: Int,
         @Query("region") region: String? = null,
         @Query("with_watch_providers") watchProviderIds: String? = null,
         @Query("watch_region") watchProviderRegion: String? = null,
         @Query("with_watch_monetization_types") monetizationTypes: String? = null,
-    ): Response<NetworkMovies>
+    ): Response<NetworkTvShows>
 
-    @GET("movie/{movie_id}")
-    suspend fun getMovieDetails(
-        @Path("movie_id") movieId: Int,
+    @GET("tv/{tv_id}")
+    suspend fun getTvShowDetails(
+        @Path("tv_id") tvId: Int,
         @Query("append_to_response") providers: String = "watch/providers",
-    ): Response<NetworkMovieDetails>
+    ): Response<NetworkTvShowDetails>
 }

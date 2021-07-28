@@ -1,7 +1,7 @@
 package com.timgortworst.cleanarchitecture.data.local
 
 import androidx.room.*
-import com.timgortworst.cleanarchitecture.data.model.DbMovieDetails
+import com.timgortworst.cleanarchitecture.data.model.movie.DbMovieDetails
 import kotlinx.coroutines.flow.Flow
 
 @Dao

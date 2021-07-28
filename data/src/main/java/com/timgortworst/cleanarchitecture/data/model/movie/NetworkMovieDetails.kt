@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.data.model
+package com.timgortworst.cleanarchitecture.data.model.movie
 
 import com.google.gson.annotations.SerializedName
 
@@ -52,27 +52,17 @@ data class NetworkMovieDetails(
     )
 
     data class WatchProviders(
-        @SerializedName("results")
-        val results: Map<String, Result>
+        @SerializedName("results") val results: Map<String, Result>
     ) {
         data class Result(
-            @SerializedName("link")
-            val link: String,
-            @SerializedName("flatrate")
-            val flatRate: List<FlatRate>
+            @SerializedName("link") val link: String,
+            @SerializedName("flatrate") val flatRate: List<FlatRate>
         ) {
-            data class FlatRate (
-                @SerializedName("display_priority")
-                val displayPriority: Long,
-
-                @SerializedName("logo_path")
-                val logoPath: String,
-
-                @SerializedName("provider_id")
-                val providerID: Long,
-
-                @SerializedName("provider_name")
-                val providerName: String
+            data class FlatRate(
+                @SerializedName("display_priority") val displayPriority: Long,
+                @SerializedName("logo_path") val logoPath: String,
+                @SerializedName("provider_id") val providerID: Long,
+                @SerializedName("provider_name") val providerName: String
             )
         }
     }

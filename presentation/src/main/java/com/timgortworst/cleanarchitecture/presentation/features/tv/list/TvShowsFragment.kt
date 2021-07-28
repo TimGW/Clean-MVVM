@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.list
+package com.timgortworst.cleanarchitecture.presentation.features.tv.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,26 +13,26 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
-import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
+import com.timgortworst.cleanarchitecture.domain.model.tv.TvShow
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaListBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.MovieListGridAdapter
 import com.timgortworst.cleanarchitecture.presentation.features.base.GridMarginDecoration
+import com.timgortworst.cleanarchitecture.presentation.features.tv.list.adapter.TvShowGridAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MovieListFragment : Fragment() {
-    private val viewModel by viewModels<MovieListViewModel>()
+class TvShowsFragment : Fragment() {
+    private val viewModel by viewModels<TvShowsViewModel>()
     private var _binding: FragmentMediaListBinding? = null
     private val binding get() = _binding!!
 
-    private val movieAdapter by lazy {
-        MovieListGridAdapter()
+    private val tvShowGridAdapter by lazy {
+        TvShowGridAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +55,7 @@ class MovieListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
-        setupMovieList()
+        setupList()
         observeUI()
 
         binding.recyclerView.doOnPreDraw {
@@ -64,7 +64,7 @@ class MovieListFragment : Fragment() {
         requireActivity().setTranslucentStatus(false)
 
         binding.swiperefresh.setOnRefreshListener {
-            movieAdapter.refresh()
+            tvShowGridAdapter.refresh()
         }
     }
 
@@ -75,20 +75,21 @@ class MovieListFragment : Fragment() {
 
     private fun observeUI() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.moviesPaged.collectLatest { movieAdapter.submitData(it) }
+            viewModel.tvShowsPaged.collectLatest { tvShowGridAdapter.submitData(it) }
         }
 
         lifecycleScope.launch {
-            movieAdapter.loadStateFlow.collectLatest { loadStates ->
+            tvShowGridAdapter.loadStateFlow.collectLatest { loadStates ->
                 binding.noResults.visibility = View.GONE
 
                 when (loadStates.refresh) {
                     is LoadState.NotLoading -> binding.swiperefresh.isRefreshing = false
-                    LoadState.Loading -> { }
+                    LoadState.Loading -> {
+                    }
                     is LoadState.Error -> {
                         binding.swiperefresh.isRefreshing = false
                         view?.snackbar(getString(R.string.connection_error))
-                        if (movieAdapter.itemCount == 0) {
+                        if (tvShowGridAdapter.itemCount == 0) {
                             binding.noResults.visibility = View.VISIBLE
                         }
                     }
@@ -97,12 +98,13 @@ class MovieListFragment : Fragment() {
         }
     }
 
-    private fun setupMovieList() {
+    private fun setupList() {
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(activity, resources.getInteger(R.integer.media_columns))
-            adapter = movieAdapter
-            movieAdapter.clickListener = { movie, view, transitionName ->
-                navigateToDetails(movie, view, transitionName)
+            layoutManager =
+                GridLayoutManager(activity, resources.getInteger(R.integer.media_columns))
+            adapter = tvShowGridAdapter
+            tvShowGridAdapter.clickListener = { tvShow, view, transitionName ->
+                navigateToDetails(tvShow, view, transitionName)
             }
 
             val padding = resources.getDimension(R.dimen.default_padding).toInt()
@@ -111,12 +113,12 @@ class MovieListFragment : Fragment() {
         }
     }
 
-    private fun navigateToDetails(movie: Movie, sharedView: View, transitionName: String) {
+    private fun navigateToDetails(tvShow: TvShow, sharedView: View, transitionName: String) {
         val directions =
-            MovieListFragmentDirections.showMovieDetails(
-                movie.title,
-                movie.id,
-                movie.highResImage,
+            TvShowsFragmentDirections.showTvShowDetails(
+                tvShow.name,
+                tvShow.id,
+                tvShow.highResImage,
                 transitionName,
             )
 

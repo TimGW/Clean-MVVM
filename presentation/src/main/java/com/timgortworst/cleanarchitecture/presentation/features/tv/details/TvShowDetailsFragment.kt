@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.details
+package com.timgortworst.cleanarchitecture.presentation.features.tv.details
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -20,17 +20,17 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.google.android.material.appbar.AppBarLayout
-import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
+import com.timgortworst.cleanarchitecture.domain.model.tv.TvShowDetails
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MovieDetailsFragment : Fragment() {
-    private val viewModel by viewModels<MovieDetailViewModel>()
-    private val args: MovieDetailsFragmentArgs by navArgs()
+class TvShowDetailsFragment : Fragment() {
+    private val viewModel by viewModels<TvShowDetailViewModel>()
+    private val args: TvShowDetailsFragmentArgs by navArgs()
     private var _binding: FragmentMediaDetailsBinding? = null
     private val binding get() = _binding!!
     private val appBarScrollListener = AppBarLayout.OnOffsetChangedListener { _, offset ->
@@ -71,11 +71,11 @@ class MovieDetailsFragment : Fragment() {
 
         binding.mediaDetailsImage.apply {
             transitionName = args.transitionName
-            startEnterTransitionAfterLoadingImage(args.movieImage, this)
+            startEnterTransitionAfterLoadingImage(args.tvShowImage, this)
         }
 
         observeUI()
-        viewModel.setMovieId(args.movieId)
+        viewModel.setTvShowId(args.tvShowId)
         requireActivity().setTranslucentStatus(true)
     }
 
@@ -95,22 +95,22 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun observeUI() {
-        viewModel.movieDetails.observe(viewLifecycleOwner) {
+        viewModel.tvShowDetails.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.INVISIBLE
-            when(it) {
+            when (it) {
                 is Resource.Error -> presentError(R.string.generic_error)
                 Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is Resource.Success -> presentMovieDetails(it.data)
+                is Resource.Success -> presentTvShowDetails(it.data)
             }
         }
     }
 
-    private fun presentMovieDetails(movieDetails: MovieDetails) {
+    private fun presentTvShowDetails(tvShowDetails: TvShowDetails) {
         binding.mediaDetailsReleaseDate.text =
-            getString(R.string.media_detail_release_date, movieDetails.releaseDate)
-        binding.mediaDetailsOverview.text = movieDetails.overview
+            getString(R.string.media_detail_release_date, tvShowDetails.firstAirDate)
+        binding.mediaDetailsOverview.text = tvShowDetails.overview
         binding.watchProviders.text =
-            getString(R.string.watch_provider_availability, movieDetails.watchProviders)
+            getString(R.string.watch_provider_availability, tvShowDetails.watchProviders)
     }
 
     private fun presentError(errorMessage: Int) {

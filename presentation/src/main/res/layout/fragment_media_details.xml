@@ -28,7 +28,7 @@
             app:expandedTitleTextAppearance="@style/TextAppearance.App.CollapsingToolbar.Expanded.Dark">
 
             <ImageView
-                android:id="@+id/movie_details_image"
+                android:id="@+id/media_details_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -37,7 +37,7 @@
                 app:layout_collapseParallaxMultiplier="0.5"
                 app:layout_collapseMode="parallax"
                 android:foreground="@drawable/gradient_bottom"
-                tools:src="@drawable/movie_placeholder" />
+                tools:src="@drawable/media_placeholder" />
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -51,7 +51,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/movie_details_container"
+        android:id="@+id/media_details_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -104,7 +104,7 @@
                     app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
-                    android:id="@+id/movie_details_release_date"
+                    android:id="@+id/media_details_release_date"
                     style="@style/TextAppearance.MyTheme.Headline6"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -114,10 +114,10 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/watch_providers"
-                    tools:text="movie_details_release_date" />
+                    tools:text="media_details_release_date" />
 
                 <TextView
-                    android:id="@+id/movie_details_language"
+                    android:id="@+id/media_details_language"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -125,11 +125,11 @@
                     android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/movie_details_overview"
-                    tools:text="movie_details_language" />
+                    app:layout_constraintTop_toBottomOf="@+id/media_details_overview"
+                    tools:text="media_details_language" />
 
                 <TextView
-                    android:id="@+id/movie_details_genre"
+                    android:id="@+id/media_details_genre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -138,11 +138,11 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/movie_details_language"
-                    tools:text="movie_details_genre" />
+                    app:layout_constraintTop_toBottomOf="@+id/media_details_language"
+                    tools:text="media_details_genre" />
 
                 <TextView
-                    android:id="@+id/movie_details_overview"
+                    android:id="@+id/media_details_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -150,8 +150,8 @@
                     android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/movie_details_release_date"
-                    tools:text="movie_details_overview" />
+                    app:layout_constraintTop_toBottomOf="@+id/media_details_release_date"
+                    tools:text="media_details_overview" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

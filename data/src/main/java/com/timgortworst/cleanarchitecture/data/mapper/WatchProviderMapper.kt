@@ -1,7 +1,7 @@
 package com.timgortworst.cleanarchitecture.data.mapper
 
-import com.timgortworst.cleanarchitecture.data.model.NetworkWatchProviderRegions
-import com.timgortworst.cleanarchitecture.data.model.NetworkWatchProviders
+import com.timgortworst.cleanarchitecture.data.model.watchproviders.NetworkWatchProviderRegions
+import com.timgortworst.cleanarchitecture.data.model.watchproviders.NetworkWatchProviders
 import com.timgortworst.cleanarchitecture.domain.model.movie.WatchProvider
 import com.timgortworst.cleanarchitecture.domain.model.movie.WatchProviderRegion
 

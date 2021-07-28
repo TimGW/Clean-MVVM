@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="movie_columns">6</integer>
+    <integer name="media_columns">6</integer>
 </resources>

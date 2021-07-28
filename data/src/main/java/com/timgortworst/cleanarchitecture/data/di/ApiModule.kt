@@ -1,6 +1,7 @@
 package com.timgortworst.cleanarchitecture.data.di
 
 import com.timgortworst.cleanarchitecture.data.remote.MovieService
+import com.timgortworst.cleanarchitecture.data.remote.TvShowService
 import com.timgortworst.cleanarchitecture.data.remote.WatchProviderService
 import dagger.Module
 import dagger.Provides
@@ -15,6 +16,11 @@ object ApiModule {
     @Provides
     fun provideMovieService(retrofit: Retrofit): MovieService {
         return retrofit.create(MovieService::class.java)
+    }
+
+    @Provides
+    fun provideTvShowService(retrofit: Retrofit): TvShowService {
+        return retrofit.create(TvShowService::class.java)
     }
 
     @Provides

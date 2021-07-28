@@ -2,13 +2,11 @@ package com.timgortworst.cleanarchitecture.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.filter
-import androidx.paging.map
 import com.timgortworst.cleanarchitecture.data.local.MovieDao
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.data.mapper.asDatabaseModel
 import com.timgortworst.cleanarchitecture.data.mapper.asDomainModel
-import com.timgortworst.cleanarchitecture.data.model.NetworkMovieDetails
+import com.timgortworst.cleanarchitecture.data.model.movie.NetworkMovieDetails
 import com.timgortworst.cleanarchitecture.data.remote.MovieService
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler

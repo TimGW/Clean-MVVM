@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.data.model
+package com.timgortworst.cleanarchitecture.data.model.watchproviders
 
 import com.google.gson.annotations.SerializedName
 

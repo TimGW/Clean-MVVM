@@ -3,10 +3,10 @@ package com.timgortworst.cleanarchitecture.data.di
 import android.content.Context
 import androidx.room.Room
 import com.timgortworst.cleanarchitecture.data.BuildConfig
+import com.timgortworst.cleanarchitecture.data.error.ErrorHandlerImpl
 import com.timgortworst.cleanarchitecture.data.local.AppDatabase
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefManager
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
-import com.timgortworst.cleanarchitecture.data.error.ErrorHandlerImpl
 import com.timgortworst.cleanarchitecture.data.remote.AuthHeaderInterceptor
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import dagger.Binds
@@ -17,6 +17,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -61,7 +62,14 @@ abstract class AppModule {
 
         @Provides
         fun provideOkHttpClient(interceptor: Interceptor): OkHttpClient {
-            return OkHttpClient().newBuilder().addInterceptor(interceptor).build()
+            val loggingInterceptor = HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+
+            val builder = OkHttpClient().newBuilder().addInterceptor(interceptor)
+            if (BuildConfig.DEBUG) builder.addInterceptor(loggingInterceptor)
+
+            return builder.build()
         }
     }
 }

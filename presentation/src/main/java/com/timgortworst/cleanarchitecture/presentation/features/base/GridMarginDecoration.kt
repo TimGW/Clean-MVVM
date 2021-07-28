@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration
+package com.timgortworst.cleanarchitecture.presentation.features.base
 
 import android.graphics.Rect
 import android.view.View

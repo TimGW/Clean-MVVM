@@ -2,11 +2,12 @@
     <string name="app_name">CleanArchitecture</string>
     <string name="generic_error">Something went wrong.</string>
     <string name="connection_error">Please check your internet connection</string>
-    <string name="movie_detail_release_date">Release Date: %1$s</string>
-    <string name="movie_detail_language">Language: %1$s</string>
+    <string name="media_detail_release_date">Release Date: %1$s</string>
+    <string name="media_detail_language">Language: %1$s</string>
     <string name="no_internet_placeholder_text">%1$s Swipe down to retry.</string>
     <string name="no_results_placeholder_text">There are no results found.</string>
     <string name="movie_list_toolbar_title">Movies</string>
+    <string name="tv_shows_list_toolbar_title">Tv Shows</string>
     <string name="settings_toolbar_title">Settings</string>
     <string name="movie_details_toolbar_title">Details</string>
     <string name="header_trending">Trending</string>

@@ -1,6 +1,6 @@
 package com.timgortworst.cleanarchitecture.data.mapper
 
-import com.timgortworst.cleanarchitecture.data.model.NetworkMovies
+import com.timgortworst.cleanarchitecture.data.model.movie.NetworkMovies
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import java.text.SimpleDateFormat
 import java.util.*

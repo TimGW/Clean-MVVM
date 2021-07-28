@@ -1,7 +1,7 @@
 package com.timgortworst.cleanarchitecture.data.mapper
 
-import com.timgortworst.cleanarchitecture.data.model.DbMovieDetails
-import com.timgortworst.cleanarchitecture.data.model.NetworkMovieDetails
+import com.timgortworst.cleanarchitecture.data.model.movie.DbMovieDetails
+import com.timgortworst.cleanarchitecture.data.model.movie.NetworkMovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 
 fun DbMovieDetails.asDomainModel() = with(this) {
