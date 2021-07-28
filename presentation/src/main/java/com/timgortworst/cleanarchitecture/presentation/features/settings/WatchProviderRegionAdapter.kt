@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.timgortworst.cleanarchitecture.domain.model.movie.WatchProviderRegion
+import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProviderRegion
 import com.timgortworst.cleanarchitecture.presentation.features.base.BaseArrayAdapter
 
 class WatchProviderRegionAdapter(

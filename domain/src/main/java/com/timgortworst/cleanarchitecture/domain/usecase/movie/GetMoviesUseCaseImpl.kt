@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.domain.usecase.movielist
+package com.timgortworst.cleanarchitecture.domain.usecase.movie
 
 import androidx.paging.filter
 import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
@@ -6,10 +6,9 @@ import kotlinx.coroutines.flow.map
 import java.util.*
 import javax.inject.Inject
 
-// TODO MERGE PACKAGES WITH DETAILS
-class GetMoviesPagedUseCaseImpl @Inject constructor(
+class GetMoviesUseCaseImpl @Inject constructor(
     private val movieRepository: MovieRepository,
-) : GetMoviesPagedUseCase {
+) : GetMoviesUseCase {
 
     override fun execute(params: Unit) = movieRepository.getPagedMovies().map { pagingData ->
         pagingData.filter { it.releaseDate?.before(Date()) == true }

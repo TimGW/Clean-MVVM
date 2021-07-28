@@ -3,8 +3,8 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie.details
 import androidx.lifecycle.*
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
-import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCase
-import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCaseImpl
+import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieDetailsUseCase
+import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieDetailsUseCaseImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.domain.model.movie
+package com.timgortworst.cleanarchitecture.domain.model.watchprovider
 
 data class WatchProviderRegion(
     val iso: String = "",

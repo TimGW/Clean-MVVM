@@ -19,20 +19,19 @@ import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMedia
 import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.MovieListGridAdapter
 import com.timgortworst.cleanarchitecture.presentation.features.base.GridMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MovieListFragment : Fragment() {
-    private val viewModel by viewModels<MovieListViewModel>()
+class MoviesFragment : Fragment() {
+    private val viewModel by viewModels<MoviesViewModel>()
     private var _binding: FragmentMediaListBinding? = null
     private val binding get() = _binding!!
 
     private val movieAdapter by lazy {
-        MovieListGridAdapter()
+        MoviesAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,7 +112,7 @@ class MovieListFragment : Fragment() {
 
     private fun navigateToDetails(movie: Movie, sharedView: View, transitionName: String) {
         val directions =
-            MovieListFragmentDirections.showMovieDetails(
+            MoviesFragmentDirections.showMovieDetails(
                 movie.title,
                 movie.id,
                 movie.highResImage,

@@ -1,9 +1,9 @@
 package com.timgortworst.cleanarchitecture.presentation.di
 
-import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCase
-import com.timgortworst.cleanarchitecture.domain.usecase.moviedetail.GetMovieDetailsUseCaseImpl
-import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesPagedUseCase
-import com.timgortworst.cleanarchitecture.domain.usecase.movielist.GetMoviesPagedUseCaseImpl
+import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieDetailsUseCase
+import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieDetailsUseCaseImpl
+import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMoviesUseCase
+import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMoviesUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,8 +17,8 @@ abstract class MovieUseCaseModule {
     @Binds
     @ViewModelScoped
     abstract fun provideGetMoviesPagedUseCase(
-        getMoviesPagedUseCaseImpl: GetMoviesPagedUseCaseImpl
-    ): GetMoviesPagedUseCase
+        getMoviesUseCaseImpl: GetMoviesUseCaseImpl
+    ): GetMoviesUseCase
 
     @Binds
     @ViewModelScoped

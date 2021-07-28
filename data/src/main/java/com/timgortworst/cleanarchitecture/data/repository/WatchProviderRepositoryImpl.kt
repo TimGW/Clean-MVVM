@@ -2,8 +2,8 @@ package com.timgortworst.cleanarchitecture.data.repository
 
 import com.timgortworst.cleanarchitecture.data.mapper.asDomainModel
 import com.timgortworst.cleanarchitecture.data.remote.WatchProviderService
-import com.timgortworst.cleanarchitecture.domain.model.movie.WatchProvider
-import com.timgortworst.cleanarchitecture.domain.model.movie.WatchProviderRegion
+import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProvider
+import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProviderRegion
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.repository.WatchProviderRepository

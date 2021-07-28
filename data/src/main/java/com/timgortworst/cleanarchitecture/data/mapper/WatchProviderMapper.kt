@@ -1,9 +1,9 @@
 package com.timgortworst.cleanarchitecture.data.mapper
 
-import com.timgortworst.cleanarchitecture.data.model.watchproviders.NetworkWatchProviderRegions
-import com.timgortworst.cleanarchitecture.data.model.watchproviders.NetworkWatchProviders
-import com.timgortworst.cleanarchitecture.domain.model.movie.WatchProvider
-import com.timgortworst.cleanarchitecture.domain.model.movie.WatchProviderRegion
+import com.timgortworst.cleanarchitecture.data.model.watchprovider.NetworkWatchProviderRegions
+import com.timgortworst.cleanarchitecture.data.model.watchprovider.NetworkWatchProviders
+import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProvider
+import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProviderRegion
 
 fun NetworkWatchProviderRegions.asDomainModel() = with(this) {
     results.map {

@@ -2,7 +2,7 @@ package com.timgortworst.cleanarchitecture.presentation.features.settings
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.timgortworst.cleanarchitecture.domain.model.movie.WatchProvider
+import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProvider
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.WatchProviderListItemBinding
 import com.timgortworst.cleanarchitecture.presentation.features.base.BaseListAdapter

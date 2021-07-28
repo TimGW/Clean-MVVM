@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.domain.usecase.moviedetail
+package com.timgortworst.cleanarchitecture.domain.usecase.movie
 
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource

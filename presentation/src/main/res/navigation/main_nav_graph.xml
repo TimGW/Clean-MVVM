@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/page_movies"
-        android:name="com.timgortworst.cleanarchitecture.presentation.features.movie.list.MovieListFragment"
+        android:name="com.timgortworst.cleanarchitecture.presentation.features.movie.list.MoviesFragment"
         android:label="@string/movie_list_toolbar_title"
         tools:layout="@layout/fragment_media_list">
 

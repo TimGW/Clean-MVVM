@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter
+package com.timgortworst.cleanarchitecture.presentation.features.movie.list
 
 import androidx.recyclerview.widget.DiffUtil
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie

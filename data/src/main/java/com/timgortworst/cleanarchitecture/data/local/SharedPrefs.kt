@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.timgortworst.cleanarchitecture.domain.model.movie.WatchProvider
+import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.lang.reflect.Type
 

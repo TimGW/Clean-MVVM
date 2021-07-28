@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.tv.list.adapter
+package com.timgortworst.cleanarchitecture.presentation.features.tv.list
 
 import androidx.recyclerview.widget.DiffUtil
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShow

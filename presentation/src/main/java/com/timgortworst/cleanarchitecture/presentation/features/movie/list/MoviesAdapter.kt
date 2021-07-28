@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter
+package com.timgortworst.cleanarchitecture.presentation.features.movie.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +10,7 @@ import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MediaListItemBinding
 import com.timgortworst.cleanarchitecture.presentation.features.base.BasePagingAdapter
 
-class MovieListGridAdapter : BasePagingAdapter<Movie, MediaListItemBinding>(DiffUtilMovieItem()) {
+class MoviesAdapter : BasePagingAdapter<Movie, MediaListItemBinding>(DiffUtilMovieItem()) {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
     override val itemViewType = R.layout.media_list_item

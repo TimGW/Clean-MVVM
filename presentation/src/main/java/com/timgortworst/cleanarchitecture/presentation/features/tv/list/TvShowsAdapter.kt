@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.tv.list.adapter
+package com.timgortworst.cleanarchitecture.presentation.features.tv.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +10,7 @@ import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MediaListItemBinding
 import com.timgortworst.cleanarchitecture.presentation.features.base.BasePagingAdapter
 
-class TvShowGridAdapter : BasePagingAdapter<TvShow, MediaListItemBinding>(DiffUtilTvShowItem()) {
+class TvShowsAdapter : BasePagingAdapter<TvShow, MediaListItemBinding>(DiffUtilTvShowItem()) {
     var clickListener: ((TvShow, ImageView, String) -> Unit)? = null
 
     override val itemViewType = R.layout.media_list_item

@@ -20,7 +20,6 @@ import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScroll
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
 import com.timgortworst.cleanarchitecture.presentation.features.base.GridMarginDecoration
-import com.timgortworst.cleanarchitecture.presentation.features.tv.list.adapter.TvShowGridAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -32,7 +31,7 @@ class TvShowsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val tvShowGridAdapter by lazy {
-        TvShowGridAdapter()
+        TvShowsAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
