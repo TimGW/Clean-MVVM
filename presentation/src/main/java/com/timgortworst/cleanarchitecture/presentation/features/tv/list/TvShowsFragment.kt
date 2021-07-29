@@ -54,6 +54,7 @@ class TvShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
+        binding.toolbar.title = getString(R.string.tv_shows_list_toolbar_title)
         setupList()
         observeUI()
 

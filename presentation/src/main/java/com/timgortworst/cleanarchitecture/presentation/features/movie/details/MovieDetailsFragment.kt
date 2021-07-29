@@ -130,6 +130,7 @@ class MovieDetailsFragment : Fragment() {
                     target: com.bumptech.glide.request.target.Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    binding.appbar.setExpanded(false)
                     startPostponedEnterTransition()
                     return false
                 }

@@ -15,7 +15,7 @@ data class TvShowDetails(
     val originalName: String,
     val overview: String,
     val popularity: Double,
-    val posterPath: String,
+    val posterPath: String?,
     val status: String,
     val tagline: String,
     val type: String,

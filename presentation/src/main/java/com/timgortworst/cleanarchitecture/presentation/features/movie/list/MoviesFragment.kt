@@ -54,6 +54,7 @@ class MoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
+        binding.toolbar.title = getString(R.string.movie_list_toolbar_title)
         setupMovieList()
         observeUI()
 

@@ -8,13 +8,13 @@ import java.util.*
 fun NetworkTvShows.asDomainModel(): List<TvShow> = with(this) {
     results.map {
         TvShow(
-            it.posterPath,
+            it.posterPath.orEmpty(),
             it.popularity,
             it.id,
-            it.backdropPath,
+            it.backdropPath.orEmpty(),
             it.voteAverage,
             it.overview,
-            if (it.firstAirDate.isNotBlank()) SimpleDateFormat(
+            if (it.firstAirDate?.isNotBlank() == true) SimpleDateFormat(
                 "yyyy-MM-dd",
                 Locale.getDefault()
             ).parse(it.firstAirDate) else null,

@@ -20,7 +20,7 @@ data class DbTvShowDetails(
     @ColumnInfo(name = "original_name") val originalName: String,
     @ColumnInfo(name = "overview") val overview: String,
     @ColumnInfo(name = "popularity") val popularity: Double,
-    @ColumnInfo(name = "poster_path") val posterPath: String,
+    @ColumnInfo(name = "poster_path") val posterPath: String?,
     @ColumnInfo(name = "status") val status: String,
     @ColumnInfo(name = "tagline") val tagline: String,
     @ColumnInfo(name = "type") val type: String,
