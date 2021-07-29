@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/page_movies"
+        android:enabled="true"
+        android:icon="@drawable/ic_movie"
+        android:title="@string/menu_movies" />
+    <item
+        android:id="@+id/page_tv"
+        android:enabled="true"
+        android:icon="@drawable/ic_tv"
+        android:title="@string/menu_tv" />
+    <item
+        android:id="@+id/page_settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/menu_settings" />
+</menu>

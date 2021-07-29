@@ -1,43 +1,31 @@
 package com.timgortworst.cleanarchitecture.data.mapper
 
-import com.timgortworst.cleanarchitecture.data.model.DbMovie
-import com.timgortworst.cleanarchitecture.data.model.NetworkMovies
+import com.timgortworst.cleanarchitecture.data.model.movie.NetworkMovies
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
+import java.text.SimpleDateFormat
+import java.util.*
 
-fun DbMovie.asDomainModel(): Movie = with(this) {
-    Movie(
-        adult,
-        backdropPath,
-        id,
-        originalLanguage,
-        originalTitle,
-        overview,
-        popularity,
-        posterPath,
-        releaseDate,
-        title,
-        video,
-        voteAverage,
-        voteCount
-    )
-}
-
-fun NetworkMovies.asDatabaseModel() : List<DbMovie> = with(this) {
+fun NetworkMovies.asDomainModel(): List<Movie> = with(this) {
     results.map {
-        DbMovie(
-            it.id,
+        Movie(
             it.adult,
             it.backdropPath,
+            it.id,
             it.originalLanguage,
             it.originalTitle,
             it.overview,
             it.popularity,
             it.posterPath,
-            it.releaseDate,
+            if (it.releaseDate.isNotBlank()) SimpleDateFormat(
+                "yyyy-MM-dd",
+                Locale.getDefault()
+            ).parse(it.releaseDate) else null,
             it.title,
             it.video,
             it.voteAverage,
-            it.voteCount
+            it.voteCount,
+            "https://image.tmdb.org/t/p/w185/".plus(it.posterPath),
+            "https://image.tmdb.org/t/p/original/".plus(it.posterPath),
         )
     }
 }

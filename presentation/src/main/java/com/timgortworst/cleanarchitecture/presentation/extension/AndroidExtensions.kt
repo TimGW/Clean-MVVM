@@ -3,6 +3,7 @@ package com.timgortworst.cleanarchitecture.presentation.extension
 import android.app.Activity
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.*
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import android.view.animation.*
@@ -68,11 +69,43 @@ fun RecyclerView.addSingleScrollDirectionListener() {
     addOnScrollListener(listener)
 }
 
-fun RecyclerView.getRelativeItemPosition(
-    adapterPosition: Int,
-    viewType: Int
-): Int {
-    return generateSequence(adapterPosition - 1) { it.dec() }
-        .takeWhile { adapter?.getItemViewType(it) == viewType }
-        .count()
+fun View.animateSlideFade(duration: Long, visibility: Int) {
+    val animSet = AnimationSet(true).apply {
+        interpolator = LinearInterpolator()
+        fillAfter = true
+        this.duration = duration
+    }
+
+    val translateAnim = if (visibility == View.VISIBLE){
+        TranslateAnimation(0, 0f, 0, 0f,
+            TranslateAnimation.RELATIVE_TO_SELF, 1f,
+            TranslateAnimation.RELATIVE_TO_SELF, 0f)
+    } else {
+        TranslateAnimation(0, 0f, 0, 0f,
+            TranslateAnimation.RELATIVE_TO_SELF, 0f,
+            TranslateAnimation.RELATIVE_TO_SELF, 1f)
+    }
+
+    val alphaAnimation = if (visibility == View.VISIBLE){
+        AlphaAnimation(0f, 1f)
+    } else {
+        AlphaAnimation(1f, 0f)
+    }
+
+    animSet.addAnimation(translateAnim)
+    animSet.addAnimation(alphaAnimation)
+    animSet.setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationStart(animation: Animation?) {
+
+        }
+
+        override fun onAnimationEnd(animation: Animation?) {
+
+        }
+
+        override fun onAnimationRepeat(animation: Animation?) {
+        }
+    })
+
+    startAnimation(animSet)
 }

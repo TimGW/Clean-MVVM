@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("kotlin-android-extensions")
+    id("kotlin-android-extensions") // TODO REMOVE
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
 }
@@ -56,10 +56,13 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+
     // network
     api "com.squareup.retrofit2:retrofit:$retrofit_version"
     api "com.squareup.retrofit2:converter-gson:$retrofit_version"
     api 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
 
     // database
     implementation "androidx.room:room-runtime:$room_version"

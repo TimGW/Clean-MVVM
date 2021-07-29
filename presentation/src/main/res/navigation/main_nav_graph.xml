@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/page_movies">
+
+    <fragment
+        android:id="@+id/page_movies"
+        android:name="com.timgortworst.cleanarchitecture.presentation.features.movie.list.MoviesFragment"
+        android:label="@string/movie_list_toolbar_title"
+        tools:layout="@layout/fragment_media_list">
+
+        <!-- don't use animations here.
+        These are handled by the Transition Framework-->
+        <action
+            android:id="@+id/show_movie_details"
+            app:destination="@id/fragmentMovieDetails" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentMovieDetails"
+        android:name="com.timgortworst.cleanarchitecture.presentation.features.movie.details.MovieDetailsFragment"
+        android:label="{pageTitle}"
+        tools:layout="@layout/fragment_media_details">
+
+        <argument
+            android:name="pageTitle"
+            app:argType="string" />
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
+        <argument
+            android:name="movieImage"
+            app:argType="string" />
+        <argument
+            android:name="transitionName"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/page_tv"
+        android:name="com.timgortworst.cleanarchitecture.presentation.features.tv.list.TvShowsFragment"
+        android:label="@string/tv_shows_list_toolbar_title"
+        tools:layout="@layout/fragment_media_list">
+
+        <!-- don't use animations here.
+        These are handled by the Transition Framework-->
+        <action
+            android:id="@+id/show_tv_show_details"
+            app:destination="@id/tvShowDetailsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/tvShowDetailsFragment"
+        android:name="com.timgortworst.cleanarchitecture.presentation.features.tv.details.TvShowDetailsFragment"
+        android:label="{pageTitle}"
+        tools:layout="@layout/fragment_media_details">
+
+        <argument
+            android:name="pageTitle"
+            app:argType="string" />
+        <argument
+            android:name="tvShowId"
+            app:argType="integer" />
+        <argument
+            android:name="tvShowImage"
+            app:argType="string" />
+        <argument
+            android:name="transitionName"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/page_settings"
+        android:name="com.timgortworst.cleanarchitecture.presentation.features.settings.SettingsFragment"
+        android:label="@string/settings_toolbar_title"
+        tools:layout="@layout/fragment_settings"/>
+</navigation>

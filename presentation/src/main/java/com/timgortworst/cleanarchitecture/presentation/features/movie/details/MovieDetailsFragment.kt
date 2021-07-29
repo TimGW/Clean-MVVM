@@ -23,7 +23,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.presentation.R
-import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieDetailsBinding
+import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.animateSlideFade
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +32,8 @@ import kotlin.math.abs
 class MovieDetailsFragment : Fragment() {
     private val viewModel by viewModels<MovieDetailViewModel>()
     private val args: MovieDetailsFragmentArgs by navArgs()
-    private lateinit var binding: FragmentMovieDetailsBinding
+    private var _binding: FragmentMediaDetailsBinding? = null
+    private val binding get() = _binding!!
     private var isCollapsedTitleVisible = false
     private val animTime by lazy {
         resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
@@ -69,7 +70,7 @@ class MovieDetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
-        enterTransition = inflater.inflateTransition(R.transition.movie_detail_enter)
+        enterTransition = inflater.inflateTransition(R.transition.media_detail_enter)
         returnTransition = inflater.inflateTransition(android.R.transition.fade)
         sharedElementEnterTransition = TransitionInflater.from(context)
             .inflateTransition(R.transition.shared_element_transition)
@@ -86,7 +87,7 @@ class MovieDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMovieDetailsBinding.inflate(layoutInflater)
+        _binding = FragmentMediaDetailsBinding.inflate(layoutInflater)
         setupToolbar()
         return binding.root
     }
@@ -94,7 +95,7 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.movieDetailsImage.apply {
+        binding.mediaDetailsImage.apply {
             transitionName = args.transitionName
             startEnterTransitionAfterLoadingImage(args.movieImage, this)
         }
@@ -114,6 +115,11 @@ class MovieDetailsFragment : Fragment() {
         binding.appbar.removeOnOffsetChangedListener(appBarScrollListener)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun observeUI() {
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.INVISIBLE
@@ -126,7 +132,7 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun presentMovieDetails(movieDetails: MovieDetails) {
-        binding.movieDetailsReleaseDate.text =
+        binding.mediaDetailsReleaseDate.text =
             getString(R.string.movie_detail_release_date, movieDetails.releaseDate)
 
         var res = ""
@@ -134,7 +140,9 @@ class MovieDetailsFragment : Fragment() {
             res = res.plus(movieDetails.overview)
         }
 
-        binding.movieDetailsOverview.text = res
+        binding.mediaDetailsOverview.text = res
+        binding.watchProviders.text =
+            getString(R.string.watch_provider_availability, movieDetails.watchProviders)
         binding.expandedTitle.text = args.pageTitle
         binding.collapsedTitle.text = args.pageTitle
     }
@@ -156,6 +164,7 @@ class MovieDetailsFragment : Fragment() {
                     target: com.bumptech.glide.request.target.Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    binding.appbar.setExpanded(false)
                     startPostponedEnterTransition()
                     return false
                 }
