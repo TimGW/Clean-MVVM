@@ -85,8 +85,9 @@ class TvShowsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_watch_providers -> {
-                TvShowWatchProvidersDialog.newInstance()
-                    .show(childFragmentManager, TvShowWatchProvidersDialog.TAG)
+                val dialog = TvShowWatchProvidersDialog.newInstance()
+                dialog.onCloseListener = { tvShowGridAdapter.refresh() }
+                dialog.show(childFragmentManager, TvShowWatchProvidersDialog.TAG)
                 true
             }
             else -> super.onOptionsItemSelected(item)

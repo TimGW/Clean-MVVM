@@ -85,8 +85,9 @@ class MoviesFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_watch_providers -> {
-                MovieWatchProvidersDialog.newInstance()
-                    .show(childFragmentManager, MovieWatchProvidersDialog.TAG)
+                val dialog = MovieWatchProvidersDialog.newInstance()
+                dialog.onCloseListener = { movieAdapter.refresh() }
+                dialog.show(childFragmentManager, MovieWatchProvidersDialog.TAG)
                 true
             }
             else -> super.onOptionsItemSelected(item)

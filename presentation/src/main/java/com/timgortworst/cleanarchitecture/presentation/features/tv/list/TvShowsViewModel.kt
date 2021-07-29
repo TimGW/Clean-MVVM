@@ -19,15 +19,15 @@ class TvShowsViewModel @Inject constructor(
 
     val tvShowsPaged = getTvShowsUseCase.execute(Unit).cachedIn(viewModelScope)
 
-    private val provider = MutableLiveData<String>()
-    val watchProviders = Transformations.switchMap(provider) { region ->
+    private val providerRegion = MutableLiveData<String>()
+    val watchProviders = Transformations.switchMap(providerRegion) { region ->
         liveData {
             emit(getWatchProvidersTvUseCase.execute(GetWatchProvidersTvUseCaseImpl.Params(region)))
         }
     }
 
     fun getAllProviders() {
-        provider.value = sharedPrefs.getWatchProviderRegion().orEmpty()
+        providerRegion.value = sharedPrefs.getWatchProviderRegion().orEmpty()
     }
 
     fun setSelectedProviders(

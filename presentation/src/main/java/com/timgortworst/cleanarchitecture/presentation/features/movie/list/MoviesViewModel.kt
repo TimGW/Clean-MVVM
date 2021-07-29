@@ -8,6 +8,7 @@ import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchP
 import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProvidersMovieUseCaseImpl
 import com.timgortworst.cleanarchitecture.presentation.features.settings.WatchProvidersAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,8 +20,8 @@ class MoviesViewModel @Inject constructor(
 
     val moviesPaged = getMoviesUseCase.execute(Unit).cachedIn(viewModelScope)
 
-    private val provider = MutableLiveData<String>()
-    val watchProviders = Transformations.switchMap(provider) { region ->
+    private val providerRegion = MutableLiveData<String>()
+    val watchProviders = Transformations.switchMap(providerRegion) { region ->
         liveData {
             emit(
                 getWatchProvidersMovieUseCase.execute(
@@ -31,7 +32,7 @@ class MoviesViewModel @Inject constructor(
     }
 
     fun getAllProviders() {
-        provider.value = sharedPrefs.getWatchProviderRegion().orEmpty()
+        providerRegion.value = sharedPrefs.getWatchProviderRegion().orEmpty()
     }
 
     fun setSelectedProviders(

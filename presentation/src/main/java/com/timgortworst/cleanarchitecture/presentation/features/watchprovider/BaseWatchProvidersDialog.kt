@@ -10,9 +10,10 @@ import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentSetti
 import com.timgortworst.cleanarchitecture.presentation.features.settings.WatchProvidersAdapter
 
 open class BaseWatchProvidersDialog : DialogFragment() {
+    var onCloseListener: (() -> Unit)? = null
     private var _binding: FragmentSettingsDialogWatchprovidersBinding? = null
     private val binding get() = _binding!!
-    val watchProviderAdapter by lazy { WatchProvidersAdapter() }
+    protected val watchProviderAdapter by lazy { WatchProvidersAdapter() }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = FragmentSettingsDialogWatchprovidersBinding
@@ -22,7 +23,10 @@ open class BaseWatchProvidersDialog : DialogFragment() {
 
         return AlertDialog.Builder(requireContext())
             .setMessage(getString(R.string.watch_providers))
-            .setPositiveButton(getString(R.string.ok)) { _, _ -> dismiss() }
+            .setPositiveButton(getString(R.string.ok)) { _, _ ->
+                onCloseListener?.invoke()
+                dismiss()
+            }
             .setView(binding.root)
             .create()
     }
