@@ -2,6 +2,7 @@ package com.timgortworst.cleanarchitecture.data.model.movie
 
 import com.google.gson.annotations.SerializedName
 
+// TODO make all results nullable and place gaurds to filter out items
 data class NetworkMovies(
     @SerializedName("page") val page: Int = 0,
     @SerializedName("results") val results: ArrayList<Result> = arrayListOf(),
