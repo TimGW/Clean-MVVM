@@ -2,12 +2,15 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie.list
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
@@ -55,6 +58,7 @@ class MoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
+        setupToolbar()
         setupMovieList()
         observeUI()
 
@@ -89,6 +93,31 @@ class MoviesFragment : Fragment() {
         }
     }
 
+    private fun setupToolbar() {
+        (activity as? AppCompatActivity)?.setSupportActionBar(binding.layoutToolbar.toolbar)
+        NavigationUI.setupWithNavController(
+            binding.layoutToolbar.collapsingToolbarLayout,
+            binding.layoutToolbar.toolbar,
+            findNavController(),
+            AppBarConfiguration.Builder(R.id.page_movies, R.id.page_tv, R.id.page_settings).build()
+        )
+    }
+
+    private fun setupMovieList() {
+        binding.recyclerView.apply {
+            layoutManager =
+                GridLayoutManager(activity, resources.getInteger(R.integer.media_columns))
+            adapter = movieAdapter
+            movieAdapter.clickListener = { movie, view, transitionName ->
+                navigateToDetails(movie, view, transitionName)
+            }
+
+            val padding = resources.getDimension(R.dimen.default_padding).toInt()
+            addItemDecoration(GridMarginDecoration(padding))
+            addSingleScrollDirectionListener()
+        }
+    }
+
     private fun observeUI() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.moviesPaged.collectLatest { movieAdapter.submitData(it) }
@@ -100,7 +129,8 @@ class MoviesFragment : Fragment() {
 
                 when (loadStates.refresh) {
                     is LoadState.NotLoading -> binding.swiperefresh.isRefreshing = false
-                    LoadState.Loading -> { }
+                    LoadState.Loading -> {
+                    }
                     is LoadState.Error -> {
                         binding.swiperefresh.isRefreshing = false
                         view?.snackbar(getString(R.string.connection_error))
@@ -110,20 +140,6 @@ class MoviesFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
-
-    private fun setupMovieList() {
-        binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(activity, resources.getInteger(R.integer.media_columns))
-            adapter = movieAdapter
-            movieAdapter.clickListener = { movie, view, transitionName ->
-                navigateToDetails(movie, view, transitionName)
-            }
-
-            val padding = resources.getDimension(R.dimen.default_padding).toInt()
-            addItemDecoration(GridMarginDecoration(padding))
-            addSingleScrollDirectionListener()
         }
     }
 

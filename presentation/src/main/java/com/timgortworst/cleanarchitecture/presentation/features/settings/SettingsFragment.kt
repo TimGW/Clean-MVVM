@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
+import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentSettingsBinding
 import com.timgortworst.cleanarchitecture.presentation.features.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,23 +38,35 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar()
         observeData()
     }
 
-    override fun onResume() {
-        super.onResume()
-        (requireActivity() as? MainActivity)?.setExpandedAppBar(false)
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        (requireActivity() as? MainActivity)?.setExpandedAppBar(true)
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        (requireActivity() as? MainActivity)?.setExpandedAppBar(false)
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//
+//        (requireActivity() as? MainActivity)?.setExpandedAppBar(true)
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setupToolbar() {
+        (activity as? AppCompatActivity)?.setSupportActionBar(binding.layoutToolbar.toolbar)
+        NavigationUI.setupWithNavController(
+            binding.layoutToolbar.collapsingToolbarLayout,
+            binding.layoutToolbar.toolbar,
+            findNavController(),
+            AppBarConfiguration.Builder(R.id.page_movies, R.id.page_tv, R.id.page_settings).build()
+        )
     }
 
     private fun observeData() {

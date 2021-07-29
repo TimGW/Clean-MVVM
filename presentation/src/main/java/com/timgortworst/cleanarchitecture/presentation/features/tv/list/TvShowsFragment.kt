@@ -2,12 +2,15 @@ package com.timgortworst.cleanarchitecture.presentation.features.tv.list
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
@@ -55,6 +58,7 @@ class TvShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
+        setupToolbar()
         setupList()
         observeUI()
 
@@ -71,6 +75,47 @@ class TvShowsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_media_settings, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_watch_providers -> {
+                TvShowWatchProvidersDialog.newInstance()
+                    .show(childFragmentManager, TvShowWatchProvidersDialog.TAG)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun setupToolbar() {
+        (activity as? AppCompatActivity)?.setSupportActionBar(binding.layoutToolbar.toolbar)
+        NavigationUI.setupWithNavController(
+            binding.layoutToolbar.collapsingToolbarLayout,
+            binding.layoutToolbar.toolbar,
+            findNavController(),
+            AppBarConfiguration.Builder(R.id.page_movies, R.id.page_tv, R.id.page_settings).build()
+        )
+    }
+
+    private fun setupList() {
+        binding.recyclerView.apply {
+            layoutManager =
+                GridLayoutManager(activity, resources.getInteger(R.integer.media_columns))
+            adapter = tvShowGridAdapter
+            tvShowGridAdapter.clickListener = { tvShow, view, transitionName ->
+                navigateToDetails(tvShow, view, transitionName)
+            }
+
+            val padding = resources.getDimension(R.dimen.default_padding).toInt()
+            addItemDecoration(GridMarginDecoration(padding))
+            addSingleScrollDirectionListener()
+        }
     }
 
     private fun observeUI() {
@@ -95,37 +140,6 @@ class TvShowsFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_media_settings, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_watch_providers -> {
-                TvShowWatchProvidersDialog.newInstance()
-                    .show(childFragmentManager, TvShowWatchProvidersDialog.TAG)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun setupList() {
-        binding.recyclerView.apply {
-            layoutManager =
-                GridLayoutManager(activity, resources.getInteger(R.integer.media_columns))
-            adapter = tvShowGridAdapter
-            tvShowGridAdapter.clickListener = { tvShow, view, transitionName ->
-                navigateToDetails(tvShow, view, transitionName)
-            }
-
-            val padding = resources.getDimension(R.dimen.default_padding).toInt()
-            addItemDecoration(GridMarginDecoration(padding))
-            addSingleScrollDirectionListener()
         }
     }
 
