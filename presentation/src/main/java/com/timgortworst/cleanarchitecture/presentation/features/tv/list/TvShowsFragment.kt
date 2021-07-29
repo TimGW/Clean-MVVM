@@ -51,6 +51,7 @@ class TvShowsFragment : Fragment() {
     ): View {
         _binding = FragmentMediaListBinding.inflate(layoutInflater, container, false)
         sharedElementReturnTransition = TransitionInflater.from(context)
+            .inflateTransition(R.transition.shared_element_transition)
         return binding.root
     }
 
@@ -70,6 +71,11 @@ class TvShowsFragment : Fragment() {
         binding.swiperefresh.setOnRefreshListener {
             tvShowGridAdapter.refresh()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.layoutToolbar.collapsingToolbarLayout.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
@@ -145,6 +151,9 @@ class TvShowsFragment : Fragment() {
     }
 
     private fun navigateToDetails(tvShow: TvShow, sharedView: View, transitionName: String) {
+        // this prevents a bug where the toolbar title already has the name of the next fragment
+        binding.layoutToolbar.collapsingToolbarLayout.visibility = View.INVISIBLE
+
         val directions =
             TvShowsFragmentDirections.showTvShowDetails(
                 tvShow.name,

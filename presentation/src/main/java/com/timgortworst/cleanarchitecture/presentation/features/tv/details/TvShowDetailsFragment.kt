@@ -20,6 +20,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.google.android.material.appbar.AppBarLayout
+import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShowDetails
 import com.timgortworst.cleanarchitecture.presentation.R
@@ -108,9 +109,12 @@ class TvShowDetailsFragment : Fragment() {
     private fun presentTvShowDetails(tvShowDetails: TvShowDetails) {
         binding.mediaDetailsReleaseDate.text =
             getString(R.string.media_detail_release_date, tvShowDetails.firstAirDate)
+
         binding.mediaDetailsOverview.text = tvShowDetails.overview
         binding.watchProviders.text =
             getString(R.string.watch_provider_availability, tvShowDetails.watchProviders)
+        binding.expandedTitle.text = args.pageTitle
+        binding.collapsedTitle.text = args.pageTitle
     }
 
     private fun presentError(errorMessage: Int) {

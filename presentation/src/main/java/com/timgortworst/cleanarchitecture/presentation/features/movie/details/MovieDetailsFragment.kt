@@ -133,14 +133,9 @@ class MovieDetailsFragment : Fragment() {
 
     private fun presentMovieDetails(movieDetails: MovieDetails) {
         binding.mediaDetailsReleaseDate.text =
-            getString(R.string.movie_detail_release_date, movieDetails.releaseDate)
+            getString(R.string.media_detail_release_date, movieDetails.releaseDate)
 
-        var res = ""
-        repeat(50) {
-            res = res.plus(movieDetails.overview)
-        }
-
-        binding.mediaDetailsOverview.text = res
+        binding.mediaDetailsOverview.text = movieDetails.overview
         binding.watchProviders.text =
             getString(R.string.watch_provider_availability, movieDetails.watchProviders)
         binding.expandedTitle.text = args.pageTitle

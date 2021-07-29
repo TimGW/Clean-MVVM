@@ -51,6 +51,7 @@ class MoviesFragment : Fragment() {
     ): View {
         _binding = FragmentMediaListBinding.inflate(layoutInflater, container, false)
         sharedElementReturnTransition = TransitionInflater.from(context)
+            .inflateTransition(R.transition.shared_element_transition)
         return binding.root
     }
 
@@ -70,6 +71,11 @@ class MoviesFragment : Fragment() {
         binding.swiperefresh.setOnRefreshListener {
             movieAdapter.refresh()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.layoutToolbar.collapsingToolbarLayout.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
@@ -145,6 +151,9 @@ class MoviesFragment : Fragment() {
     }
 
     private fun navigateToDetails(movie: Movie, sharedView: View, transitionName: String) {
+        // this prevents a bug where the toolbar title already has the name of the next fragment
+        binding.layoutToolbar.collapsingToolbarLayout.visibility = View.INVISIBLE
+
         val directions =
             MoviesFragmentDirections.showMovieDetails(
                 movie.title,
