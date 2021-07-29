@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentSettingsBinding
+import com.timgortworst.cleanarchitecture.presentation.features.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -17,8 +18,6 @@ class SettingsFragment : Fragment() {
     private val viewModel by viewModels<SettingsViewModel>()
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-    private val movieProviderAdapter by lazy { WatchProvidersAdapter() }
-    private val tvProviderAdapter by lazy { WatchProvidersAdapter() }
 
     @Inject
     lateinit var sharedPrefs: SharedPrefs
@@ -35,6 +34,17 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as? MainActivity)?.setExpandedAppBar(false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        (requireActivity() as? MainActivity)?.setExpandedAppBar(true)
     }
 
     override fun onDestroyView() {
@@ -61,63 +71,6 @@ class SettingsFragment : Fragment() {
                         resource.data.indexOfFirst {
                             it.iso == sharedPrefs.getWatchProviderRegion()
                         })
-                }
-            }
-        }
-
-        viewModel.movieProviders.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Error -> {
-                }
-                Resource.Loading -> {
-                }
-                is Resource.Success -> {
-                    binding.watchProviderRvMovie.adapter = movieProviderAdapter.apply {
-                        submitList(it.data.map { watchProvider ->
-
-                            val isChecked = sharedPrefs.getWatchProvidersMovie()?.any { wp ->
-                                wp.providerId == watchProvider.providerId
-                            } ?: false
-
-                            WatchProvidersAdapter.ViewItem(watchProvider, isChecked).apply {
-                                onCheckedListener = { _, _ ->
-                                    val providers = movieProviderAdapter.currentList
-                                        .filter { it.isChecked }
-                                        .map { it.watchProvider }
-
-                                    viewModel.setWatchProvidersMovie(providers)
-                                }
-                            }
-                        })
-                    }
-                }
-            }
-        }
-
-        viewModel.tvProviders.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Error -> {
-                }
-                Resource.Loading -> {
-                }
-                is Resource.Success -> {
-                    binding.watchProviderRvTv.adapter = tvProviderAdapter.apply {
-                        submitList(it.data.map { watchProvider ->
-                            val isChecked = sharedPrefs.getWatchProvidersTv()?.any { wp ->
-                                wp.providerId == watchProvider.providerId
-                            } ?: false
-
-                            WatchProvidersAdapter.ViewItem(watchProvider, isChecked).apply {
-                                onCheckedListener = { _, _ ->
-                                    val providers = tvProviderAdapter.currentList
-                                        .filter { it.isChecked }
-                                        .map { it.watchProvider }
-
-                                    viewModel.setWatchProvidersTv(providers)
-                                }
-                            }
-                        })
-                    }
                 }
             }
         }

@@ -18,6 +18,7 @@ import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScroll
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
 import com.timgortworst.cleanarchitecture.presentation.features.base.GridMarginDecoration
+import com.timgortworst.cleanarchitecture.presentation.features.watchprovider.TvShowWatchProvidersDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -105,8 +106,8 @@ class TvShowsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_watch_providers -> {
-                // TODO add provider lists to their respective fragments as (overflow) menu item
-//                view?.findNavController()?.navigate(TimerSetupFragmentDirections.showAppSettings())
+                TvShowWatchProvidersDialog.newInstance()
+                    .show(childFragmentManager, TvShowWatchProvidersDialog.TAG)
                 true
             }
             else -> super.onOptionsItemSelected(item)

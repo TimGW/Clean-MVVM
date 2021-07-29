@@ -16,5 +16,7 @@
     <string name="menu_tv">Television</string>
     <string name="menu_settings">Settings</string>
     <string name="action_watch_providers">Watch providers</string>
+    <string name="watch_providers">Watch Providers</string>
+    <string name="ok">ok</string>
 
 </resources>

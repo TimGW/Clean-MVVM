@@ -49,4 +49,8 @@ class MainActivity : AppCompatActivity() {
             AppBarConfiguration.Builder(R.id.page_movies, R.id.page_tv).build()
         )
     }
+
+    fun setExpandedAppBar(expanded: Boolean) {
+        binding.appbar.setExpanded(expanded)
+    }
 }
