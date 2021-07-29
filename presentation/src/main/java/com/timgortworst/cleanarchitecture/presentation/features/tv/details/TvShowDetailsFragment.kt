@@ -25,8 +25,10 @@ import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShowDetails
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
+import com.timgortworst.cleanarchitecture.presentation.extension.animateSlideFade
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class TvShowDetailsFragment : Fragment() {
@@ -34,11 +36,36 @@ class TvShowDetailsFragment : Fragment() {
     private val args: TvShowDetailsFragmentArgs by navArgs()
     private var _binding: FragmentMediaDetailsBinding? = null
     private val binding get() = _binding!!
-    private val appBarScrollListener = AppBarLayout.OnOffsetChangedListener { _, offset ->
-        if (offset < -resources.getDimension(R.dimen.scrim_visible_height_trigger)) {
-            requireActivity().setTranslucentStatus(false)
-        } else {
-            requireActivity().setTranslucentStatus(true)
+    private var isCollapsedTitleVisible = false
+    private val animTime by lazy {
+        resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+    }
+    private val appBarScrollListener = AppBarLayout.OnOffsetChangedListener { layout, offset ->
+        binding.expandedTitle.alpha = (1 - abs(offset).toFloat() / layout.totalScrollRange.toFloat())
+
+        when {
+            // fully collapsed
+            abs(offset) == layout.totalScrollRange -> {
+                requireActivity().setTranslucentStatus(false)
+
+                if(!isCollapsedTitleVisible) {
+                    binding.collapsedTitle.animateSlideFade(animTime, View.VISIBLE)
+                    isCollapsedTitleVisible = true
+                }
+            }
+
+            // fully expanded
+            offset == 0 -> { /** do nothing **/ }
+
+            // scrolling
+            else -> {
+                requireActivity().setTranslucentStatus(true)
+
+                if (isCollapsedTitleVisible) {
+                    binding.collapsedTitle.animateSlideFade(animTime, View.INVISIBLE)
+                    isCollapsedTitleVisible = false
+                }
+            }
         }
     }
 
