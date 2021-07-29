@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.ActivityMainBinding
@@ -25,17 +26,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
-        // TODO fix global toolbar?
         setUpNavigation()
     }
 
     private fun setUpNavigation() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+
+        // connect bottomNavigationView
         NavigationUI.setupWithNavController(
             binding.bottomNavigation,
             navHostFragment.navController
+        )
+
+        // connect collapsingToolbar
+        NavigationUI.setupWithNavController(
+            binding.collapsingToolbarLayout,
+            binding.toolbar,
+            navHostFragment.navController,
+            AppBarConfiguration.Builder(R.id.page_movies, R.id.page_tv).build()
         )
     }
 }

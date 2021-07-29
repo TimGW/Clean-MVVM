@@ -26,4 +26,5 @@
     <dimen name="loading_line_height">20dp</dimen>
     <dimen name="default_padding">8dp</dimen>
     <dimen name="scrim_visible_height_trigger">150dp</dimen>
+    <dimen name="bottom_nav_height">56dp</dimen>
 </resources>

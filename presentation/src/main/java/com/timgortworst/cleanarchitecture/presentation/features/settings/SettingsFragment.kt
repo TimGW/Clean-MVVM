@@ -12,7 +12,6 @@ import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentSetti
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-// TODO add provider lists to their respective fragments as (overflow) menu item
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
     private val viewModel by viewModels<SettingsViewModel>()

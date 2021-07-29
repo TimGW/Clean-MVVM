@@ -1,13 +1,12 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -36,6 +35,8 @@ class MoviesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+
         val inflater = TransitionInflater.from(requireContext())
         exitTransition = inflater.inflateTransition(android.R.transition.fade)
     }
@@ -54,7 +55,6 @@ class MoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
-        binding.toolbar.title = getString(R.string.movie_list_toolbar_title)
         setupMovieList()
         observeUI()
 
@@ -71,6 +71,22 @@ class MoviesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_media_settings, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_watch_providers -> {
+                // TODO add provider lists to their respective fragments as (overflow) menu item
+//                view?.findNavController()?.navigate(TimerSetupFragmentDirections.showAppSettings())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun observeUI() {
