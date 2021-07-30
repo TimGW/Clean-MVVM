@@ -9,7 +9,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.ActivityMainBinding
-import com.timgortworst.cleanarchitecture.presentation.extension.animateSlideFade
+import com.timgortworst.cleanarchitecture.presentation.extension.animateSlide
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,9 +49,9 @@ class MainActivity : AppCompatActivity() {
             val duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
 
             if (isNavigatingToDetails(destination.id)) {
-                binding.bottomNavigation.animateSlideFade(duration, View.GONE)
+                binding.bottomNavigation.animateSlide(duration, View.GONE)
             } else if (isNavigatingToList(destination.id)) {
-                binding.bottomNavigation.animateSlideFade(duration, View.VISIBLE)
+                binding.bottomNavigation.animateSlide(duration, View.VISIBLE)
             }
             currentDestinationId = destination.id
         }

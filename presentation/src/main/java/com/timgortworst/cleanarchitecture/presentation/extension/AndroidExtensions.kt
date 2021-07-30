@@ -41,7 +41,24 @@ fun RecyclerView.addSingleScrollDirectionListener() {
     addOnScrollListener(listener)
 }
 
-fun View.animateSlideFade(duration: Long, visibility: Int) {
+fun View.animateFade(duration: Long, visibility: Int) {
+    val animSet = AnimationSet(true).apply {
+        interpolator = LinearInterpolator()
+        fillAfter = true
+        this.duration = duration
+    }
+
+    val alphaAnimation = if (visibility == View.VISIBLE){
+        AlphaAnimation(0f, 1f)
+    } else {
+        AlphaAnimation(1f, 0f)
+    }
+
+    animSet.addAnimation(alphaAnimation)
+    startAnimation(animSet)
+}
+
+fun View.animateSlide(duration: Long, visibility: Int) {
     val animSet = AnimationSet(true).apply {
         interpolator = LinearInterpolator()
         fillAfter = true
@@ -58,26 +75,6 @@ fun View.animateSlideFade(duration: Long, visibility: Int) {
             TranslateAnimation.RELATIVE_TO_SELF, 1f)
     }
 
-    val alphaAnimation = if (visibility == View.VISIBLE){
-        AlphaAnimation(0f, 1f)
-    } else {
-        AlphaAnimation(1f, 0f)
-    }
-
     animSet.addAnimation(translateAnim)
-    animSet.addAnimation(alphaAnimation)
-    animSet.setAnimationListener(object : Animation.AnimationListener {
-        override fun onAnimationStart(animation: Animation?) {
-
-        }
-
-        override fun onAnimationEnd(animation: Animation?) {
-
-        }
-
-        override fun onAnimationRepeat(animation: Animation?) {
-        }
-    })
-
     startAnimation(animSet)
 }
