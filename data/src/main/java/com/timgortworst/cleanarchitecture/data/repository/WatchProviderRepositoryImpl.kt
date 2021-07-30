@@ -1,6 +1,5 @@
 package com.timgortworst.cleanarchitecture.data.repository
 
-import com.timgortworst.cleanarchitecture.data.mapper.asDomainModel
 import com.timgortworst.cleanarchitecture.data.remote.WatchProviderService
 import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProvider
 import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProviderRegion
@@ -21,7 +20,7 @@ class WatchProviderRepositoryImpl @Inject constructor(
             val data = apiResponse.body()
 
             if (apiResponse.isSuccessful && data != null) {
-                Resource.Success(data.asDomainModel())
+                Resource.Success(data)
             } else {
                 Resource.Error(
                     errorHandler.getApiError(
@@ -41,7 +40,7 @@ class WatchProviderRepositoryImpl @Inject constructor(
             val data = apiResponse.body()
 
             if (apiResponse.isSuccessful && data != null) {
-                Resource.Success(data.asDomainModel())
+                Resource.Success(data)
             } else {
                 Resource.Error(
                     errorHandler.getApiError(
@@ -61,7 +60,7 @@ class WatchProviderRepositoryImpl @Inject constructor(
             val data = apiResponse.body()
 
             if (apiResponse.isSuccessful && data != null) {
-                Resource.Success(data.asDomainModel())
+                Resource.Success(data)
             } else {
                 Resource.Error(
                     errorHandler.getApiError(

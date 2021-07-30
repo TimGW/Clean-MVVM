@@ -1,18 +1,13 @@
 package com.timgortworst.cleanarchitecture.data.model.watchprovider
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class NetworkWatchProviderRegions(
-    @SerializedName("results")
-    val results: ArrayList<Result>,
+    @field:Json(name = "results") val results: List<Result>?,
 ) {
-
     data class Result(
-        @SerializedName("iso_3166_1")
-        val iso: String,
-        @SerializedName("english_name")
-        val englishName: String,
-        @SerializedName("native_name")
-        val nativeName: String,
+        @field:Json(name = "iso_3166_1") val iso: String?,
+        @field:Json(name = "english_name") val englishName: String?,
+        @field:Json(name = "native_name") val nativeName: String?,
     )
 }

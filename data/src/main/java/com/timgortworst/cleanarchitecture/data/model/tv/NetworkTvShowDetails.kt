@@ -1,108 +1,108 @@
 package com.timgortworst.cleanarchitecture.data.model.tv
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class NetworkTvShowDetails(
-    @SerializedName("backdrop_path") val backdropPath: String?,
-    @SerializedName("created_by") val createdBy: List<CreatedBy>,
-    @SerializedName("episode_run_time") val episodeRunTime: List<Int>,
-    @SerializedName("first_air_date") val firstAirDate: String,
-    @SerializedName("genres") val genres: List<Genre>,
-    @SerializedName("homepage") val homepage: String,
-    @SerializedName("id") val id: Int,
-    @SerializedName("in_production") val inProduction: Boolean,
-    @SerializedName("languages") val languages: List<String>,
-    @SerializedName("last_air_date") val lastAirDate: String,
-    @SerializedName("last_episode_to_air") val lastEpisodeToAir: LastEpisodeToAir,
-    @SerializedName("name") val name: String,
-//    @SerializedName("nextEpisodeToAir") val nextEpisodeToAir: Any? = null,
-    @SerializedName("networks") val networks: List<Network>,
-    @SerializedName("number_of_episodes") val numberOfEpisodes: Int,
-    @SerializedName("number_of_seasons") val numberOfSeasons: Int,
-    @SerializedName("origin_country") val originCountry: List<String>,
-    @SerializedName("original_language") val originalLanguage: String,
-    @SerializedName("original_name") val originalName: String,
-    @SerializedName("overview") val overview: String,
-    @SerializedName("popularity") val popularity: Double,
-    @SerializedName("poster_path") val posterPath: String?,
-    @SerializedName("production_companies") val productionCompanies: List<Network>,
-    @SerializedName("production_countries") val productionCountries: List<ProductionCountry>,
-    @SerializedName("seasons") val seasons: List<Season>,
-    @SerializedName("spoken_languages") val spokenLanguages: List<SpokenLanguage>,
-    @SerializedName("status") val status: String,
-    @SerializedName("tagline") val tagline: String,
-    @SerializedName("type") val type: String,
-    @SerializedName("vote_average") val voteAverage: Double,
-    @SerializedName("vote_count") val voteCount: Int,
-    @SerializedName("watch/providers") val watchProviders: WatchProviders? = null,
+    @field:Json(name = "backdrop_path") val backdropPath: String?,
+    @field:Json(name = "created_by") val createdBy: List<CreatedBy>?,
+    @field:Json(name = "episode_run_time") val episodeRunTime: List<Int>?,
+    @field:Json(name = "first_air_date") val firstAirDate: String?,
+    @field:Json(name = "genres") val genres: List<Genre>?,
+    @field:Json(name = "homepage") val homepage: String?,
+    @field:Json(name = "id") val id: Int?,
+    @field:Json(name = "in_production") val inProduction: Boolean?,
+    @field:Json(name = "languages") val languages: List<String>?,
+    @field:Json(name = "last_air_date") val lastAirDate: String?,
+    @field:Json(name = "last_episode_to_air") val lastEpisodeToAir: LastEpisodeToAir?,
+    @field:Json(name = "name") val name: String?,
+//    @field:Json(name = "nextEpisodeToAir") val nextEpisodeToAir: Any? = null?,
+    @field:Json(name = "networks") val networks: List<Network>?,
+    @field:Json(name = "number_of_episodes") val numberOfEpisodes: Int?,
+    @field:Json(name = "number_of_seasons") val numberOfSeasons: Int?,
+    @field:Json(name = "origin_country") val originCountry: List<String>?,
+    @field:Json(name = "original_language") val originalLanguage: String?,
+    @field:Json(name = "original_name") val originalName: String?,
+    @field:Json(name = "overview") val overview: String?,
+    @field:Json(name = "popularity") val popularity: Double?,
+    @field:Json(name = "poster_path") val posterPath: String??,
+    @field:Json(name = "production_companies") val productionCompanies: List<Network>?,
+    @field:Json(name = "production_countries") val productionCountries: List<ProductionCountry>?,
+    @field:Json(name = "seasons") val seasons: List<Season>?,
+    @field:Json(name = "spoken_languages") val spokenLanguages: List<SpokenLanguage>?,
+    @field:Json(name = "status") val status: String?,
+    @field:Json(name = "tagline") val tagline: String?,
+    @field:Json(name = "type") val type: String?,
+    @field:Json(name = "vote_average") val voteAverage: Double?,
+    @field:Json(name = "vote_count") val voteCount: Int?,
+    @field:Json(name = "watch/providers") val watchProviders: WatchProviders?,
 ) {
 
     data class CreatedBy(
-        @SerializedName("id") val id: Int,
-        @SerializedName("credit_id") val creditID: String,
-        @SerializedName("name") val name: String,
-        @SerializedName("gender") val gender: Int,
-        @SerializedName("profile_path") val profilePath: String?
+        @field:Json(name = "id") val id: Int?,
+        @field:Json(name = "credit_id") val creditID: String?,
+        @field:Json(name = "name") val name: String?,
+        @field:Json(name = "gender") val gender: Int?,
+        @field:Json(name = "profile_path") val profilePath: String?
     )
 
     data class Genre(
-        @SerializedName("id") val id: Int,
-        @SerializedName("name") val name: String,
+        @field:Json(name = "id") val id: Int?,
+        @field:Json(name = "name") val name: String?,
     )
 
     data class LastEpisodeToAir(
-        @SerializedName("air_date") val airDate: String,
-        @SerializedName("episode_number") val episodeNumber: Int,
-        @SerializedName("id") val id: Int,
-        @SerializedName("name") val name: String,
-        @SerializedName("overview") val overview: String,
-        @SerializedName("production_code") val productionCode: String,
-        @SerializedName("season_number") val seasonNumber: Int,
-        @SerializedName("still_path") val stillPath: String?,
-        @SerializedName("vote_average") val voteAverage: Double,
-        @SerializedName("vote_count") val voteCount: Int
+        @field:Json(name = "air_date") val airDate: String?,
+        @field:Json(name = "episode_number") val episodeNumber: Int?,
+        @field:Json(name = "id") val id: Int?,
+        @field:Json(name = "name") val name: String?,
+        @field:Json(name = "overview") val overview: String?,
+        @field:Json(name = "production_code") val productionCode: String?,
+        @field:Json(name = "season_number") val seasonNumber: Int?,
+        @field:Json(name = "still_path") val stillPath: String?,
+        @field:Json(name = "vote_average") val voteAverage: Double?,
+        @field:Json(name = "vote_count") val voteCount: Int,
     )
 
     data class Network(
-        @SerializedName("name") val name: String,
-        @SerializedName("id") val id: Int,
-        @SerializedName("logo_path") val logoPath: String?,
-        @SerializedName("origin_country") val originCountry: String
+        @field:Json(name = "name") val name: String?,
+        @field:Json(name = "id") val id: Int?,
+        @field:Json(name = "logo_path") val logoPath: String?,
+        @field:Json(name = "origin_country") val originCountry: String?,
     )
 
     data class ProductionCountry(
-        @SerializedName("iso_3166_1") val iso3166_1: String,
-        @SerializedName("name") val name: String,
+        @field:Json(name = "iso_3166_1") val iso3166_1: String?,
+        @field:Json(name = "name") val name: String?,
     )
 
     data class Season(
-        @SerializedName("air_date") val airDate: String,
-        @SerializedName("episode_count") val episodeCount: Int,
-        @SerializedName("id") val id: Int,
-        @SerializedName("name") val name: String,
-        @SerializedName("overview") val overview: String,
-        @SerializedName("poster_path") val posterPath: String,
-        @SerializedName("season_number") val seasonNumber: Int
+        @field:Json(name = "air_date") val airDate: String?,
+        @field:Json(name = "episode_count") val episodeCount: Int?,
+        @field:Json(name = "id") val id: Int?,
+        @field:Json(name = "name") val name: String?,
+        @field:Json(name = "overview") val overview: String?,
+        @field:Json(name = "poster_path") val posterPath: String?,
+        @field:Json(name = "season_number") val seasonNumber: Int?,
     )
 
     data class SpokenLanguage(
-        @SerializedName("english_name") val englishName: String,
-        @SerializedName("iso_639_1") val iso639_1: String,
-        @SerializedName("name") val name: String,
+        @field:Json(name = "english_name") val englishName: String,
+        @field:Json(name = "iso_639_1") val iso639_1: String,
+        @field:Json(name = "name") val name: String,
     )
 
     data class WatchProviders(
-        @SerializedName("results") val results: Map<String, Result>
+        @field:Json(name = "results") val results: Map<String, Result>
     ) {
         data class Result(
-            @SerializedName("link") val link: String,
-            @SerializedName("flatrate") val flatRate: List<FlatRate>
+            @field:Json(name = "link") val link: String,
+            @field:Json(name = "flatrate") val flatRate: List<FlatRate>
         ) {
             data class FlatRate(
-                @SerializedName("display_priority") val displayPriority: Int,
-                @SerializedName("logo_path") val logoPath: String?,
-                @SerializedName("provider_id") val providerID: Int,
-                @SerializedName("provider_name") val providerName: String
+                @field:Json(name = "display_priority") val displayPriority: Int,
+                @field:Json(name = "logo_path") val logoPath: String?,
+                @field:Json(name = "provider_id") val providerID: Int,
+                @field:Json(name = "provider_name") val providerName: String
             )
         }
     }

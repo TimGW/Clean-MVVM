@@ -2,11 +2,10 @@ package com.timgortworst.cleanarchitecture.data.di
 
 import android.content.Context
 import androidx.room.Room
+import com.squareup.moshi.Moshi
 import com.timgortworst.cleanarchitecture.data.BuildConfig
 import com.timgortworst.cleanarchitecture.data.error.ErrorHandlerImpl
-import com.timgortworst.cleanarchitecture.data.local.AppDatabase
-import com.timgortworst.cleanarchitecture.data.local.SharedPrefManager
-import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
+import com.timgortworst.cleanarchitecture.data.local.*
 import com.timgortworst.cleanarchitecture.data.remote.AuthHeaderInterceptor
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import dagger.Binds
@@ -19,7 +18,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 /**
@@ -48,16 +47,24 @@ abstract class AppModule {
         @Provides
         @Singleton
         fun providesRoomDb(
-            @ApplicationContext context: Context
+            @ApplicationContext context: Context,
+            moshi: Moshi.Builder
         ) = Room.databaseBuilder(context, AppDatabase::class.java, "tmdb")
+            .addTypeConverter(TypeConverterMovie(moshi.build()))
+            .addTypeConverter(TypeConverterTvShow(moshi.build()))
             .fallbackToDestructiveMigration()
             .build()
 
         @Provides
         @Singleton
-        fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-            return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL).client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create()).build()
+        fun provideRetrofit(
+            okHttpClient: OkHttpClient,
+            moshi: Moshi
+        ): Retrofit {
+            return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
+                .client(okHttpClient)
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
+                .build()
         }
 
         @Provides

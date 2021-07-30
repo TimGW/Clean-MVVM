@@ -1,27 +1,27 @@
 package com.timgortworst.cleanarchitecture.data.model.tv
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class NetworkTvShows(
-    @SerializedName("page") val page: Int = 0,
-    @SerializedName("results") val results: ArrayList<Result> = arrayListOf(),
-    @SerializedName("total_pages") val totalPages: Int = 0,
-    @SerializedName("total_results") val totalResults: Int = 0
+    @field:Json(name = "page") val page: Int?,
+    @field:Json(name = "results") val results: List<Result>?,
+    @field:Json(name = "total_pages") val totalPages: Int?,
+    @field:Json(name = "total_results") val totalResults: Int?,
 ) {
 
     data class Result(
-        @SerializedName("poster_path") val posterPath: String?,
-        @SerializedName("popularity") val popularity: Double,
-        @SerializedName("id") val id: Int,
-        @SerializedName("backdrop_path") val backdropPath: String?,
-        @SerializedName("vote_average") val voteAverage: Double,
-        @SerializedName("overview") val overview: String,
-        @SerializedName("first_air_date") val firstAirDate: String?,
-        @SerializedName("origin_country") val originCountry: List<String>,
-        @SerializedName("genre_ids") val genreIds: List<Int>,
-        @SerializedName("original_language") val originalLanguage: String,
-        @SerializedName("vote_count") val voteCount: Int,
-        @SerializedName("name") val name: String,
-        @SerializedName("original_name") val originalName: String
+        @field:Json(name = "poster_path") val posterPath: String?,
+        @field:Json(name = "popularity") val popularity: Double?,
+        @field:Json(name = "id") val id: Int?,
+        @field:Json(name = "backdrop_path") val backdropPath: String?,
+        @field:Json(name = "vote_average") val voteAverage: Double?,
+        @field:Json(name = "overview") val overview: String?,
+        @field:Json(name = "first_air_date") val firstAirDate: String?,
+        @field:Json(name = "origin_country") val originCountry: List<String>?,
+        @field:Json(name = "genre_ids") val genreIds: List<Int>?,
+        @field:Json(name = "original_language") val originalLanguage: String?,
+        @field:Json(name = "vote_count") val voteCount: Int?,
+        @field:Json(name = "name") val name: String?,
+        @field:Json(name = "original_name") val originalName: String?,
     )
 }

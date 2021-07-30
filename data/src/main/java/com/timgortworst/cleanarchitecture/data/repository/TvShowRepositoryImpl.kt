@@ -4,9 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.data.local.TvShowDao
-import com.timgortworst.cleanarchitecture.data.mapper.asDatabaseModel
-import com.timgortworst.cleanarchitecture.data.mapper.asDomainModel
-import com.timgortworst.cleanarchitecture.data.model.tv.NetworkTvShowDetails
+import com.timgortworst.cleanarchitecture.data.model.tv.TvShowDetailsEntity
 import com.timgortworst.cleanarchitecture.data.remote.TvShowService
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShowDetails
@@ -31,13 +29,13 @@ class TvShowRepositoryImpl @Inject constructor(
 
     override fun getTvShowDetails(
         tvShowId: Int
-    ) = object : NetworkBoundResource<NetworkTvShowDetails, List<TvShowDetails>>() {
+    ) = object : NetworkBoundResource<TvShowDetails, List<TvShowDetails>>() {
 
-        override suspend fun saveRemoteData(response: NetworkTvShowDetails) =
-            tvShowDao.insertTvShowDetails(response.asDatabaseModel(sharedPrefs.getWatchProviderRegion()))
+        override suspend fun saveRemoteData(response: TvShowDetails) =
+            tvShowDao.insertTvShowDetails(TvShowDetailsEntity.from(response)) //.asDatabaseModel(sharedPrefs.getWatchProviderRegion()))
 
         override fun fetchFromLocal() = tvShowDao.getTvShowDetails(tvShowId).map { list ->
-            list.map { tvShow -> tvShow.asDomainModel() }
+            list.map { tvShow -> tvShow.toTvShowDetails() }
         }
 
         override suspend fun fetchFromRemote() = tvShowService.getTvShowDetails(tvShowId)

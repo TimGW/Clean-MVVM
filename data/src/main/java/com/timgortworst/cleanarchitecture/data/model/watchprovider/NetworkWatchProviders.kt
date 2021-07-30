@@ -1,19 +1,14 @@
 package com.timgortworst.cleanarchitecture.data.model.watchprovider
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class NetworkWatchProviders(
-    @SerializedName("results")
-    val results: ArrayList<Result>,
+    @field:Json(name = "results") val results: List<Result>?,
 ) {
     data class Result(
-        @SerializedName("display_priority")
-        val displayPriority: Int,
-        @SerializedName("logo_path")
-        val logoPath: String,
-        @SerializedName("provider_name")
-        val providerName: String,
-        @SerializedName("provider_id")
-        val providerId: Int,
+        @field:Json(name = "display_priority") val displayPriority: Int?,
+        @field:Json(name = "logo_path") val logoPath: String?,
+        @field:Json(name = "provider_name") val providerName: String?,
+        @field:Json(name = "provider_id") val providerId: Int?,
     )
 }

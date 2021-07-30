@@ -4,9 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.timgortworst.cleanarchitecture.data.local.MovieDao
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
-import com.timgortworst.cleanarchitecture.data.mapper.asDatabaseModel
-import com.timgortworst.cleanarchitecture.data.mapper.asDomainModel
-import com.timgortworst.cleanarchitecture.data.model.movie.NetworkMovieDetails
+import com.timgortworst.cleanarchitecture.data.model.movie.MovieDetailsEntity
 import com.timgortworst.cleanarchitecture.data.remote.MovieService
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
@@ -16,12 +14,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-/**
- * Lazy cache repository for fetching videos from the network and storing them on disk
- *
- * @property movieService
- * @property movieDao
- */
 class MovieRepositoryImpl @Inject constructor(
     private val movieService: MovieService,
     private val movieDao: MovieDao,
@@ -37,13 +29,13 @@ class MovieRepositoryImpl @Inject constructor(
 
     override fun getMovieDetailFlow(
         movieId: Int
-    ) = object : NetworkBoundResource<NetworkMovieDetails, List<MovieDetails>>() {
+    ) = object : NetworkBoundResource<MovieDetails, List<MovieDetails>>() {
 
-        override suspend fun saveRemoteData(response: NetworkMovieDetails) =
-            movieDao.insertMovieDetails(response.asDatabaseModel(sharedPrefs.getWatchProviderRegion()))
+        override suspend fun saveRemoteData(response: MovieDetails) =
+            movieDao.insertMovieDetails(MovieDetailsEntity.from(response))//(sharedPrefs.getWatchProviderRegion()))
 
         override fun fetchFromLocal() = movieDao.getMovieDetails(movieId).map { list ->
-            list.map { movie -> movie.asDomainModel() }
+            list.map { movie -> movie.toMovieDetails() }
         }
 
         override suspend fun fetchFromRemote() = movieService.getMovieDetails(movieId)

@@ -3,6 +3,7 @@ package com.timgortworst.cleanarchitecture.domain.usecase.tv
 import androidx.paging.filter
 import com.timgortworst.cleanarchitecture.domain.repository.TvShowRepository
 import kotlinx.coroutines.flow.map
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -11,6 +12,13 @@ class GetTvShowsUseCaseImpl @Inject constructor(
 ) : GetTvShowsUseCase {
 
     override fun execute(params: Unit) = tvShowRepository.getTvShows().map { pagingData ->
-        pagingData.filter { it.firstAirDate?.before(Date()) == true }
+        pagingData.filter {
+            val date = if (it.firstAirDate.isNotBlank()) SimpleDateFormat(
+                "yyyy-MM-dd",
+                Locale.getDefault()
+            ).parse(it.firstAirDate) else null
+
+            date?.before(Date()) == true
+        }
     }
 }

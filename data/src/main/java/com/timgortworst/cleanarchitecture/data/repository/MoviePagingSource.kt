@@ -3,12 +3,10 @@ package com.timgortworst.cleanarchitecture.data.repository
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
-import com.timgortworst.cleanarchitecture.data.mapper.asDomainModel
 import com.timgortworst.cleanarchitecture.data.remote.MovieService
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import retrofit2.HttpException
 import java.io.IOException
-import java.util.*
 
 class MoviePagingSource (
     private val movieService: MovieService,
@@ -27,13 +25,14 @@ class MoviePagingSource (
                 page = nextPageNumber,
                 region = region,
                 watchProviderIds = watchProviders?.map { it.providerId }?.joinToString(separator = "|"),
-                watchProviderRegion = region,
-                monetizationTypes = "flatrate|free|ads"
-            ).body()!!
+                watchProviderRegion = if(watchProviders != null) region else null,
+                monetizationTypes = if(watchProviders != null) "flatrate|free|ads" else null
+            ).body() ?: run { return LoadResult.Error(Throwable()) }
+
             val nextPage = if (response.page < response.totalPages) response.page + 1 else null
 
             LoadResult.Page(
-                data = response.asDomainModel(),
+                data = response.results,
                 prevKey = null, // Only paging forward.
                 nextKey = nextPage
             )

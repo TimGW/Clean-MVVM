@@ -3,10 +3,11 @@ package com.timgortworst.cleanarchitecture.data.model.tv
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.timgortworst.cleanarchitecture.domain.model.tv.TvShowDetails
 
 @Entity
-data class DbTvShowDetails(
-    @PrimaryKey @ColumnInfo(name = "id") val id: Int = 0,
+data class TvShowDetailsEntity(
+    @PrimaryKey @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "backdrop_path") val backdropPath: String,
     @ColumnInfo(name = "first_air_date") val firstAirDate: String,
     @ColumnInfo(name = "genres") val genres: List<Genre>,
@@ -29,7 +30,59 @@ data class DbTvShowDetails(
     @ColumnInfo(name = "watch_providers") val watchProviders: String = "",
 ) {
     data class Genre(
-        @ColumnInfo(name = "id") val id: Int = 0,
+        @ColumnInfo(name = "id") val id: Int,
         @ColumnInfo(name = "name") val name: String = ""
+    )
+
+    companion object {
+        fun from(tvShowDetails: TvShowDetails) = with(tvShowDetails) {
+            TvShowDetailsEntity(
+                id,
+                backdropPath,
+                firstAirDate,
+                genres.map { Genre(it.id, it.name) },
+                homepage,
+                inProduction,
+                lastAirDate,
+                name,
+                numberOfEpisodes,
+                numberOfSeasons,
+                originalLanguage,
+                originalName,
+                overview,
+                popularity,
+                posterPath,
+                status,
+                tagline,
+                type,
+                voteAverage,
+                voteCount,
+                watchProviders,
+            )
+        }
+    }
+
+    fun toTvShowDetails() = TvShowDetails(
+        id,
+        backdropPath,
+        firstAirDate,
+        genres.map { TvShowDetails.Genre(it.id, it.name) },
+        homepage,
+        inProduction,
+        lastAirDate,
+        name,
+        numberOfEpisodes,
+        numberOfSeasons,
+        originalLanguage,
+        originalName,
+        overview,
+        popularity,
+        posterPath,
+        status,
+        tagline,
+        type,
+        voteAverage,
+        voteCount,
+        watchProviders,
     )
 }

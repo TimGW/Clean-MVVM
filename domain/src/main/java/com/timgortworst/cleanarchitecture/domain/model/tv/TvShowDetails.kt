@@ -21,11 +21,11 @@ data class TvShowDetails(
     val type: String,
     val voteAverage: Double,
     val voteCount: Int,
-    val watchProviders: String = "",
+    val watchProviders: String,
 ) {
 
     data class Genre(
-        val id: Int = 0,
-        val name: String = ""
+        val id: Int,
+        val name: String
     )
 }
