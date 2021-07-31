@@ -140,6 +140,7 @@ class MoviesFragment : Fragment() {
                     }
                     is LoadState.Error -> {
                         binding.swiperefresh.isRefreshing = false
+                        // todo anchor above bottomnavview
                         view?.snackbar(getString(R.string.connection_error))
                         if (movieAdapter.itemCount == 0) {
                             binding.noResults.visibility = View.VISIBLE

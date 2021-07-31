@@ -38,7 +38,7 @@ class MoviePagingSource (
             )
         } catch (e: IOException) {
             // IOException for network failures.
-            return LoadResult.Error(e)
+            return LoadResult.Error(e) // todo show correct error
         } catch (e: HttpException) {
             // HttpException for any non-2xx HTTP status codes.
             return LoadResult.Error(e)

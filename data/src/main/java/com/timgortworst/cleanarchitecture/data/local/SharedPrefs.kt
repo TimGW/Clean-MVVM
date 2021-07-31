@@ -27,7 +27,7 @@ class SharedPrefs(
         val json = PreferenceManager.getDefaultSharedPreferences(context)
             .getString(SHARED_PREF_WATCH_PROVIDER_MOVIE, null) ?: return null
         val type: Type = object : TypeToken<List<WatchProvider>>() {}.type
-        return Gson().fromJson(json, type)
+        return Gson().fromJson(json, type) // FIXME
     }
 
     fun setWatchProvidersTv(watchProviders: List<WatchProvider>) {
@@ -38,7 +38,7 @@ class SharedPrefs(
         val json = PreferenceManager.getDefaultSharedPreferences(context)
             .getString(SHARED_PREF_WATCH_PROVIDER_TV, null) ?: return null
         val type: Type = object : TypeToken<List<WatchProvider>>() {}.type
-        return Gson().fromJson(json, type)
+        return Gson().fromJson(json, type) // FIXME
     }
 
     companion object {
