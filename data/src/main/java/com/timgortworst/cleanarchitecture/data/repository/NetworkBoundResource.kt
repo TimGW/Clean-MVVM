@@ -7,14 +7,10 @@ import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import kotlinx.coroutines.flow.*
 import retrofit2.Response
 
-
 /**
- * A repository which provides resource from local database as well as remote end point.
- *
- * [NETWORK] represents the type for network.
- * [DOMAIN] represents the type for domain.
+ * A generic class that can provide a resource backed by both the sqlite database and the network.
  */
-abstract class NetworkBoundResource<NETWORK, DOMAIN> {
+abstract class NetworkBoundResource<RequestType, ResultType> {
 
     fun asFlow() = flow {
         emit(Resource.Loading)
@@ -52,14 +48,14 @@ abstract class NetworkBoundResource<NETWORK, DOMAIN> {
     protected abstract suspend fun getErrorHandler() : ErrorHandler
 
     @WorkerThread
-    protected abstract suspend fun saveRemoteData(response: NETWORK)
+    protected abstract suspend fun saveRemoteData(response: RequestType)
 
     @MainThread
-    protected abstract fun fetchFromLocal(): Flow<DOMAIN>
+    protected abstract fun fetchFromLocal(): Flow<ResultType>
 
     @MainThread
-    protected abstract suspend fun fetchFromRemote(): Response<NETWORK>
+    protected abstract suspend fun fetchFromRemote(): Response<RequestType>
 
     @MainThread
-    protected abstract fun shouldFetch(data: DOMAIN?): Boolean
+    protected abstract fun shouldFetch(data: ResultType?): Boolean
 }

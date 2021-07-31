@@ -29,10 +29,10 @@ class TvShowRepositoryImpl @Inject constructor(
 
     override fun getTvShowDetails(
         tvShowId: Int
-    ) = object : NetworkBoundResource<TvShowDetails, List<TvShowDetails>>() {
+    ) = object : NetworkBoundResource<TvShowDetailsEntity, List<TvShowDetails>>() {
 
-        override suspend fun saveRemoteData(response: TvShowDetails) =
-            tvShowDao.insertTvShowDetails(TvShowDetailsEntity.from(response)) //.asDatabaseModel(sharedPrefs.getWatchProviderRegion()))
+        override suspend fun saveRemoteData(response: TvShowDetailsEntity) =
+            tvShowDao.insertTvShowDetails(response)
 
         override fun fetchFromLocal() = tvShowDao.getTvShowDetails(tvShowId).map { list ->
             list.map { tvShow -> tvShow.toTvShowDetails() }

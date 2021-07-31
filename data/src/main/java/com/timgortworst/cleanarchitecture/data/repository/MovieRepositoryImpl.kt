@@ -29,10 +29,10 @@ class MovieRepositoryImpl @Inject constructor(
 
     override fun getMovieDetailFlow(
         movieId: Int
-    ) = object : NetworkBoundResource<MovieDetails, List<MovieDetails>>() {
+    ) = object : NetworkBoundResource<MovieDetailsEntity, List<MovieDetails>>() {
 
-        override suspend fun saveRemoteData(response: MovieDetails) =
-            movieDao.insertMovieDetails(MovieDetailsEntity.from(response))//(sharedPrefs.getWatchProviderRegion()))
+        override suspend fun saveRemoteData(response: MovieDetailsEntity) =
+            movieDao.insertMovieDetails(response)
 
         override fun fetchFromLocal() = movieDao.getMovieDetails(movieId).map { list ->
             list.map { movie -> movie.toMovieDetails() }

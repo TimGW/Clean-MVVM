@@ -1,6 +1,6 @@
 package com.timgortworst.cleanarchitecture.data.remote
 
-import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
+import com.timgortworst.cleanarchitecture.data.model.movie.MovieDetailsEntity
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movies
 import retrofit2.Response
 import retrofit2.http.GET
@@ -22,5 +22,5 @@ interface MovieService {
     suspend fun getMovieDetails(
         @Path("movie_id") movieId: Int,
         @Query("append_to_response") providers: String = "watch/providers",
-    ): Response<MovieDetails>
+    ): Response<MovieDetailsEntity>
 }

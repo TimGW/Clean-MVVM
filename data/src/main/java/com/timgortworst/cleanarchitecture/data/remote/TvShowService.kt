@@ -1,6 +1,6 @@
 package com.timgortworst.cleanarchitecture.data.remote
 
-import com.timgortworst.cleanarchitecture.domain.model.tv.TvShowDetails
+import com.timgortworst.cleanarchitecture.data.model.tv.TvShowDetailsEntity
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShows
 import retrofit2.Response
 import retrofit2.http.GET
@@ -22,5 +22,5 @@ interface TvShowService {
     suspend fun getTvShowDetails(
         @Path("tv_id") tvId: Int,
         @Query("append_to_response") providers: String = "watch/providers",
-    ): Response<TvShowDetails>
+    ): Response<TvShowDetailsEntity>
 }
