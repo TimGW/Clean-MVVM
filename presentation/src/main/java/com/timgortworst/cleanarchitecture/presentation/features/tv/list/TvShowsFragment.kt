@@ -14,12 +14,14 @@ import androidx.navigation.ui.NavigationUI
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShow
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaListBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
+import com.timgortworst.cleanarchitecture.presentation.features.MainActivity
 import com.timgortworst.cleanarchitecture.presentation.features.base.GridMarginDecoration
 import com.timgortworst.cleanarchitecture.presentation.features.watchprovider.TvShowWatchProvidersDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -140,7 +142,13 @@ class TvShowsFragment : Fragment() {
                     }
                     is LoadState.Error -> {
                         binding.swiperefresh.isRefreshing = false
-                        view?.snackbar(getString(R.string.connection_error))
+                        val bottomNavView = (requireActivity() as? MainActivity)
+                            ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+                        view?.snackbar(
+                            message = getString(R.string.connection_error),
+                            anchorView = bottomNavView)
+
                         if (tvShowGridAdapter.itemCount == 0) {
                             binding.noResults.visibility = View.VISIBLE
                         }
