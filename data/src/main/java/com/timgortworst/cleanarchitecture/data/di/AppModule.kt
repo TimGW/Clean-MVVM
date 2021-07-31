@@ -48,10 +48,10 @@ abstract class AppModule {
         @Singleton
         fun providesRoomDb(
             @ApplicationContext context: Context,
-            moshi: Moshi.Builder
+            @MoshiDefault moshi: Moshi
         ) = Room.databaseBuilder(context, AppDatabase::class.java, "tmdb")
-            .addTypeConverter(TypeConverterMovie(moshi.build()))
-            .addTypeConverter(TypeConverterTvShow(moshi.build()))
+            .addTypeConverter(TypeConverterMovie(moshi))
+            .addTypeConverter(TypeConverterTvShow(moshi))
             .fallbackToDestructiveMigration()
             .build()
 
@@ -59,7 +59,7 @@ abstract class AppModule {
         @Singleton
         fun provideRetrofit(
             okHttpClient: OkHttpClient,
-            moshi: Moshi
+            @MoshiNetwork moshi: Moshi
         ): Retrofit {
             return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
                 .client(okHttpClient)
@@ -78,5 +78,14 @@ abstract class AppModule {
 
             return builder.build()
         }
+
+        @Provides
+        @MoshiDefault
+        fun provideMoshi(
+            builder: Moshi.Builder
+        ) = builder.build()
+
+        @Provides
+        fun provideMoshiBuilder() = Moshi.Builder()
     }
 }
