@@ -41,8 +41,9 @@ abstract class AppModule {
         @Provides
         fun providesSharedPreferences(
             sharedPrefManager: SharedPrefManager,
-            @ApplicationContext context: Context
-        ): SharedPrefs = SharedPrefs(sharedPrefManager, context)
+            @ApplicationContext context: Context,
+            @MoshiDefault moshi: Moshi
+        ): SharedPrefs = SharedPrefs(sharedPrefManager, context, moshi)
 
         @Provides
         @Singleton

@@ -1,16 +1,14 @@
 package com.timgortworst.cleanarchitecture.data.local
 
 import android.content.Context
-import androidx.preference.PreferenceManager
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.squareup.moshi.Moshi
 import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.lang.reflect.Type
 
 class SharedPrefs(
     private val spm: SharedPrefManager,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val moshi: Moshi
 ) {
 
     fun setWatchProviderRegion(region: String) {
@@ -20,26 +18,18 @@ class SharedPrefs(
     fun getWatchProviderRegion() = spm.getStringValue(SHARED_PREF_WATCH_PROVIDER_REGION)
 
     fun setWatchProvidersMovie(watchProviders: List<WatchProvider>) {
-        spm.setList(SHARED_PREF_WATCH_PROVIDER_MOVIE, watchProviders)
+        spm.setList(context, moshi, SHARED_PREF_WATCH_PROVIDER_MOVIE, watchProviders)
     }
 
-    fun getWatchProvidersMovie(): List<WatchProvider>? {
-        val json = PreferenceManager.getDefaultSharedPreferences(context)
-            .getString(SHARED_PREF_WATCH_PROVIDER_MOVIE, null) ?: return null
-        val type: Type = object : TypeToken<List<WatchProvider>>() {}.type
-        return Gson().fromJson(json, type) // FIXME
-    }
+    fun getWatchProvidersMovie() =
+        spm.getList<WatchProvider>(context, moshi, SHARED_PREF_WATCH_PROVIDER_MOVIE)
 
     fun setWatchProvidersTv(watchProviders: List<WatchProvider>) {
-        spm.setList(SHARED_PREF_WATCH_PROVIDER_TV, watchProviders)
+        spm.setList(context, moshi, SHARED_PREF_WATCH_PROVIDER_TV, watchProviders)
     }
 
-    fun getWatchProvidersTv(): List<WatchProvider>? {
-        val json = PreferenceManager.getDefaultSharedPreferences(context)
-            .getString(SHARED_PREF_WATCH_PROVIDER_TV, null) ?: return null
-        val type: Type = object : TypeToken<List<WatchProvider>>() {}.type
-        return Gson().fromJson(json, type) // FIXME
-    }
+    fun getWatchProvidersTv() =
+        spm.getList<WatchProvider>(context, moshi, SHARED_PREF_WATCH_PROVIDER_TV)
 
     companion object {
         const val SHARED_PREF_WATCH_PROVIDER_REGION = "SHARED_PREF_WATCH_PROVIDER_REGION"

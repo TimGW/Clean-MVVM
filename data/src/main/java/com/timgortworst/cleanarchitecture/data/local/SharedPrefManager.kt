@@ -2,15 +2,15 @@ package com.timgortworst.cleanarchitecture.data.local
 
 import android.content.Context
 import androidx.preference.PreferenceManager
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.lang.reflect.Type
 import javax.inject.Inject
 
 
 class SharedPrefManager @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext context: Context,
 ) {
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -42,15 +42,29 @@ class SharedPrefManager @Inject constructor(
         sharedPreferences.edit().putBoolean(key, value).apply()
     }
 
-    fun <T> setList(key: String, list: List<T>?) {
-        val gson = Gson()
-        sharedPreferences.edit().putString(key, gson.toJson(list)).apply()
+    inline fun <reified T> setList(
+        context: Context,
+        moshi: Moshi,
+        key: String,
+        list: List<T>?
+    ) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val type = Types.newParameterizedType(List::class.java, T::class.java)
+        val adapter: JsonAdapter<List<T>> = moshi.adapter(type)
+
+        sharedPreferences.edit().putString(key, adapter.toJson(list)).apply()
     }
 
-    inline fun <reified T> getList(key: String, context: Context): ArrayList<T> {
+    inline fun <reified T> getList(
+        context: Context,
+        moshi: Moshi,
+        key: String
+    ): List<T>? {
         val json = PreferenceManager.getDefaultSharedPreferences(context).getString(key, null)
-            ?: return ArrayList()
-        val type: Type = object: TypeToken<List<T>>(){}.type
-        return Gson().fromJson(json, type)
+            ?: return null
+        val type = Types.newParameterizedType(List::class.java, T::class.java)
+        val adapter: JsonAdapter<List<T>> = moshi.adapter(type)
+
+        return adapter.fromJson(json)
     }
 }
