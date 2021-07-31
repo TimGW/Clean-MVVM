@@ -1,14 +1,14 @@
 package com.timgortworst.cleanarchitecture.data.remote.jsonAdapter
 
 import com.squareup.moshi.FromJson
-import com.timgortworst.cleanarchitecture.data.model.watchprovider.NetworkWatchProviders
+import com.timgortworst.cleanarchitecture.data.model.watchprovider.WatchProvidersJson
 import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProvider
 
 class WatchProviderJsonAdapter {
 
     @FromJson
-    fun fromJson(networkWatchProviders: NetworkWatchProviders): List<WatchProvider>? {
-        val results = networkWatchProviders.results
+    fun fromJson(watchProvidersJson: WatchProvidersJson): List<WatchProvider>? {
+        val results = watchProvidersJson.results
         if (results.isNullOrEmpty()) return null
 
         return results.map {

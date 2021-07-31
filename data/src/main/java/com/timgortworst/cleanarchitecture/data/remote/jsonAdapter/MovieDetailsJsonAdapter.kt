@@ -2,18 +2,18 @@ package com.timgortworst.cleanarchitecture.data.remote.jsonAdapter
 
 import com.squareup.moshi.FromJson
 import com.timgortworst.cleanarchitecture.data.model.movie.MovieDetailsEntity
-import com.timgortworst.cleanarchitecture.data.model.movie.NetworkMovieDetails
+import com.timgortworst.cleanarchitecture.data.model.movie.MovieDetailsJson
 import java.util.*
 
 class MovieDetailsJsonAdapter {
 
     @FromJson
-    fun fromJson(networkMovies: NetworkMovieDetails): MovieDetailsEntity? {
-        if (networkMovies.id == null) return null
-        if (networkMovies.title == null) return null
-        if (networkMovies.overview == null) return null
+    fun fromJson(moviesJson: MovieDetailsJson): MovieDetailsEntity? {
+        if (moviesJson.id == null) return null
+        if (moviesJson.title == null) return null
+        if (moviesJson.overview == null) return null
 
-        return with(networkMovies) {
+        return with(moviesJson) {
             MovieDetailsEntity(
                 id!!,
                 overview!!,
@@ -26,11 +26,11 @@ class MovieDetailsJsonAdapter {
         }
     }
 
-    private fun NetworkMovieDetails.Genre.asDbModel() = with(this) {
+    private fun MovieDetailsJson.Genre.asDbModel() = with(this) {
         MovieDetailsEntity.Genre(id ?: return@with null, name ?: return@with null)
     }
 
-    private fun NetworkMovieDetails.WatchProviders.Result.asDbModel() = with(this) {
+    private fun MovieDetailsJson.WatchProviders.Result.asDbModel() = with(this) {
         MovieDetailsEntity.Provider(
             flatRate?.mapNotNull { it.providerName },
             buy?.mapNotNull { it.providerName },

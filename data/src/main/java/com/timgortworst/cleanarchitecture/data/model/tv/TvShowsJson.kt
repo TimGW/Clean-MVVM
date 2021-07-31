@@ -2,7 +2,7 @@ package com.timgortworst.cleanarchitecture.data.model.tv
 
 import com.squareup.moshi.Json
 
-data class NetworkTvShows(
+data class TvShowsJson(
     @field:Json(name = "page") val page: Int?,
     @field:Json(name = "results") val results: List<Result>?,
     @field:Json(name = "total_pages") val totalPages: Int?,

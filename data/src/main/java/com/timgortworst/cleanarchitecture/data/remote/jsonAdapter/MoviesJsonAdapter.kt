@@ -1,26 +1,23 @@
 package com.timgortworst.cleanarchitecture.data.remote.jsonAdapter
 
 import com.squareup.moshi.FromJson
-import com.squareup.moshi.ToJson
-import com.timgortworst.cleanarchitecture.data.model.movie.NetworkMovies
+import com.timgortworst.cleanarchitecture.data.model.movie.MoviesJson
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movies
-import java.text.SimpleDateFormat
-import java.util.*
 
-class MovieJsonAdapter {
+class MoviesJsonAdapter {
 
     @FromJson
-    fun fromJson(networkMovies: NetworkMovies?): Movies? {
-        val results = networkMovies?.results
+    fun fromJson(moviesJson: MoviesJson?): Movies? {
+        val results = moviesJson?.results
         if (results.isNullOrEmpty()) return null
-        if (networkMovies.page == null) return null
-        if (networkMovies.totalPages == null) return null
-        if (networkMovies.totalResults == null) return null
+        if (moviesJson.page == null) return null
+        if (moviesJson.totalPages == null) return null
+        if (moviesJson.totalResults == null) return null
 
         return Movies(
-            networkMovies.page,
-            networkMovies.results.map {
+            moviesJson.page,
+            moviesJson.results.map {
                 Movie(
                     it.adult ?: false,
                     it.backdropPath,
@@ -39,8 +36,8 @@ class MovieJsonAdapter {
                     "https://image.tmdb.org/t/p/original/".plus(it.posterPath),
                 )
             },
-            networkMovies.totalPages,
-            networkMovies.totalResults,
+            moviesJson.totalPages,
+            moviesJson.totalResults,
         )
     }
 }

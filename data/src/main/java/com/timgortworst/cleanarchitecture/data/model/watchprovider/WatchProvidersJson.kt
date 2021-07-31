@@ -2,7 +2,7 @@ package com.timgortworst.cleanarchitecture.data.model.watchprovider
 
 import com.squareup.moshi.Json
 
-data class NetworkWatchProviders(
+data class WatchProvidersJson(
     @field:Json(name = "results") val results: List<Result>?,
 ) {
     data class Result(

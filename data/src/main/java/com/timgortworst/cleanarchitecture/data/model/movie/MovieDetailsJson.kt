@@ -2,7 +2,7 @@ package com.timgortworst.cleanarchitecture.data.model.movie
 
 import com.squareup.moshi.Json
 
-data class NetworkMovieDetails(
+data class MovieDetailsJson(
     @field:Json(name = "id") val id: Int?,
     @field:Json(name = "adult") val adult: Boolean?,
     @field:Json(name = "backdrop_path") val backdropPath: String?,

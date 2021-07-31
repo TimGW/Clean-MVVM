@@ -19,9 +19,9 @@ object ParsingModule {
     @Provides
     fun provideNetworkMoshi(builder: Moshi.Builder): Moshi {
         return builder
-            .add(MovieJsonAdapter())
+            .add(MoviesJsonAdapter())
             .add(MovieDetailsJsonAdapter())
-            .add(TvShowJsonAdapter())
+            .add(TvShowsJsonAdapter())
             .add(TvShowDetailsJsonAdapter())
             .add(WatchProviderJsonAdapter())
             .add(WatchProviderRegionJsonAdapter())

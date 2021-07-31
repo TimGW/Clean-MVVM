@@ -1,25 +1,23 @@
 package com.timgortworst.cleanarchitecture.data.remote.jsonAdapter
 
 import com.squareup.moshi.FromJson
-import com.timgortworst.cleanarchitecture.data.model.tv.NetworkTvShows
+import com.timgortworst.cleanarchitecture.data.model.tv.TvShowsJson
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShow
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShows
-import java.text.SimpleDateFormat
-import java.util.*
 
-class TvShowJsonAdapter {
+class TvShowsJsonAdapter {
 
     @FromJson
-    fun fromJson(networkTvShows: NetworkTvShows): TvShows? {
-        val results = networkTvShows.results
+    fun fromJson(tvShowsJson: TvShowsJson): TvShows? {
+        val results = tvShowsJson.results
         if (results.isNullOrEmpty()) return null
-        if (networkTvShows.page == null) return null
-        if (networkTvShows.totalPages == null) return null
-        if (networkTvShows.totalResults == null) return null
+        if (tvShowsJson.page == null) return null
+        if (tvShowsJson.totalPages == null) return null
+        if (tvShowsJson.totalResults == null) return null
 
         return TvShows(
-            networkTvShows.page,
-            networkTvShows.results.map {
+            tvShowsJson.page,
+            tvShowsJson.results.map {
                 TvShow(
                     it.posterPath.orEmpty(),
                     it.popularity ?: 0.0,
@@ -38,8 +36,8 @@ class TvShowJsonAdapter {
                     "https://image.tmdb.org/t/p/original/".plus(it.posterPath),
                 )
             },
-            networkTvShows.totalPages,
-            networkTvShows.totalResults,
+            tvShowsJson.totalPages,
+            tvShowsJson.totalResults,
         )
     }
 }

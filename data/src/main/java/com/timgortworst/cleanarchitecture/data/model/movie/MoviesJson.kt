@@ -3,7 +3,7 @@ package com.timgortworst.cleanarchitecture.data.model.movie
 import com.squareup.moshi.Json
 
 
-data class NetworkMovies(
+data class MoviesJson(
     @field:Json(name = "page") val page: Int?,
     @field:Json(name = "total_pages") val totalPages: Int?,
     @field:Json(name = "total_results") val totalResults: Int?,

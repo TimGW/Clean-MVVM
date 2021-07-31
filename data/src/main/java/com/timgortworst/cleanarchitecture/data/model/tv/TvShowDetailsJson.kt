@@ -2,7 +2,7 @@ package com.timgortworst.cleanarchitecture.data.model.tv
 
 import com.squareup.moshi.Json
 
-data class NetworkTvShowDetails(
+data class TvShowDetailsJson(
     @field:Json(name = "backdrop_path") val backdropPath: String?,
     @field:Json(name = "created_by") val createdBy: List<CreatedBy>?,
     @field:Json(name = "episode_run_time") val episodeRunTime: List<Int>?,
