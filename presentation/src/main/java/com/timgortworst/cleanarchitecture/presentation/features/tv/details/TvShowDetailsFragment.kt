@@ -112,7 +112,7 @@ class TvShowDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateList
 
         binding.mediaDetailsOverview.text = tvShowDetails.overview
         binding.watchProviders.text =
-            getString(R.string.watch_provider_availability, tvShowDetails.watchProviders)
+            getString(R.string.watch_provider_availability, tvShowDetails.watchProviders) // FIXME: format nice list
         binding.expandedTitle.text = args.pageTitle
         binding.collapsedTitle.text = args.pageTitle
     }

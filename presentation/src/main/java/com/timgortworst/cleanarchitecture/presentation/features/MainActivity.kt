@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
             val duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
 
+            // FIXME: bottomNavView re-shows when rotating in detail fragment
             if (isNavigatingToDetails(destination.id)) {
                 binding.bottomNavigation.animateSlide(duration, View.GONE)
             } else if (isNavigatingToList(destination.id)) {
