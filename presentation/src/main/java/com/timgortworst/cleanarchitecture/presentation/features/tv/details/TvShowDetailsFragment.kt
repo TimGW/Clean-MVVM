@@ -100,8 +100,8 @@ class TvShowDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateList
             binding.progressBar.visibility = View.INVISIBLE
             when (it) {
                 is Resource.Error -> view?.snackbar(getString(R.string.generic_error)) // FIXME show correct error
-                Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is Resource.Success -> presentTvShowDetails(it.data)
+                is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is Resource.Success -> presentTvShowDetails(it.data!!) // FIXME
             }
         }
     }

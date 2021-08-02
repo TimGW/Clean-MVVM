@@ -18,13 +18,14 @@ class MovieWatchProvidersDialog : BaseWatchProvidersDialog() {
         viewModel.getAllProviders()
     }
 
+    // FIXME: nullability
     private fun observeData() {
         viewModel.watchProviders.observe(this) {
             when (it) {
                 is Resource.Error -> { }
-                Resource.Loading -> { }
+                is Resource.Loading -> { } // FIXME empty state
                 is Resource.Success -> {
-                    watchProviderAdapter.submitList(it.data.map { watchProvider ->
+                    watchProviderAdapter.submitList(it.data!!.map { watchProvider ->
                         WatchProvidersAdapter.ViewItem(
                             watchProvider,
                             viewModel.isProviderChecked(watchProvider.providerId)

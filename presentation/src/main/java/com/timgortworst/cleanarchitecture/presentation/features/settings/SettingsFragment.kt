@@ -43,6 +43,7 @@ class SettingsFragment : Fragment() {
         observeData()
     }
 
+    // FIXME
 //    override fun onResume() {
 //        super.onResume()
 //        (requireActivity() as? MainActivity)?.setExpandedAppBar(false)
@@ -69,23 +70,22 @@ class SettingsFragment : Fragment() {
         )
     }
 
+    // TODO fix nullability
     private fun observeData() {
         viewModel.regions.observe(viewLifecycleOwner) { resource ->
             when (resource) {
-                is Resource.Error -> {
-                }
-                Resource.Loading -> {
-                }
+                is Resource.Error -> { } // FIXME
+                is Resource.Loading -> { }
                 is Resource.Success -> {
                     binding.regionSpinner.adapter = WatchProviderRegionAdapter(
-                        resource.data, binding.regionSpinner,
+                        resource.data!!, binding.regionSpinner,
                     ).apply {
                         selectedListener = {
                             viewModel.updateProviders(it.iso)
                         }
                     }
                     binding.regionSpinner.setSelection(
-                        resource.data.indexOfFirst {
+                        resource.data!!.indexOfFirst {
                             it.iso == sharedPrefs.getWatchProviderRegion()
                         })
                 }

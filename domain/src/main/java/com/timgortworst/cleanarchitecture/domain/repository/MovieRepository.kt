@@ -11,5 +11,5 @@ interface MovieRepository {
 
     fun getPagedMovies(): Flow<PagingData<Movie>>
 
-    fun getMovieDetailFlow(movieId: Int): Flow<Resource<List<MovieDetails>>>
+    fun getMovieDetailFlow(movieId: Int): Flow<Resource<out List<MovieDetails>?>>
 }

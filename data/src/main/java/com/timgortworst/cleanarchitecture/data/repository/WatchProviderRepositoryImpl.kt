@@ -8,7 +8,7 @@ import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.repository.WatchProviderRepository
 import javax.inject.Inject
 
-// TODO caching
+// TODO caching with networkboundresource
 class WatchProviderRepositoryImpl @Inject constructor(
     private val service: WatchProviderService,
     private val errorHandler: ErrorHandler

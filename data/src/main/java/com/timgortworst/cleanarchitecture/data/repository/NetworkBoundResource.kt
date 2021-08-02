@@ -13,24 +13,26 @@ import retrofit2.Response
 abstract class NetworkBoundResource<RequestType, ResultType> {
 
     fun asFlow() = flow {
-        emit(Resource.Loading)
+        val localResult = fetchFromLocal().firstOrNull()
 
         try {
-            val local = fetchFromLocal().first()
+            emit(Resource.Loading(localResult))
 
-            if (shouldFetch(local)) {
-                fetchFromNetwork().collect()
+            if (shouldFetch(localResult)) {
+                fetchFromNetwork(localResult).collect()
             } else {
-                emit(Resource.Success(local))
+                emit(Resource.Success(localResult))
             }
         } catch (e: Exception) {
-            emit(Resource.Error(getErrorHandler().getError(e)))
+            emit(Resource.Error(getErrorHandler().getError(e), localResult))
         }
 
         emitAll(fetchFromLocal().map { Resource.Success(it) })
     }
 
-    private fun fetchFromNetwork() = flow {
+    private fun fetchFromNetwork(
+        localResult: ResultType?
+    ) = flow {
         val apiResponse = fetchFromRemote()
         val remoteResponse = apiResponse.body()
 
@@ -41,7 +43,7 @@ abstract class NetworkBoundResource<RequestType, ResultType> {
                 statusCode = apiResponse.code(),
                 message = apiResponse.message()
             )
-            emit(Resource.Error(error))
+            emit(Resource.Error(error, localResult))
         }
     }
 

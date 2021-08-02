@@ -15,10 +15,11 @@ class GetMovieDetailsUseCaseImpl @Inject constructor(
 
     override fun execute(params: Params): Flow<Resource<MovieDetails>> {
         return movieRepository.getMovieDetailFlow(params.movieId).map { response ->
+            val result = response.data!!.first()
             when (response) {
-                is Resource.Success -> Resource.Success(response.data.first())
-                is Resource.Error -> response
-                is Resource.Loading -> response
+                is Resource.Success -> Resource.Success(result)
+                is Resource.Error -> Resource.Error(response.error, result)
+                is Resource.Loading -> Resource.Loading(result)
             }
         }
     }

@@ -15,10 +15,11 @@ class GetTvShowDetailsUseCaseImpl @Inject constructor(
 
     override fun execute(params: Params): Flow<Resource<TvShowDetails>> {
         return tvShowRepository.getTvShowDetails(params.movieId).map { response ->
+            val result = response.data!!.first()
             when (response) {
-                is Resource.Success -> Resource.Success(response.data.first())
-                is Resource.Error -> Resource.Error(response.errorEntity)
-                is Resource.Loading -> Resource.Loading
+                is Resource.Success -> Resource.Success(result)
+                is Resource.Error -> Resource.Error(response.error, result)
+                is Resource.Loading -> Resource.Loading(result)
             }
         }
     }
