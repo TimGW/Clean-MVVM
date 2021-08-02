@@ -19,16 +19,15 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.google.android.material.appbar.AppBarLayout
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShowDetails
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.animateFade
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
+import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
 import com.timgortworst.cleanarchitecture.presentation.features.base.AppBarOffsetListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.abs
 
 @AndroidEntryPoint
 class TvShowDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListener {
@@ -78,7 +77,6 @@ class TvShowDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateList
         }
 
         observeUI()
-        viewModel.setTvShowId(args.tvShowId)
         requireActivity().setTranslucentStatus(true)
     }
 
@@ -101,7 +99,7 @@ class TvShowDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateList
         viewModel.tvShowDetails.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.INVISIBLE
             when (it) {
-                is Resource.Error -> presentError(R.string.generic_error)
+                is Resource.Error -> view?.snackbar(getString(R.string.generic_error)) // FIXME show correct error
                 Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is Resource.Success -> presentTvShowDetails(it.data)
             }
@@ -117,12 +115,6 @@ class TvShowDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateList
             getString(R.string.watch_provider_availability, tvShowDetails.watchProviders)
         binding.expandedTitle.text = args.pageTitle
         binding.collapsedTitle.text = args.pageTitle
-    }
-
-    private fun presentError(errorMessage: Int) {
-        binding.errorMessage.visibility = View.VISIBLE
-        binding.errorMessage.text =
-            getString(R.string.no_internet_placeholder_text, getString(errorMessage))
     }
 
     private fun startEnterTransitionAfterLoadingImage(uri: String, imageView: ImageView) {

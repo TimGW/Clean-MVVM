@@ -9,6 +9,7 @@ import javax.inject.Inject
 
 class ErrorHandlerImpl @Inject constructor() : ErrorHandler {
 
+    // TODO REMOVE HARDCODED STRINGS
     override fun getError(throwable: Throwable): ErrorEntity {
         return when (throwable) {
             is IOException -> ErrorEntity.NetworkException(throwable, "a network error occurred")

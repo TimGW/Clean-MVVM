@@ -11,7 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TvShowDetailViewModel @Inject constructor(
     private val getTvShowDetailsUseCase: GetTvShowDetailsUseCase,
-    private val savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val tvShowDetails: LiveData<Resource<TvShowDetails>> =
@@ -19,10 +19,6 @@ class TvShowDetailViewModel @Inject constructor(
             getTvShowDetailsUseCase.execute(GetTvShowDetailsUseCaseImpl.Params(tvShowId))
                 .asLiveData()
         }
-
-    fun setTvShowId(tvShowId: Int) {
-        savedStateHandle[STATE_ID_TV_SHOW] = tvShowId
-    }
 
     companion object {
         private const val STATE_ID_TV_SHOW = "tvShowId"

@@ -17,8 +17,8 @@ class GetMovieDetailsUseCaseImpl @Inject constructor(
         return movieRepository.getMovieDetailFlow(params.movieId).map { response ->
             when (response) {
                 is Resource.Success -> Resource.Success(response.data.first())
-                is Resource.Error -> Resource.Error(response.errorEntity)
-                is Resource.Loading -> Resource.Loading
+                is Resource.Error -> response
+                is Resource.Loading -> response
             }
         }
     }

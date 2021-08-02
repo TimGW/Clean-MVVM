@@ -25,6 +25,7 @@ import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.animateFade
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
+import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
 import com.timgortworst.cleanarchitecture.presentation.features.base.AppBarOffsetListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -76,7 +77,6 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         }
 
         observeUI()
-        viewModel.setMovieId(args.movieId)
         requireActivity().setTranslucentStatus(true)
     }
 
@@ -99,7 +99,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.INVISIBLE
             when(it) {
-                is Resource.Error -> presentError(R.string.generic_error)
+                is Resource.Error -> view?.snackbar(getString(R.string.generic_error)) // FIXME show correct error
                 Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is Resource.Success -> presentMovieDetails(it.data)
             }
@@ -115,12 +115,6 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
             getString(R.string.watch_provider_availability, movieDetails.watchProviders)
         binding.expandedTitle.text = args.pageTitle
         binding.collapsedTitle.text = args.pageTitle
-    }
-
-    private fun presentError(errorMessage: Int) {
-        binding.errorMessage.visibility = View.VISIBLE
-        binding.errorMessage.text =
-            getString(R.string.no_internet_placeholder_text, getString(errorMessage))
     }
 
     private fun startEnterTransitionAfterLoadingImage(uri: String, imageView: ImageView) {
