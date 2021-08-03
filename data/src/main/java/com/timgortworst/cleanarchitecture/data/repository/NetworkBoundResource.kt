@@ -13,7 +13,7 @@ import retrofit2.Response
 abstract class NetworkBoundResource<RequestType, ResultType> {
 
     fun asFlow() = flow {
-        val localResult = fetchFromLocal().first()
+        val localResult = fetchFromLocal().first() // todo firstOrNull ??
 
         try {
             emit(Resource.Loading(localResult))
