@@ -13,7 +13,7 @@ import retrofit2.Response
 abstract class NetworkBoundResource<RequestType, ResultType> {
 
     fun asFlow() = flow {
-        val localResult = fetchFromLocal().firstOrNull()
+        val localResult = fetchFromLocal().first()
 
         try {
             emit(Resource.Loading(localResult))
@@ -25,9 +25,10 @@ abstract class NetworkBoundResource<RequestType, ResultType> {
             }
         } catch (e: Exception) {
             emit(Resource.Error(getErrorHandler().getError(e), localResult))
+        } finally {
+            // emit all from DB TODO map really required???
+            emitAll(fetchFromLocal().map { Resource.Success(it) })
         }
-
-        emitAll(fetchFromLocal().map { Resource.Success(it) })
     }
 
     private fun fetchFromNetwork(
