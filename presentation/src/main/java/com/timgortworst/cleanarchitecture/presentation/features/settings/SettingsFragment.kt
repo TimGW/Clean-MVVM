@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
+import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,9 +73,11 @@ class SettingsFragment : Fragment() {
     private fun observeData() {
         viewModel.regions.observe(viewLifecycleOwner) { resource ->
             when (resource) {
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Error -> { } // FIXME
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Loading -> { }
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Success -> {
+                is Result.Error -> {
+                } // FIXME
+                is Result.Loading -> {
+                }
+                is Result.Success -> {
                     binding.regionSpinner.adapter = WatchProviderRegionAdapter(
                         resource.data!!, binding.regionSpinner,
                     ).apply {

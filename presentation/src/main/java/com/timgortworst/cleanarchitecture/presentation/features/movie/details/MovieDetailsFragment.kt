@@ -20,6 +20,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
+import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.animateFade
@@ -97,10 +98,10 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     private fun observeUI() {
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.INVISIBLE
-            when(it) {
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Error -> view?.snackbar(getString(R.string.generic_error)) // FIXME show correct error
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Success -> presentMovieDetails(it.data!!)
+            when (it) {
+                is Result.Error -> view?.snackbar(getString(R.string.generic_error)) // FIXME show correct error
+                is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is Result.Success -> presentMovieDetails(it.data!!)
             }
         }
     }

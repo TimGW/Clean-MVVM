@@ -17,9 +17,9 @@ class GetTvShowDetailsUseCaseImpl @Inject constructor(
         return tvShowRepository.getTvShowDetails(params.movieId).map { response ->
             val result = response.data!!.first()
             when (response) {
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Success -> Result.Success(result)
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Error -> Result.Error(response.error, result)
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Loading -> Result.Loading(result)
+                is Result.Success -> Result.Success(result)
+                is Result.Error -> Result.Error(response.error, result)
+                is Result.Loading -> Result.Loading(result)
             }
         }
     }

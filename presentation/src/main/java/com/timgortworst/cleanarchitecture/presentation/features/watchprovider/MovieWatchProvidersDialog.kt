@@ -2,6 +2,7 @@ package com.timgortworst.cleanarchitecture.presentation.features.watchprovider
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.MoviesViewModel
 import com.timgortworst.cleanarchitecture.presentation.features.settings.WatchProvidersAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,9 +22,11 @@ class MovieWatchProvidersDialog : BaseWatchProvidersDialog() {
     private fun observeData() {
         viewModel.watchProviders.observe(this) {
             when (it) {
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Error -> { }
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Loading -> { } // FIXME empty state
-                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Success -> {
+                is Result.Error -> {
+                }
+                is Result.Loading -> {
+                } // FIXME empty state
+                is Result.Success -> {
                     watchProviderAdapter.submitList(it.data!!.map { watchProvider ->
                         WatchProvidersAdapter.ViewItem(
                             watchProvider,
