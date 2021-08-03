@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.timgortworst.cleanarchitecture.domain.model.state.Resource
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShowDetails
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
@@ -99,9 +98,9 @@ class TvShowDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateList
         viewModel.tvShowDetails.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.INVISIBLE
             when (it) {
-                is Resource.Error -> view?.snackbar(getString(R.string.generic_error)) // FIXME show correct error
-                is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is Resource.Success -> presentTvShowDetails(it.data!!) // FIXME
+                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Error -> view?.snackbar(getString(R.string.generic_error)) // FIXME show correct error
+                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Success -> presentTvShowDetails(it.data!!) // FIXME
             }
         }
     }

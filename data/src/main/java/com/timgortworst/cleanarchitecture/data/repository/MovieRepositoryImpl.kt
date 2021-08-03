@@ -40,7 +40,7 @@ class MovieRepositoryImpl @Inject constructor(
 
         override suspend fun fetchFromRemote() = movieService.getMovieDetails(movieId)
 
-        override suspend fun getErrorHandler() = errorHandler
+        override suspend fun errorHandler() = errorHandler
 
         override fun shouldFetch(data: List<MovieDetails>?) = data.isNullOrEmpty()
 

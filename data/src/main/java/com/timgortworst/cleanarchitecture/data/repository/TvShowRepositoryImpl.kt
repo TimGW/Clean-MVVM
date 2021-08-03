@@ -40,7 +40,7 @@ class TvShowRepositoryImpl @Inject constructor(
 
         override suspend fun fetchFromRemote() = tvShowService.getTvShowDetails(tvShowId)
 
-        override suspend fun getErrorHandler() = errorHandler
+        override suspend fun errorHandler() = errorHandler
 
         override fun shouldFetch(data: List<TvShowDetails>?) = data.isNullOrEmpty()
 

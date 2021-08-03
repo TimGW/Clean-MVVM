@@ -1,6 +1,6 @@
 package com.timgortworst.cleanarchitecture.domain.usecase.tv
 
-import com.timgortworst.cleanarchitecture.domain.model.state.Resource
+import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShowDetails
 import com.timgortworst.cleanarchitecture.domain.repository.TvShowRepository
 import kotlinx.coroutines.flow.Flow
@@ -13,13 +13,13 @@ class GetTvShowDetailsUseCaseImpl @Inject constructor(
 
     data class Params(val movieId: Int)
 
-    override fun execute(params: Params): Flow<Resource<TvShowDetails>> {
+    override fun execute(params: Params): Flow<Result<TvShowDetails>> {
         return tvShowRepository.getTvShowDetails(params.movieId).map { response ->
             val result = response.data!!.first()
             when (response) {
-                is Resource.Success -> Resource.Success(result)
-                is Resource.Error -> Resource.Error(response.error, result)
-                is Resource.Loading -> Resource.Loading(result)
+                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Success -> Result.Success(result)
+                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Error -> Result.Error(response.error, result)
+                is com.timgortworst.cleanarchitecture.domain.model.state.Resource.Result.Loading -> Result.Loading(result)
             }
         }
     }

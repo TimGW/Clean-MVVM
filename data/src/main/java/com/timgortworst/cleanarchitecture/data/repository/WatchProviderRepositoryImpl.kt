@@ -1,11 +1,10 @@
 package com.timgortworst.cleanarchitecture.data.repository
 
 import com.timgortworst.cleanarchitecture.data.remote.WatchProviderService
-import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProvider
-import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProviderRegion
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
-import com.timgortworst.cleanarchitecture.domain.model.state.Resource
+import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.domain.repository.WatchProviderRepository
+import retrofit2.Response
 import javax.inject.Inject
 
 // TODO caching with networkboundresource
@@ -14,63 +13,30 @@ class WatchProviderRepositoryImpl @Inject constructor(
     private val errorHandler: ErrorHandler
 ) : WatchProviderRepository {
 
-    override suspend fun getWatchProviderRegions(): Resource<List<WatchProviderRegion>> {
-        return try {
-            val apiResponse = service.getWatchProviderRegions()
-            val data = apiResponse.body()
-
-            if (apiResponse.isSuccessful && data != null) {
-                Resource.Success(data)
-            } else {
-                Resource.Error(
-                    errorHandler.getApiError(
-                        statusCode = apiResponse.code(),
-                        message = apiResponse.message()
-                    )
-                )
-            }
-        } catch (e: Throwable) {
-            Resource.Error(errorHandler.getError(e))
-        }
+    override suspend fun getWatchProviderRegions() = try {
+        apiResult(service.getWatchProviderRegions())
+    } catch (e: Throwable) {
+        Result.Error(errorHandler.getError(e))
     }
 
-    override suspend fun getWatchProvidersMovie(region: String): Resource<List<WatchProvider>> {
-        return try {
-            val apiResponse = service.getWatchProvidersMovie(region)
-            val data = apiResponse.body()
-
-            if (apiResponse.isSuccessful && data != null) {
-                Resource.Success(data)
-            } else {
-                Resource.Error(
-                    errorHandler.getApiError(
-                        statusCode = apiResponse.code(),
-                        message = apiResponse.message()
-                    )
-                )
-            }
-        } catch (e: Throwable) {
-            Resource.Error(errorHandler.getError(e))
-        }
+    override suspend fun getWatchProvidersMovie(region: String) = try {
+        apiResult(service.getWatchProvidersMovie(region))
+    } catch (e: Throwable) {
+        Result.Error(errorHandler.getError(e))
     }
 
-    override suspend fun getWatchProvidersTv(region: String): Resource<List<WatchProvider>> {
-        return try {
-            val apiResponse = service.getWatchProvidersTv(region)
-            val data = apiResponse.body()
+    override suspend fun getWatchProvidersTv(region: String) = try {
+        apiResult(service.getWatchProvidersTv(region))
+    } catch (e: Throwable) {
+        Result.Error(errorHandler.getError(e))
+    }
 
-            if (apiResponse.isSuccessful && data != null) {
-                Resource.Success(data)
-            } else {
-                Resource.Error(
-                    errorHandler.getApiError(
-                        statusCode = apiResponse.code(),
-                        message = apiResponse.message()
-                    )
-                )
-            }
-        } catch (e: Throwable) {
-            Resource.Error(errorHandler.getError(e))
+    private fun <T> apiResult(response: Response<T>): Result<T> {
+        val data = response.body()
+        return if (response.isSuccessful && data != null) {
+            Result.Success(data)
+        } else {
+            Result.Error(errorHandler.getApiError(response.code()))
         }
     }
 }

@@ -3,7 +3,7 @@ package com.timgortworst.cleanarchitecture.data.repository
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
-import com.timgortworst.cleanarchitecture.domain.model.state.Resource
+import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import kotlinx.coroutines.flow.*
 import retrofit2.Response
 
@@ -16,18 +16,18 @@ abstract class NetworkBoundResource<RequestType, ResultType> {
         val localResult = fetchFromLocal().first() // todo firstOrNull ??
 
         try {
-            emit(Resource.Loading(localResult))
+            emit(Result.Loading(localResult))
 
             if (shouldFetch(localResult)) {
                 fetchFromNetwork(localResult).collect()
             } else {
-                emit(Resource.Success(localResult))
+                emit(Result.Success(localResult))
             }
         } catch (e: Exception) {
-            emit(Resource.Error(getErrorHandler().getError(e), localResult))
+            emit(Result.Error(errorHandler().getError(e), localResult))
         } finally {
             // emit all from DB TODO map really required???
-            emitAll(fetchFromLocal().map { Resource.Success(it) })
+            emitAll(fetchFromLocal().map { Result.Success(it) })
         }
     }
 
@@ -40,15 +40,11 @@ abstract class NetworkBoundResource<RequestType, ResultType> {
         if (apiResponse.isSuccessful && remoteResponse != null) {
             saveRemoteData(remoteResponse)
         } else {
-            val error = getErrorHandler().getApiError(
-                statusCode = apiResponse.code(),
-                message = apiResponse.message()
-            )
-            emit(Resource.Error(error, localResult))
+            emit(Result.Error(errorHandler().getApiError(apiResponse.code()), localResult))
         }
     }
 
-    protected abstract suspend fun getErrorHandler() : ErrorHandler
+    protected abstract suspend fun errorHandler() : ErrorHandler
 
     @WorkerThread
     protected abstract suspend fun saveRemoteData(response: RequestType)
