@@ -16,14 +16,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var currentDestinationId = INVALID_ID
 
     companion object {
         fun intentBuilder(context: Context): Intent {
             return Intent(context, MainActivity::class.java)
         }
-
-        const val INVALID_ID = -1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     private fun setUpNavigation() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        currentDestinationId = navHostFragment.navController.currentDestination?.id ?: INVALID_ID
 
         // connect bottomNavigationView
         NavigationUI.setupWithNavController(
@@ -46,23 +42,16 @@ class MainActivity : AppCompatActivity() {
         )
 
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
-            val duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-
-            // FIXME: bottomNavView re-shows when rotating in detail fragment
-            if (isNavigatingToDetails(destination.id)) {
-                binding.bottomNavigation.animateSlide(duration, View.GONE)
-            } else if (isNavigatingToList(destination.id)) {
-                binding.bottomNavigation.animateSlide(duration, View.VISIBLE)
+            when (destination.id) {
+                R.id.page_movies,
+                R.id.page_tv,
+                R.id.page_settings -> showBottomNav()
+                else -> hideBottomNav()
             }
-            currentDestinationId = destination.id
         }
     }
 
-    private fun isNavigatingToDetails(destinationId: Int) =
-        (currentDestinationId == R.id.page_movies && destinationId == R.id.fragmentMovieDetails) ||
-        (currentDestinationId == R.id.page_tv && destinationId == R.id.tvShowDetailsFragment)
+    private fun showBottomNav() { binding.bottomNavigation.visibility = View.VISIBLE }
 
-    private fun isNavigatingToList(destinationId: Int) =
-        (currentDestinationId == R.id.fragmentMovieDetails && destinationId == R.id.page_movies) ||
-        (currentDestinationId == R.id.tvShowDetailsFragment && destinationId == R.id.page_tv)
+    private fun hideBottomNav() { binding.bottomNavigation.visibility = View.GONE }
 }
