@@ -42,18 +42,6 @@ class SettingsFragment : Fragment() {
         observeData()
     }
 
-    // FIXME
-//    override fun onResume() {
-//        super.onResume()
-//        (requireActivity() as? MainActivity)?.setExpandedAppBar(false)
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//
-//        (requireActivity() as? MainActivity)?.setExpandedAppBar(true)
-//    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
