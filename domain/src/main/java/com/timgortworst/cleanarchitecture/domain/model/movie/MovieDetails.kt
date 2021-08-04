@@ -7,7 +7,7 @@ data class MovieDetails(
     val posterPath: String?,
     val releaseDate: String,
     val title: String,
-    val watchProviders: Map<String, Provider>,
+    var watchProviders: Map<String, Provider>,
     val modifiedAt: Long,
 ) {
 

@@ -7,7 +7,7 @@ data class TvShowDetails(
     val name: String,
     val overview: String,
     val posterPath: String?,
-    val watchProviders: Map<String, Provider>,
+    var watchProviders: Map<String, Provider>,
     val modifiedAt: Long,
 ) {
 
