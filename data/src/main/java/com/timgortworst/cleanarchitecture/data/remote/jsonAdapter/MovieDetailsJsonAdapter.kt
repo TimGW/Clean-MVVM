@@ -27,6 +27,7 @@ class MovieDetailsJsonAdapter {
                         it.flatRate?.isNullOrEmpty() == false ||
                         it.rent?.isNullOrEmpty() == false
                     } ?: emptyMap(),
+                System.currentTimeMillis()
             )
         }
         return entity

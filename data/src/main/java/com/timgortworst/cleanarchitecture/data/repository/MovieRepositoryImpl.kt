@@ -12,6 +12,7 @@ import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
@@ -43,7 +44,13 @@ class MovieRepositoryImpl @Inject constructor(
 
         override suspend fun errorHandler() = errorHandler
 
-        override fun shouldFetch(data: MovieDetails?) = data == null // TODO provide stale cache timeout
+        override fun shouldFetch(data: MovieDetails?) =
+            (data == null || isMovieStale(data.modifiedAt))
 
     }.asFlow().flowOn(Dispatchers.IO)
+
+    private fun isMovieStale(lastUpdated: Long): Boolean {
+        val oneDay = TimeUnit.DAYS.toMillis(1)
+        return (System.currentTimeMillis() - oneDay) > lastUpdated
+    }
 }

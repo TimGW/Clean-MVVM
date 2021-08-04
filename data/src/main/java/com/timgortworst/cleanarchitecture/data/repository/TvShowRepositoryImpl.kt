@@ -12,6 +12,7 @@ import com.timgortworst.cleanarchitecture.domain.repository.TvShowRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class TvShowRepositoryImpl @Inject constructor(
@@ -43,7 +44,13 @@ class TvShowRepositoryImpl @Inject constructor(
 
         override suspend fun errorHandler() = errorHandler
 
-        override fun shouldFetch(data: TvShowDetails?) = data == null // TODO provide stale cache timeout
+        override fun shouldFetch(data: TvShowDetails?) =
+            (data == null || isTvShowStale(data.modifiedAt))
 
     }.asFlow().flowOn(Dispatchers.IO)
+
+    private fun isTvShowStale(lastUpdated: Long): Boolean {
+        val oneDay = TimeUnit.DAYS.toMillis(1)
+        return (System.currentTimeMillis() - oneDay) > lastUpdated
+    }
 }

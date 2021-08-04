@@ -15,6 +15,7 @@ data class MovieDetailsEntity(
     @ColumnInfo(name = "genres") val genres: List<Genre>,
     // key: countrycode, value: WatchProvider
     @ColumnInfo(name = "watch_providers") val watchProviders: Map<String, Provider>?,
+    @ColumnInfo(name = "modified_at") val modifiedAt: Long
 ) {
     data class Genre(
         @ColumnInfo(name = "id") val id: Int,
@@ -45,6 +46,7 @@ data class MovieDetailsEntity(
                         it.value.rent,
                     )
                 },
+                modifiedAt,
             )
         }
     }
@@ -65,5 +67,6 @@ data class MovieDetailsEntity(
                 it.value.rent,
             )
         } ?: emptyMap(),
+        modifiedAt,
     )
 }

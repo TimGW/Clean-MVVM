@@ -8,7 +8,8 @@ data class TvShowDetails(
     val overview: String,
     val posterPath: String?,
     val watchProviders: Map<String, Provider>,
-    ) {
+    val modifiedAt: Long,
+) {
 
     data class Genre(
         val id: Int,

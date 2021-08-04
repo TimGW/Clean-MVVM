@@ -22,6 +22,7 @@ class TvShowDetailsJsonAdapter {
                 overview!!,
                 posterPath,
                 watchProviders?.results?.mapValues { it.value.asDbModel() } ?: emptyMap(),
+                System.currentTimeMillis()
             )
         }
     }

@@ -15,6 +15,7 @@ data class TvShowDetailsEntity(
     @ColumnInfo(name = "poster_path") val posterPath: String?,
     // key: countrycode, value: WatchProvider
     @ColumnInfo(name = "watch_providers") val watchProviders: Map<String, Provider>?,
+    @ColumnInfo(name = "modified_at") val modifiedAt: Long
 ) {
     data class Genre(
         @ColumnInfo(name = "id") val id: Int,
@@ -43,6 +44,7 @@ data class TvShowDetailsEntity(
                         it.value.rent,
                     )
                 },
+                modifiedAt,
             )
         }
     }
@@ -61,5 +63,6 @@ data class TvShowDetailsEntity(
                 it.value.rent,
             )
         } ?: emptyMap(),
+        modifiedAt,
     )
 }

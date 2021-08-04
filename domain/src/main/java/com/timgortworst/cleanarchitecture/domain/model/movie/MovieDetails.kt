@@ -8,6 +8,7 @@ data class MovieDetails(
     val releaseDate: String,
     val title: String,
     val watchProviders: Map<String, Provider>,
+    val modifiedAt: Long,
 ) {
 
     data class Genre(
