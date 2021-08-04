@@ -13,7 +13,7 @@ class MovieDetailsJsonAdapter {
         if (moviesJson.title == null) return null
         if (moviesJson.overview == null) return null
 
-        return with(moviesJson) {
+        val entity = with(moviesJson) {
             MovieDetailsEntity(
                 id!!,
                 overview!!,
@@ -21,9 +21,15 @@ class MovieDetailsJsonAdapter {
                 releaseDate.orEmpty(),
                 title!!,
                 genres?.mapNotNull { it.asDbModel() } ?: emptyList(),
-                watchProviders?.results?.mapValues { it.value.asDbModel() } ?: emptyMap(),
+                watchProviders?.results?.mapValues { it.value.asDbModel() }
+                    ?.filterValues {
+                        it.buy?.isNullOrEmpty() == false ||
+                        it.flatRate?.isNullOrEmpty() == false ||
+                        it.rent?.isNullOrEmpty() == false
+                    } ?: emptyMap(),
             )
         }
+        return entity
     }
 
     private fun MovieDetailsJson.Genre.asDbModel() = with(this) {

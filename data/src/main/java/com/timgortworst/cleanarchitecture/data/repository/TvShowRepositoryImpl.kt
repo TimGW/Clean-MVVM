@@ -29,20 +29,21 @@ class TvShowRepositoryImpl @Inject constructor(
 
     override fun getTvShowDetails(
         tvShowId: Int
-    ) = object : NetworkBoundResource<TvShowDetailsEntity, List<TvShowDetails>>() {
+    ) = object : NetworkBoundResource<TvShowDetailsEntity, TvShowDetails?>() {
 
-        override suspend fun saveRemoteData(response: TvShowDetailsEntity) =
+        override suspend fun saveRemoteData(response: TvShowDetailsEntity) {
             tvShowDao.insertTvShowDetails(response)
+        }
 
-        override fun fetchFromLocal() = tvShowDao.getTvShowDetails(tvShowId).map { list ->
-            list.map { tvShow -> tvShow.toTvShowDetails() }
+        override fun fetchFromLocal() = tvShowDao.getTvShowDetailsDistinctUntilChanged(tvShowId).map { tvShow ->
+            tvShow?.toTvShowDetails()
         }
 
         override suspend fun fetchFromRemote() = tvShowService.getTvShowDetails(tvShowId)
 
         override suspend fun errorHandler() = errorHandler
 
-        override fun shouldFetch(data: List<TvShowDetails>?) = data.isNullOrEmpty()
+        override fun shouldFetch(data: TvShowDetails?) = data == null // TODO provide stale cache timeout
 
     }.asFlow().flowOn(Dispatchers.IO)
 }

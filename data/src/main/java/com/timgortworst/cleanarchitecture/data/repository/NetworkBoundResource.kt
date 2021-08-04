@@ -9,26 +9,34 @@ import retrofit2.Response
 
 /**
  * A generic class that can provide a resource backed by both the sqlite database and the network.
+ *
+ * Guide to app architecture:
+ * https://developer.android.com/jetpack/guide
+ *
+ * @param <ResultType> Represents the domain model
+ * @param <RequestType> Represents the (converted) network > database model
  */
 abstract class NetworkBoundResource<RequestType, ResultType> {
 
     fun asFlow() = flow {
-        val localResult = fetchFromLocal().first() // todo firstOrNull ??
+        val localResult = fetchFromLocal().firstOrNull()
 
-        try {
-            emit(Result.Loading(localResult))
+        // first emit loading state with cached result
+        emit(Result.Loading(localResult))
 
-            if (shouldFetch(localResult)) {
-                fetchFromNetwork(localResult).collect()
-            } else {
-                emit(Result.Success(localResult))
-            }
-        } catch (e: Exception) {
-            emit(Result.Error(errorHandler().getError(e), localResult))
-        } finally {
-            // emit all from DB TODO map really required???
-            emitAll(fetchFromLocal().map { Result.Success(it) })
+        // check for cache invalidation rules
+        if (shouldFetch(localResult)) {
+
+            // retrieve fresh data from network
+            fetchFromNetwork(localResult).collect()
+        } else {
+
+            // cache is not stale or null, return cached result
+            emit(Result.Success(localResult))
         }
+
+        // finally re-emit the values from the Database acting as the single source of truth
+        emitAll(fetchFromLocal().map { Result.Success(it) })
     }
 
     private fun fetchFromNetwork(
@@ -38,8 +46,12 @@ abstract class NetworkBoundResource<RequestType, ResultType> {
         val remoteResponse = apiResponse.body()
 
         if (apiResponse.isSuccessful && remoteResponse != null) {
+
+            // store the fetched data in the database
             saveRemoteData(remoteResponse)
         } else {
+
+            // an exception occurred, emit error state with cached result
             emit(Result.Error(errorHandler().getApiError(apiResponse.code()), localResult))
         }
     }

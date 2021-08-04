@@ -10,5 +10,5 @@ interface TvShowRepository {
 
     fun getTvShows(): Flow<PagingData<TvShow>>
 
-    fun getTvShowDetails(tvShowId: Int): Flow<Result<out List<TvShowDetails>?>>
+    fun getTvShowDetails(tvShowId: Int): Flow<Result<out TvShowDetails?>>
 }

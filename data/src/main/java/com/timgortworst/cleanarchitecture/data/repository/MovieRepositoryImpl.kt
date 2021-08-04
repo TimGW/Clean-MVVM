@@ -29,20 +29,21 @@ class MovieRepositoryImpl @Inject constructor(
 
     override fun getMovieDetailFlow(
         movieId: Int
-    ) = object : NetworkBoundResource<MovieDetailsEntity, List<MovieDetails>>() {
+    ) = object : NetworkBoundResource<MovieDetailsEntity, MovieDetails?>() {
 
-        override suspend fun saveRemoteData(response: MovieDetailsEntity) =
+        override suspend fun saveRemoteData(response: MovieDetailsEntity) {
             movieDao.insertMovieDetails(response)
+        }
 
-        override fun fetchFromLocal() = movieDao.getMovieDetails(movieId).map { list ->
-            list.map { movie -> movie.toMovieDetails() }
+        override fun fetchFromLocal() = movieDao.getMovieDetailsDistinctUntilChanged(movieId).map {
+            it?.toMovieDetails()
         }
 
         override suspend fun fetchFromRemote() = movieService.getMovieDetails(movieId)
 
         override suspend fun errorHandler() = errorHandler
 
-        override fun shouldFetch(data: List<MovieDetails>?) = data.isNullOrEmpty()
+        override fun shouldFetch(data: MovieDetails?) = data == null // TODO provide stale cache timeout
 
     }.asFlow().flowOn(Dispatchers.IO)
 }
