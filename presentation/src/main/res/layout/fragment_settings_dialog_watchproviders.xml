@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:indeterminate="true"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/watch_provider_rv"
         android:layout_width="match_parent"

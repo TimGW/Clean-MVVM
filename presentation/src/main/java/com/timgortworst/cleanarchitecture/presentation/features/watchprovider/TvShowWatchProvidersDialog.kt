@@ -1,8 +1,10 @@
 package com.timgortworst.cleanarchitecture.presentation.features.watchprovider
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.viewModels
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
+import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.features.settings.WatchProvidersAdapter
 import com.timgortworst.cleanarchitecture.presentation.features.tv.list.TvShowsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,27 +20,30 @@ class TvShowWatchProvidersDialog : BaseWatchProvidersDialog() {
         viewModel.getAllProviders()
     }
 
-    // FIXME nullability
     private fun observeData() {
         viewModel.watchProviders.observe(this) {
             when (it) {
+                is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is Result.Error -> {
-                }
-                is Result.Loading -> {
+                    binding.progressBar.visibility = View.GONE
+                    showError(getString(R.string.connection_error)) // todo set correct error
                 }
                 is Result.Success -> {
-                    watchProviderAdapter.submitList(it.data!!.map { watchProvider ->
+                    binding.progressBar.visibility = View.GONE
+
+                    val data = it.data?.map {
                         WatchProvidersAdapter.ViewItem(
-                            watchProvider,
-                            viewModel.isProviderChecked(watchProvider.providerId)
-                        ).apply {
-                            watchProviderAdapter.onCheckedListener = { _, _ ->
-                                viewModel.setSelectedProviders(
-                                    watchProviderAdapter.currentList,
-                                )
-                            }
+                            it,
+                            viewModel.isProviderChecked(it.providerId)
+                        )
+                    }
+
+                    with(watchProviderAdapter) {
+                        onCheckedListener = { _, _ ->
+                            viewModel.setSelectedProviders(watchProviderAdapter.currentList)
                         }
-                    })
+                        submitList(data)
+                    }
                 }
             }
         }

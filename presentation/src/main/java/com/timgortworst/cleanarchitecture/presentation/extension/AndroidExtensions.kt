@@ -57,24 +57,3 @@ fun View.animateFade(duration: Long, visibility: Int) {
     animSet.addAnimation(alphaAnimation)
     startAnimation(animSet)
 }
-
-fun View.animateSlide(duration: Long, visibility: Int) {
-    val animSet = AnimationSet(true).apply {
-        interpolator = LinearInterpolator()
-        fillAfter = true
-        this.duration = duration
-    }
-
-    val translateAnim = if (visibility == View.VISIBLE){
-        TranslateAnimation(0, 0f, 0, 0f,
-            TranslateAnimation.RELATIVE_TO_SELF, 1f,
-            TranslateAnimation.RELATIVE_TO_SELF, 0f)
-    } else {
-        TranslateAnimation(0, 0f, 0, 0f,
-            TranslateAnimation.RELATIVE_TO_SELF, 0f,
-            TranslateAnimation.RELATIVE_TO_SELF, 1f)
-    }
-
-    animSet.addAnimation(translateAnim)
-    startAnimation(animSet)
-}
