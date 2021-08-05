@@ -10,10 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentSettingsBinding
+import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
+import com.timgortworst.cleanarchitecture.presentation.features.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -57,26 +60,34 @@ class SettingsFragment : Fragment() {
         )
     }
 
-    // TODO fix nullability
     private fun observeData() {
         viewModel.regions.observe(viewLifecycleOwner) { resource ->
             when (resource) {
+                is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is Result.Error -> {
-                } // FIXME
-                is Result.Loading -> {
+                    binding.progressBar.visibility = View.GONE
+
+                    val bottomNavView = (requireActivity() as? MainActivity)
+                        ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+                    view?.snackbar(
+                        message = getString(R.string.generic_error), // todo show correct error
+                        anchorView = bottomNavView)
                 }
                 is Result.Success -> {
+                    binding.progressBar.visibility = View.GONE
+
                     binding.regionSpinner.adapter = WatchProviderRegionAdapter(
-                        resource.data!!, binding.regionSpinner,
+                        resource.data.orEmpty(), binding.regionSpinner,
                     ).apply {
                         selectedListener = {
                             viewModel.updateProviders(it.iso)
                         }
                     }
                     binding.regionSpinner.setSelection(
-                        resource.data!!.indexOfFirst {
+                        resource.data?.indexOfFirst {
                             it.iso == sharedPrefs.getWatchProviderRegion()
-                        })
+                        } ?: 0)
                 }
             }
         }

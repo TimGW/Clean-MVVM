@@ -30,7 +30,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override fun getMovieDetailFlow(
         movieId: Int
-    ) = object : NetworkBoundResource<MovieDetailsEntity, MovieDetails?>() {
+    ) = object : NetworkBoundResource<MovieDetailsEntity, MovieDetails?>(errorHandler) {
 
         override suspend fun saveRemoteData(response: MovieDetailsEntity) {
             movieDao.insertMovieDetails(response)
@@ -41,8 +41,6 @@ class MovieRepositoryImpl @Inject constructor(
         }
 
         override suspend fun fetchFromRemote() = movieService.getMovieDetails(movieId)
-
-        override suspend fun errorHandler() = errorHandler
 
         override fun shouldFetch(data: MovieDetails?) =
             (data == null || isMovieStale(data.modifiedAt))

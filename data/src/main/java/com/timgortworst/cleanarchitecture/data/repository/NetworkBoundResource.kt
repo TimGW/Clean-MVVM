@@ -16,7 +16,9 @@ import retrofit2.Response
  * @param <ResultType> Represents the domain model
  * @param <RequestType> Represents the (converted) network > database model
  */
-abstract class NetworkBoundResource<RequestType, ResultType> {
+abstract class NetworkBoundResource<RequestType, ResultType>(
+    private val errorHandler: ErrorHandler,
+) {
 
     fun asFlow() = flow {
         val localResult = fetchFromLocal().firstOrNull()
@@ -52,11 +54,9 @@ abstract class NetworkBoundResource<RequestType, ResultType> {
         } else {
 
             // an exception occurred, emit error state with cached result
-            emit(Result.Error(errorHandler().getApiError(apiResponse.code()), localResult))
+            emit(Result.Error(errorHandler.getApiError(apiResponse.code()), localResult))
         }
     }
-
-    protected abstract suspend fun errorHandler() : ErrorHandler
 
     @WorkerThread
     protected abstract suspend fun saveRemoteData(response: RequestType)

@@ -30,7 +30,7 @@ class TvShowRepositoryImpl @Inject constructor(
 
     override fun getTvShowDetails(
         tvShowId: Int
-    ) = object : NetworkBoundResource<TvShowDetailsEntity, TvShowDetails?>() {
+    ) = object : NetworkBoundResource<TvShowDetailsEntity, TvShowDetails?>(errorHandler) {
 
         override suspend fun saveRemoteData(response: TvShowDetailsEntity) {
             tvShowDao.insertTvShowDetails(response)
@@ -41,8 +41,6 @@ class TvShowRepositoryImpl @Inject constructor(
         }
 
         override suspend fun fetchFromRemote() = tvShowService.getTvShowDetails(tvShowId)
-
-        override suspend fun errorHandler() = errorHandler
 
         override fun shouldFetch(data: TvShowDetails?) =
             (data == null || isTvShowStale(data.modifiedAt))

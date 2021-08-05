@@ -1,9 +1,7 @@
 package com.timgortworst.cleanarchitecture.presentation.features.settings
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.asLiveData
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProviderRegionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,16 +13,7 @@ class SettingsViewModel @Inject constructor(
     private val sharedPrefs: SharedPrefs,
 ) : ViewModel() {
 
-    private val load = MutableLiveData<Unit>()
-    val regions = Transformations.switchMap(load) {
-        liveData {
-            emit(getWatchProviderRegionsUseCase.execute(it))
-        }
-    }
-
-    init {
-        load.value = Unit
-    }
+    val regions = getWatchProviderRegionsUseCase.execute(Unit).asLiveData()
 
     fun updateProviders(isoValue: String) {
         sharedPrefs.setWatchProviderRegion(isoValue)
