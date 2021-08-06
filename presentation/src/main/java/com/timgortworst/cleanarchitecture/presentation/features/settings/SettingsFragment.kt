@@ -62,10 +62,16 @@ class SettingsFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.regions.observe(viewLifecycleOwner) { result ->
-            binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
-            result.data?.let { showData(it) }
-            result.error?.let { showError(getString(R.string.generic_error)) } // todo set correct error
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progress.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
+        }
+
+        viewModel.data.observe(viewLifecycleOwner) { result ->
+            result?.let { showData(it) }
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            error?.let { showError(getString(it)) }
         }
     }
 
@@ -87,9 +93,6 @@ class SettingsFragment : Fragment() {
         val bottomNavView = (requireActivity() as? MainActivity)
             ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        view?.snackbar(
-            message = message, // todo show correct error
-            anchorView = bottomNavView
-        )
+        view?.snackbar(message = message, anchorView = bottomNavView)
     }
 }
