@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
+import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProvider
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.MoviesViewModel
 import com.timgortworst.cleanarchitecture.presentation.features.settings.WatchProvidersAdapter
@@ -21,31 +22,23 @@ class MovieWatchProvidersDialog : BaseWatchProvidersDialog() {
     }
 
     private fun observeData() {
-        viewModel.watchProviders.observe(this) {
-            when (it) {
-                is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is Result.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    showError(getString(R.string.connection_error)) // todo set correct error
-                }
-                is Result.Success -> {
-                    binding.progressBar.visibility = View.GONE
+        viewModel.watchProviders.observe(this) { result ->
+            binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
+            result.data?.let { showData(it) } ?: showError(getString(R.string.generic_error)) // todo set correct error
+            result.error?.let { showError(getString(R.string.generic_error)) } // todo set correct error
+        }
+    }
 
-                    val data = it.data?.map {
-                        WatchProvidersAdapter.ViewItem(
-                            it,
-                            viewModel.isProviderChecked(it.providerId)
-                        )
-                    }
+    private fun showData(list: List<WatchProvider>) {
+        val data = list.map {
+            WatchProvidersAdapter.ViewItem(it, viewModel.isProviderChecked(it.providerId))
+        }
 
-                    with(watchProviderAdapter) {
-                        onCheckedListener = { _, _ ->
-                            viewModel.setSelectedProviders(watchProviderAdapter.currentList)
-                        }
-                        submitList(data)
-                    }
-                }
+        with(watchProviderAdapter) {
+            onCheckedListener = { _, _ ->
+                viewModel.setSelectedProviders(watchProviderAdapter.currentList)
             }
+            submitList(data)
         }
     }
 

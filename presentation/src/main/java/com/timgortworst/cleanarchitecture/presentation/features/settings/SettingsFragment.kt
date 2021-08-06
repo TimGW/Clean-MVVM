@@ -13,6 +13,7 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
+import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProviderRegion
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentSettingsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
@@ -61,35 +62,36 @@ class SettingsFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.regions.observe(viewLifecycleOwner) { resource ->
-            when (resource) {
-                is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is Result.Error -> {
-                    binding.progressBar.visibility = View.GONE
+        viewModel.regions.observe(viewLifecycleOwner) { result ->
+            binding.progress.visibility =
+                if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
+            result.data?.let { showData(it) }
+                ?: showError(getString(R.string.generic_error)) // todo set correct error
+            result.error?.let { showError(getString(R.string.generic_error)) } // todo set correct error
+        }
+    }
 
-                    val bottomNavView = (requireActivity() as? MainActivity)
-                        ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
-                    view?.snackbar(
-                        message = getString(R.string.generic_error), // todo show correct error
-                        anchorView = bottomNavView)
-                }
-                is Result.Success -> {
-                    binding.progressBar.visibility = View.GONE
-
-                    binding.regionSpinner.adapter = WatchProviderRegionAdapter(
-                        resource.data.orEmpty(), binding.regionSpinner,
-                    ).apply {
-                        selectedListener = {
-                            viewModel.updateProviders(it.iso)
-                        }
-                    }
-                    binding.regionSpinner.setSelection(
-                        resource.data?.indexOfFirst {
-                            it.iso == sharedPrefs.getWatchProviderRegion()
-                        } ?: 0)
-                }
+    private fun showData(list: List<WatchProviderRegion>) {
+        binding.regionSpinner.adapter = WatchProviderRegionAdapter(
+            list, binding.regionSpinner,
+        ).apply {
+            selectedListener = {
+                viewModel.updateProviders(it.iso)
             }
         }
+        binding.regionSpinner.setSelection(
+            list.indexOfFirst {
+                it.iso == sharedPrefs.getWatchProviderRegion()
+            })
+    }
+
+    private fun showError(message: String) {
+        val bottomNavView = (requireActivity() as? MainActivity)
+            ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+        view?.snackbar(
+            message = message, // todo show correct error
+            anchorView = bottomNavView
+        )
     }
 }

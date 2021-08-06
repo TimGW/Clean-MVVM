@@ -96,21 +96,23 @@ class TvShowDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateList
     }
 
     private fun observeUI() {
-        viewModel.tvShowDetails.observe(viewLifecycleOwner) {
-            binding.progressBar.visibility = View.INVISIBLE
-            when (it) {
-                is Result.Error -> view?.snackbar(getString(R.string.generic_error)) // FIXME show correct error
-                is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is Result.Success -> presentTvShowDetails(it.data!!) // FIXME
-            }
+        viewModel.tvShowDetails.observe(viewLifecycleOwner) { result ->
+            binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
+            result.data?.let { showTvShowDetails(it) } ?: showEmptyState()
+            result.error?.let { view?.snackbar(getString(R.string.generic_error)) } // todo set correct error
         }
     }
 
-    private fun presentTvShowDetails(tvShowDetails: TvShowDetails) {
+    private fun showEmptyState() {
+        binding.noResults.visibility = View.VISIBLE
+    }
+
+    private fun showTvShowDetails(tvShowDetails: TvShowDetails) {
+        binding.noResults.visibility = View.GONE
         binding.mediaDetailsReleaseDate.text =
             getString(R.string.media_detail_release_date, tvShowDetails.firstAirDate)
-
         binding.mediaDetailsOverview.text = tvShowDetails.overview
+        binding.watchProviders.visibility = View.VISIBLE
         binding.watchProviders.text =
             getString(R.string.watch_provider_availability, tvShowDetails.watchProviders) // FIXME: format nice list
         binding.expandedTitle.text = args.pageTitle

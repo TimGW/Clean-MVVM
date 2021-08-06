@@ -16,7 +16,7 @@ class MovieDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val movieDetails: LiveData<Result<MovieDetails>> =
+    val movieDetails: LiveData<Result<MovieDetails?>> =
         savedStateHandle.getLiveData<Int>(STATE_ID_MOVIE).switchMap { movieId ->
             getMovieDetailsUseCase.execute(
                 GetMovieDetailsUseCaseImpl.Params(

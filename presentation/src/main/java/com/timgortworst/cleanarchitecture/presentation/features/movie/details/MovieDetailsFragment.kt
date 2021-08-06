@@ -96,21 +96,23 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     }
 
     private fun observeUI() {
-        viewModel.movieDetails.observe(viewLifecycleOwner) {
-            binding.progressBar.visibility = View.INVISIBLE
-            when (it) {
-                is Result.Error -> view?.snackbar(getString(R.string.generic_error)) // FIXME show correct error
-                is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is Result.Success -> presentMovieDetails(it.data!!)
-            }
+        viewModel.movieDetails.observe(viewLifecycleOwner) { result ->
+            binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
+            result.data?.let { showMovieDetails(it) } ?: showEmptyState()
+            result.error?.let { view?.snackbar(getString(R.string.generic_error)) } // todo set correct error
         }
     }
 
-    private fun presentMovieDetails(movieDetails: MovieDetails) {
+    private fun showEmptyState() {
+        binding.noResults.visibility = View.VISIBLE
+    }
+
+    private fun showMovieDetails(movieDetails: MovieDetails) {
+        binding.noResults.visibility = View.GONE
         binding.mediaDetailsReleaseDate.text =
             getString(R.string.media_detail_release_date, movieDetails.releaseDate)
-
         binding.mediaDetailsOverview.text = movieDetails.overview
+        binding.watchProviders.visibility = View.VISIBLE
         binding.watchProviders.text =
             getString(R.string.watch_provider_availability, movieDetails.watchProviders) // FIXME: format nice list
         binding.expandedTitle.text = args.pageTitle

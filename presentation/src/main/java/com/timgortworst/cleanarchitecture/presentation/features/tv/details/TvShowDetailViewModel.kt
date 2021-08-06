@@ -16,7 +16,7 @@ class TvShowDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val tvShowDetails: LiveData<Result<TvShowDetails>> =
+    val tvShowDetails: LiveData<Result<TvShowDetails?>> =
         savedStateHandle.getLiveData<Int>(STATE_ID_TV_SHOW).switchMap { tvShowId ->
             getTvShowDetailsUseCase.execute(
                 GetTvShowDetailsUseCaseImpl.Params(

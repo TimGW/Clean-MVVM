@@ -14,11 +14,11 @@ class GetMovieDetailsUseCaseImpl @Inject constructor(
 
     data class Params(val movieId: Int, val countryCode: String?)
 
-    override fun execute(params: Params): Flow<Result<MovieDetails>> {
+    override fun execute(params: Params): Flow<Result<MovieDetails?>> {
         return movieRepository.getMovieDetailFlow(params.movieId).mapNotNull { response ->
 
-            // filter null values & filter selected watch provider
-            val result = (response.data ?: return@mapNotNull null).apply {
+            // filter selected watch provider
+            val result = response.data?.apply {
                 watchProviders = watchProviders.filterKeys { it == params.countryCode }
             }
 

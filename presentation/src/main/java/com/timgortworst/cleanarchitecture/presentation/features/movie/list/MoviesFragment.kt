@@ -139,7 +139,7 @@ class MoviesFragment : Fragment() {
                 when (loadStates.refresh) {
                     is LoadState.NotLoading -> binding.swiperefresh.isRefreshing = false
                     LoadState.Loading -> {
-                    }
+                    } // todo implement
                     is LoadState.Error -> {
                         binding.swiperefresh.isRefreshing = false
                         val bottomNavView = (requireActivity() as? MainActivity)

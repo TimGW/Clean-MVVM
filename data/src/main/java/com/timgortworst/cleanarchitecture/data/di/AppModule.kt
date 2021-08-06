@@ -70,12 +70,11 @@ abstract class AppModule {
 
         @Provides
         fun provideOkHttpClient(interceptor: Interceptor): OkHttpClient {
-            val loggingInterceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-
             val builder = OkHttpClient().newBuilder().addInterceptor(interceptor)
-            if (BuildConfig.DEBUG) builder.addInterceptor(loggingInterceptor)
+
+            if (BuildConfig.DEBUG) builder.addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
 
             return builder.build()
         }
@@ -84,7 +83,7 @@ abstract class AppModule {
         @MoshiDefault
         fun provideMoshi(
             builder: Moshi.Builder
-        ) = builder.build()
+        ): Moshi = builder.build()
 
         @Provides
         fun provideMoshiBuilder() = Moshi.Builder()
