@@ -134,25 +134,20 @@ class MoviesFragment : Fragment() {
 
         lifecycleScope.launch {
             movieAdapter.loadStateFlow.collectLatest { loadStates ->
-                binding.noResults.visibility = View.GONE
+                binding.noResults.visibility =
+                    if (movieAdapter.itemCount == 0) View.VISIBLE else View.GONE
 
-                when (loadStates.refresh) {
-                    is LoadState.NotLoading -> binding.swiperefresh.isRefreshing = false
-                    LoadState.Loading -> {
-                    } // todo implement
-                    is LoadState.Error -> {
-                        binding.swiperefresh.isRefreshing = false
-                        val bottomNavView = (requireActivity() as? MainActivity)
-                            ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+                binding.swiperefresh.isRefreshing = loadStates.refresh !is LoadState.NotLoading
 
-                        view?.snackbar(
-                            message = getString(R.string.connection_error),
-                            anchorView = bottomNavView)
+                if (loadStates.refresh is LoadState.Error) {
+                    binding.swiperefresh.isRefreshing = false
+                    val bottomNavView = (requireActivity() as? MainActivity)
+                        ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-                        if (movieAdapter.itemCount == 0) {
-                            binding.noResults.visibility = View.VISIBLE
-                        }
-                    }
+                    view?.snackbar(
+                        message = getString(R.string.connection_error),
+                        anchorView = bottomNavView
+                    )
                 }
             }
         }
