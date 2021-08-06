@@ -22,6 +22,7 @@ class TvShowWatchProvidersDialog : BaseWatchProvidersDialog() {
         viewModel.getAllProviders()
     }
 
+    // todo split in multible observers and let the viewmodel handle presentation
     private fun observeData() {
         viewModel.watchProviders.observe(this) { result ->
             binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE

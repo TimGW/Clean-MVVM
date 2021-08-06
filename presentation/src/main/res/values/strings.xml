@@ -13,7 +13,7 @@
     <string name="settings_toolbar_title">Settings</string>
     <string name="movie_details_toolbar_title">Details</string>
     <string name="header_trending">Trending</string>
-    <string name="watch_provider_availability">Available on: %1$s</string>
+    <string name="available_watch_providers">Available on: %1$s</string>
     <string name="menu_movies">Movies</string>
     <string name="menu_tv">Television</string>
     <string name="menu_settings">Settings</string>

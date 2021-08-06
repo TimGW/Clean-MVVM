@@ -96,6 +96,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     }
 
     private fun observeUI() {
+        // todo split in multible observers and let the viewmodel handle presentation
         viewModel.movieDetails.observe(viewLifecycleOwner) { result ->
             binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
             result.data?.let { showMovieDetails(it) } ?: showEmptyState()
@@ -108,13 +109,16 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     }
 
     private fun showMovieDetails(movieDetails: MovieDetails) {
+        val watchProviders = movieDetails.watchProviders.map {
+            (it.value.flatRate.orEmpty() + it.value.buy.orEmpty() + it.value.rent.orEmpty())
+        }.joinToString()
+
         binding.noResults.visibility = View.GONE
         binding.mediaDetailsReleaseDate.text =
             getString(R.string.media_detail_release_date, movieDetails.releaseDate)
         binding.mediaDetailsOverview.text = movieDetails.overview
-        binding.watchProviders.visibility = View.VISIBLE
-        binding.watchProviders.text =
-            getString(R.string.watch_provider_availability, movieDetails.watchProviders) // FIXME: format nice list
+        binding.watchProviders.visibility = if(watchProviders.isBlank()) View.GONE else View.VISIBLE
+        binding.watchProviders.text = getString(R.string.available_watch_providers, watchProviders)
         binding.expandedTitle.text = args.pageTitle
         binding.collapsedTitle.text = args.pageTitle
     }

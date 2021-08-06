@@ -63,10 +63,8 @@ class SettingsFragment : Fragment() {
 
     private fun observeData() {
         viewModel.regions.observe(viewLifecycleOwner) { result ->
-            binding.progress.visibility =
-                if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
-            result.data?.let { showData(it) }
-                ?: showError(getString(R.string.generic_error)) // todo set correct error
+            binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
+            result.data?.let { showData(it) } ?: showError(getString(R.string.generic_error)) // todo set correct error
             result.error?.let { showError(getString(R.string.generic_error)) } // todo set correct error
         }
     }

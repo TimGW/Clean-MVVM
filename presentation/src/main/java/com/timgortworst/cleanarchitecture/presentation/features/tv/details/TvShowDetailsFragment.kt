@@ -95,6 +95,7 @@ class TvShowDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateList
         _binding = null
     }
 
+    // todo split in multible observers and let the viewmodel handle presentation
     private fun observeUI() {
         viewModel.tvShowDetails.observe(viewLifecycleOwner) { result ->
             binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
@@ -108,13 +109,17 @@ class TvShowDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateList
     }
 
     private fun showTvShowDetails(tvShowDetails: TvShowDetails) {
+        val watchProviders = tvShowDetails.watchProviders.map {
+            (it.value.flatRate.orEmpty() + it.value.buy.orEmpty() + it.value.rent.orEmpty())
+        }.joinToString()
+
         binding.noResults.visibility = View.GONE
         binding.mediaDetailsReleaseDate.text =
             getString(R.string.media_detail_release_date, tvShowDetails.firstAirDate)
         binding.mediaDetailsOverview.text = tvShowDetails.overview
         binding.watchProviders.visibility = View.VISIBLE
-        binding.watchProviders.text =
-            getString(R.string.watch_provider_availability, tvShowDetails.watchProviders) // FIXME: format nice list
+        binding.watchProviders.visibility = if(watchProviders.isBlank()) View.GONE else View.VISIBLE
+        binding.watchProviders.text = getString(R.string.available_watch_providers, watchProviders)
         binding.expandedTitle.text = args.pageTitle
         binding.collapsedTitle.text = args.pageTitle
     }
