@@ -45,6 +45,7 @@ class MoviePagingSource (
         }
     }
 
+    // TODO refresh produces new results for first 3 times??
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
         // Try to find the page key of the closest page to anchorPosition, from
         // either the prevKey or the nextKey, but you need to handle nullability
