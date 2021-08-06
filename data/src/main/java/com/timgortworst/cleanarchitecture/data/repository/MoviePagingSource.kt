@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.data.remote.MovieService
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
+import com.timgortworst.cleanarchitecture.domain.model.tv.TvShow
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -45,18 +46,6 @@ class MoviePagingSource (
         }
     }
 
-    // TODO refresh produces new results for first 3 times??
-    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
-        // Try to find the page key of the closest page to anchorPosition, from
-        // either the prevKey or the nextKey, but you need to handle nullability
-        // here:
-        //  * prevKey == null -> anchorPage is the first page.
-        //  * nextKey == null -> anchorPage is the last page.
-        //  * both prevKey and nextKey null -> anchorPage is the initial page, so
-        //    just return null.
-        return state.anchorPosition?.let { anchorPosition ->
-            val anchorPage = state.closestPageToPosition(anchorPosition)
-            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
-        }
-    }
+    // anchorPage is the initial page, so just return null.
+    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? = null
 }
