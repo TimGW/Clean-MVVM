@@ -4,12 +4,10 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import androidx.fragment.app.DialogFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentSettingsDialogWatchprovidersBinding
-import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
-import com.timgortworst.cleanarchitecture.presentation.features.MainActivity
 import com.timgortworst.cleanarchitecture.presentation.features.settings.WatchProvidersAdapter
 
 open class BaseWatchProvidersDialog : DialogFragment() {
@@ -40,11 +38,7 @@ open class BaseWatchProvidersDialog : DialogFragment() {
     }
 
     fun showError(message: String) {
-        val bottomNavView = (requireActivity() as? MainActivity)
-            ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
-        view?.snackbar(
-            message = message,
-            anchorView = bottomNavView)
+        binding.errorMessage.visibility = View.VISIBLE
+        binding.errorMessage.text = message
     }
 }

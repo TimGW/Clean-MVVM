@@ -9,7 +9,8 @@ sealed class Result<out T>(
     class Error<T>(error: ErrorType? = null, data: T? = null) : Result<T>(data, error)
 
     sealed class ErrorType(
-        val throwable: Throwable? = null
+        val throwable: Throwable? = null,
+        var message: Int? = null
     ) {
         class DatabaseError(throwable: Throwable? = null) : ErrorType(throwable)
         class IOError(throwable: Throwable? = null) : ErrorType(throwable)

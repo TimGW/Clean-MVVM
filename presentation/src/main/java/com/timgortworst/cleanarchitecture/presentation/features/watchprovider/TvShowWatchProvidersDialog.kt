@@ -17,17 +17,17 @@ class TvShowWatchProvidersDialog : BaseWatchProvidersDialog() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observeData()
 
-        viewModel.getAllProviders()
+        observeData()
     }
 
-    // todo split in multible observers and let the viewmodel handle presentation
     private fun observeData() {
         viewModel.watchProviders.observe(this) { result ->
             binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
-            result.data?.let { showData(it) } ?: showError(getString(R.string.generic_error)) // todo set correct error
-            result.error?.let { showError(getString(R.string.generic_error)) } // todo set correct error
+            result.data?.let { showData(it) }
+            result.error?.message?.let { showError(getString(it)) } ?: run {
+                binding.errorMessage.visibility = View.GONE
+            }
         }
     }
 
