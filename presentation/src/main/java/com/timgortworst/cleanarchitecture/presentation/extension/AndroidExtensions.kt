@@ -3,10 +3,10 @@ package com.timgortworst.cleanarchitecture.presentation.extension
 import android.app.Activity
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.*
-import androidx.recyclerview.widget.RecyclerView
+import android.view.animation.AlphaAnimation
+import android.view.animation.AnimationSet
+import android.view.animation.LinearInterpolator
 import com.google.android.material.snackbar.Snackbar
-import android.view.animation.*
 
 
 fun View.snackbar(
@@ -33,12 +33,6 @@ fun Activity.setTranslucentStatus(isTranslucent: Boolean) {
     ) return
 
     if (isTranslucent) window.setFlags(flag, flag) else window.clearFlags(flag)
-}
-
-fun RecyclerView.addSingleScrollDirectionListener() {
-    val listener = SingleScrollDirectionListener()
-    addOnItemTouchListener(listener)
-    addOnScrollListener(listener)
 }
 
 fun View.animateFade(duration: Long, visibility: Int) {

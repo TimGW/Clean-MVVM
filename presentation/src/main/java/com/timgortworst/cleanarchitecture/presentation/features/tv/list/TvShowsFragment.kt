@@ -18,7 +18,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.timgortworst.cleanarchitecture.domain.model.tv.TvShow
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaListBinding
-import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
 import com.timgortworst.cleanarchitecture.presentation.features.MainActivity
@@ -123,7 +122,6 @@ class TvShowsFragment : Fragment() {
 
             val padding = resources.getDimension(R.dimen.default_padding).toInt()
             addItemDecoration(GridMarginDecoration(padding))
-            addSingleScrollDirectionListener()
         }
     }
 
