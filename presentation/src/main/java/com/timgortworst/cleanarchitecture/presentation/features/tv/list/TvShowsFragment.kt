@@ -134,18 +134,22 @@ class TvShowsFragment : Fragment() {
 
         lifecycleScope.launch {
             tvShowGridAdapter.loadStateFlow.collectLatest { loadStates ->
-                binding.noResults.visibility =
-                    if (tvShowGridAdapter.itemCount == 0) View.VISIBLE else View.GONE
+                val loadState = loadStates.refresh
 
-                binding.swiperefresh.isRefreshing = loadStates.refresh !is LoadState.NotLoading
+                if (loadState !is LoadState.Loading) {
+                    binding.noResults.visibility =
+                        if (tvShowGridAdapter.itemCount == 0) View.VISIBLE else View.GONE
+                }
 
-                if (loadStates.refresh is LoadState.Error) {
-                    binding.swiperefresh.isRefreshing = false
+                binding.swiperefresh.isRefreshing = loadState is LoadState.Loading
+
+                if (loadState is LoadState.Error) {
                     val bottomNavView = (requireActivity() as? MainActivity)
                         ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
                     view?.snackbar(
-                        message = getString(R.string.connection_error),
+                        message = loadState.error.localizedMessage
+                            ?: getString(R.string.connection_error),
                         anchorView = bottomNavView
                     )
                 }
