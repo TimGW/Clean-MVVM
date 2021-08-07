@@ -136,25 +136,25 @@ class TvShowsFragment : Fragment() {
             tvShowGridAdapter.loadStateFlow.collectLatest { loadStates ->
                 val loadState = loadStates.refresh
 
+                binding.swiperefresh.isRefreshing = loadState is LoadState.Loading
+
+                if (loadState is LoadState.Error) showError(loadState.error.localizedMessage)
                 if (loadState !is LoadState.Loading) {
                     binding.noResults.visibility =
                         if (tvShowGridAdapter.itemCount == 0) View.VISIBLE else View.GONE
                 }
-
-                binding.swiperefresh.isRefreshing = loadState is LoadState.Loading
-
-                if (loadState is LoadState.Error) {
-                    val bottomNavView = (requireActivity() as? MainActivity)
-                        ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
-                    view?.snackbar(
-                        message = loadState.error.localizedMessage
-                            ?: getString(R.string.connection_error),
-                        anchorView = bottomNavView
-                    )
-                }
             }
         }
+    }
+
+    private fun showError(message: String?) {
+        val bottomNavView = (requireActivity() as? MainActivity)
+            ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+        view?.snackbar(
+            message = message ?: getString(R.string.connection_error),
+            anchorView = bottomNavView
+        )
     }
 
     private fun navigateToDetails(tvShow: TvShow, sharedView: View, transitionName: String) {

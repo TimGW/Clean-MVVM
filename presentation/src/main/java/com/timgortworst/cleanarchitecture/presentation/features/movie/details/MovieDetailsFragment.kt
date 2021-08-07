@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.presentation.R
@@ -26,6 +27,7 @@ import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMedia
 import com.timgortworst.cleanarchitecture.presentation.extension.animateFade
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
+import com.timgortworst.cleanarchitecture.presentation.features.MainActivity
 import com.timgortworst.cleanarchitecture.presentation.features.base.AppBarOffsetListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -96,12 +98,15 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     }
 
     private fun observeUI() {
-        // todo split in multible observers and let the viewmodel handle presentation
         viewModel.movieDetails.observe(viewLifecycleOwner) { result ->
             binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
             result.data?.let { showMovieDetails(it) } ?: showEmptyState()
-            result.error?.let { view?.snackbar(getString(R.string.generic_error)) } // todo set correct error
+            result.error?.message?.let { showError(getString(it)) }
         }
+    }
+
+    private fun showError(message: String?) {
+        view?.snackbar(message ?: getString(R.string.connection_error))
     }
 
     private fun showEmptyState() {

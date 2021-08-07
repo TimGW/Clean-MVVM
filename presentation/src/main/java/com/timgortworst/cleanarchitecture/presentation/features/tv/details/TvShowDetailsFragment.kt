@@ -95,13 +95,16 @@ class TvShowDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateList
         _binding = null
     }
 
-    // todo split in multible observers and let the viewmodel handle presentation
     private fun observeUI() {
         viewModel.tvShowDetails.observe(viewLifecycleOwner) { result ->
             binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
             result.data?.let { showTvShowDetails(it) } ?: showEmptyState()
-            result.error?.let { view?.snackbar(getString(R.string.generic_error)) } // todo set correct error
+            result.error?.message?.let { showError(getString(it)) }
         }
+    }
+
+    private fun showError(message: String?) {
+        view?.snackbar(message ?: getString(R.string.connection_error))
     }
 
     private fun showEmptyState() {
