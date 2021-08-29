@@ -44,12 +44,6 @@ class WatchProviderRepositoryImpl @Inject constructor(
         Result.Error(errorHandler.getError(e))
     }
 
-    override suspend fun getWatchProvidersTv(region: String) = try {
-        apiResult(service.getWatchProvidersTv(region))
-    } catch (e: Throwable) {
-        Result.Error(errorHandler.getError(e))
-    }
-
     private fun <T> apiResult(response: Response<T>): Result<T> {
         val data = response.body()
         return if (response.isSuccessful && data != null) {

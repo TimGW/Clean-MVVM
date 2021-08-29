@@ -24,16 +24,8 @@ class SharedPrefs(
     fun getWatchProvidersMovie() =
         spm.getList<WatchProvider>(context, moshi, SHARED_PREF_WATCH_PROVIDER_MOVIE)
 
-    fun setWatchProvidersTv(watchProviders: List<WatchProvider>) {
-        spm.setList(context, moshi, SHARED_PREF_WATCH_PROVIDER_TV, watchProviders)
-    }
-
-    fun getWatchProvidersTv() =
-        spm.getList<WatchProvider>(context, moshi, SHARED_PREF_WATCH_PROVIDER_TV)
-
     companion object {
         const val SHARED_PREF_WATCH_PROVIDER_REGION = "SHARED_PREF_WATCH_PROVIDER_REGION"
         const val SHARED_PREF_WATCH_PROVIDER_MOVIE = "SHARED_PREF_WATCH_PROVIDER_MOVIE"
-        const val SHARED_PREF_WATCH_PROVIDER_TV = "SHARED_PREF_WATCH_PROVIDER_TV"
     }
 }
