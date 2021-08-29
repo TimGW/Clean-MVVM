@@ -165,8 +165,8 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     override fun onScrollStateChangedListener(scrollState: AppBarOffsetListener.ScrollState) {
         binding.expandedTitle.alpha = 1 - scrollState.scrolledPercentile // fade out
 
-        // start halfway but go twice the speed to reach alpha 1.0
-        binding.collapsedTitle.alpha = (scrollState.scrolledPercentile - 0.5f) * 2
+        // start quarterway but go 4-times the speed to reach alpha 1.0
+        binding.collapsedTitle.alpha = (scrollState.scrolledPercentile - 0.75f) * 4
 
         requireActivity().setTranslucentStatus(
             scrollState !is AppBarOffsetListener.ScrollState.Collapsed
