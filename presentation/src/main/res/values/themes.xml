@@ -16,10 +16,10 @@
     <!--Base custom theme which will be shared between both light and dark theme variants-->
     <style name="Base.MyTheme" parent="Base.MaterialThemeBuilder">
         <!--Material color attributes -->
-        <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorPrimaryVariant">@color/color_primary_variant</item>
-        <item name="colorSecondary">@color/color_secondary</item>
-        <item name="colorSecondaryVariant">@color/color_secondary_variant</item>
+        <item name="colorPrimary">@color/color_primary_blue</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant_blue</item>
+        <item name="colorSecondary">@color/color_primary_blue</item>
+        <item name="colorSecondaryVariant">@color/color_primary_variant_blue</item>
 
         <item name="android:colorBackground">@color/color_background</item>
         <item name="colorSurface">@color/color_surface</item>
@@ -30,6 +30,8 @@
         <item name="colorOnBackground">@color/color_on_background</item>
         <item name="colorOnSurface">@color/color_on_surface</item>
         <item name="colorOnError">@color/color_on_error</item>
+
+        <item name="iconTint">@color/color_primary_blue</item>
 
         <item name="android:textColor">@color/color_on_surface</item>
 
@@ -69,5 +71,22 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+
+    <style name="AppTheme.Red" parent="Base.MyTheme">
+        <item name="colorPrimary">@color/color_primary_red</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant_red</item>
+        <item name="colorSecondary">@color/color_primary_red</item>
+        <item name="colorSecondaryVariant">@color/color_primary_variant_red</item>
+        <item name="iconTint">@color/color_primary_red</item>
+    </style>
+
+    <style name="AppTheme.Green" parent="Base.MyTheme">
+        <item name="colorPrimary">@color/color_primary_green</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant_green</item>
+        <item name="colorSecondary">@color/color_primary_green</item>
+        <item name="colorSecondaryVariant">@color/color_primary_variant_green</item>
+        <item name="iconTint">@color/color_primary_green</item>
+
+    </style>
 
 </resources>

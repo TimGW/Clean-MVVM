@@ -9,12 +9,17 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.ActivityMainBinding
+import com.timgortworst.cleanarchitecture.presentation.features.base.ThemeHelper
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var themeHelper: ThemeHelper
 
     companion object {
         fun intentBuilder(context: Context): Intent {
@@ -24,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(themeHelper.getAppTheme())
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

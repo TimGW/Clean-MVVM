@@ -11,16 +11,21 @@ import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs.Companion.SHARED_PREF_WATCH_PROVIDER_REGION
 import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProviderRegion
 import com.timgortworst.cleanarchitecture.presentation.R
+import com.timgortworst.cleanarchitecture.presentation.features.base.ThemeHelper
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
     private var darkModePref: ListPreference? = null
+    private var themePref: ListPreference? = null
     private var regionsPref: ListPreference? = null
 
     @Inject
     lateinit var sharedPrefs: SharedPrefs
+
+    @Inject
+    lateinit var themeHelper: ThemeHelper
 
     private val viewModel by viewModels<SettingsViewModel>()
 
@@ -33,11 +38,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         darkModePref = (findPreference("dark_mode_key") as? ListPreference)
         regionsPref = (findPreference(SHARED_PREF_WATCH_PROVIDER_REGION) as? ListPreference)
+        themePref = (findPreference("theme_key") as? ListPreference)
+
+        observeWatchProviders()
 
         displayPrefs()
         regionsPrefs()
-
-        observeWatchProviders()
     }
 
     private fun displayPrefs() {
@@ -46,18 +52,21 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         darkModePref?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, newValue ->
-                val darkModeSetting =
-                    (newValue as String).toIntOrNull() ?: return@OnPreferenceChangeListener false
-                val nightMode = when (darkModeSetting) {
-                    0 -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                    1 -> AppCompatDelegate.MODE_NIGHT_NO
-                    2 -> AppCompatDelegate.MODE_NIGHT_YES
-                    else -> AppCompatDelegate.MODE_NIGHT_UNSPECIFIED
-                }
-                AppCompatDelegate.setDefaultNightMode(nightMode)
-                sharedPrefs.setDarkModeSetting(darkModeSetting)
-                darkModePref?.summary =
-                    resources.getStringArray(R.array.night_mode_items)[darkModeSetting]
+                val value = (newValue as String).toIntOrNull() ?: return@OnPreferenceChangeListener false
+                AppCompatDelegate.setDefaultNightMode(themeHelper.getNightMode(value))
+                sharedPrefs.setDarkModeSetting(value)
+                darkModePref?.summary = resources.getStringArray(R.array.night_mode_items)[value]
+                true
+            }
+
+        themePref?.summary = resources
+            .getStringArray(R.array.theme_items)[sharedPrefs.getThemeSetting()]
+
+        themePref?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, newValue ->
+                val themeSetting = (newValue as String).toIntOrNull() ?: return@OnPreferenceChangeListener false
+                sharedPrefs.setThemeSetting(themeSetting)
+                requireActivity().recreate()
                 true
             }
     }
@@ -76,21 +85,19 @@ class SettingsFragment : PreferenceFragmentCompat() {
             result?.let { showData(it) }
         }
 
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            regionsPref?.summary = if (isLoading) getString(R.string.loading) else ""
-        }
-
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             error?.let { regionsPref?.summary = getString(it) }
         }
     }
 
     private fun showData(list: List<WatchProviderRegion>) {
-        regionsPref?.summary = list.firstOrNull {
+        regionsPref?.entries = list.map { it.nativeName }.toTypedArray()
+        regionsPref?.entryValues = list.map { it.iso }.toTypedArray()
+
+        val summary = list.firstOrNull {
             it.iso == sharedPrefs.getWatchProviderRegion()
         }?.nativeName ?: getString(R.string.select_region)
 
-        regionsPref?.entries = list.map { it.nativeName }.toTypedArray()
-        regionsPref?.entryValues = list.map { it.iso }.toTypedArray()
+        regionsPref?.summary = summary
     }
 }

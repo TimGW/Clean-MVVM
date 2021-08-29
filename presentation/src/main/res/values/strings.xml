@@ -20,6 +20,7 @@
     <string name="ok">ok</string>
 
     <string name="preferences_display_dark_mode">Dark mode</string>
+    <string name="preferences_display_theme">Theme</string>
     <string name="preferences_app_version_title">App version</string>
     <string name="preferences_general_header">General</string>
     <string name="preferences_display_header">Display</string>
@@ -38,6 +39,21 @@
     <string name="night_mode_label_auto">Follow system</string>
     <string name="night_mode_label_off">Off</string>
     <string name="night_mode_label_on">On</string>
+
+    <string-array name="theme_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="theme_items">
+        <item>@string/theme_label_default</item>
+        <item>@string/theme_label_red</item>
+        <item>@string/theme_label_green</item>
+    </string-array>
+    <string name="theme_label_default">Blue</string>
+    <string name="theme_label_red">Red</string>
+    <string name="theme_label_green">Green</string>
+
     <string name="loading">loading…</string>
     <string name="region">Region</string>
     <string name="region_error">Can\'t load regions</string>

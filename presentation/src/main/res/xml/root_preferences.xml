@@ -25,6 +25,14 @@
             app:key="dark_mode_key"
             app:title="@string/preferences_display_dark_mode" />
 
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/theme_items"
+            android:entryValues="@array/theme_values"
+            app:iconSpaceReserved="false"
+            app:key="theme_key"
+            app:title="@string/preferences_display_theme" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

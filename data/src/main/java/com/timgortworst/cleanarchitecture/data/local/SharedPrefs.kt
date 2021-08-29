@@ -16,6 +16,12 @@ class SharedPrefs(
 
     fun getDarkModeSetting() = spm.getIntValue(SHARED_PREF_DARK_MODE)
 
+    fun setThemeSetting(darkMode: Int) {
+        spm.setIntValue(SHARED_PREF_THEME, darkMode)
+    }
+
+    fun getThemeSetting() = spm.getIntValue(SHARED_PREF_THEME)
+
     fun getWatchProviderRegion() = spm.getStringValue(SHARED_PREF_WATCH_PROVIDER_REGION)
 
     fun setWatchProvidersMovie(watchProviders: List<WatchProvider>) {
@@ -27,6 +33,7 @@ class SharedPrefs(
 
     companion object {
         const val SHARED_PREF_DARK_MODE = "SHARED_PREF_WATCH_PROVIDER_REGION"
+        const val SHARED_PREF_THEME = "SHARED_PREF_THEME"
         const val SHARED_PREF_WATCH_PROVIDER_REGION = "regions_key"
         const val SHARED_PREF_WATCH_PROVIDER_MOVIE = "SHARED_PREF_WATCH_PROVIDER_MOVIE"
     }
