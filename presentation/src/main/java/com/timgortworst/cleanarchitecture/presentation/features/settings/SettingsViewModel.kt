@@ -38,17 +38,10 @@ class SettingsViewModel @Inject constructor(
                 _isLoading.value = it is Result.Loading
                 _data.value = it.data
                 _errorMessage.value = when (it.error) {
-                    is Result.ErrorType.DatabaseError -> R.string.database_error
-                    is Result.ErrorType.HttpError -> R.string.server_error
-                    is Result.ErrorType.IOError -> R.string.connection_error
-                    is Result.ErrorType.Unknown -> R.string.generic_error
                     null -> null
+                    else -> R.string.region_error
                 }
             }
         }
-    }
-
-    fun updateProviders(isoValue: String) {
-        sharedPrefs.setWatchProviderRegion(isoValue)
     }
 }

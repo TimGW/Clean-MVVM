@@ -1,0 +1,42 @@
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/preferences_general_header">
+
+        <ListPreference
+            app:iconSpaceReserved="false"
+            app:key="regions_key"
+            app:title="@string/region"
+            android:summary="@string/loading"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/preferences_display_header">
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/night_mode_items"
+            android:entryValues="@array/night_mode_values"
+            app:iconSpaceReserved="false"
+            app:key="dark_mode_key"
+            app:title="@string/preferences_display_dark_mode" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/preferences_about_header">
+
+        <Preference
+            android:key="preferences_app_version_key"
+            android:summary="@string/versionName"
+            android:title="@string/preferences_app_version_title"
+            app:iconSpaceReserved="false"/>
+
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

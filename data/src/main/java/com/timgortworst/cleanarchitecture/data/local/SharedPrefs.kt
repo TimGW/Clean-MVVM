@@ -10,10 +10,11 @@ class SharedPrefs(
     @ApplicationContext private val context: Context,
     private val moshi: Moshi
 ) {
-
-    fun setWatchProviderRegion(region: String) {
-        spm.setStringValue(SHARED_PREF_WATCH_PROVIDER_REGION, region)
+    fun setDarkModeSetting(darkMode: Int) {
+        spm.setIntValue(SHARED_PREF_DARK_MODE, darkMode)
     }
+
+    fun getDarkModeSetting() = spm.getIntValue(SHARED_PREF_DARK_MODE)
 
     fun getWatchProviderRegion() = spm.getStringValue(SHARED_PREF_WATCH_PROVIDER_REGION)
 
@@ -25,7 +26,8 @@ class SharedPrefs(
         spm.getList<WatchProvider>(context, moshi, SHARED_PREF_WATCH_PROVIDER_MOVIE)
 
     companion object {
-        const val SHARED_PREF_WATCH_PROVIDER_REGION = "SHARED_PREF_WATCH_PROVIDER_REGION"
+        const val SHARED_PREF_DARK_MODE = "SHARED_PREF_WATCH_PROVIDER_REGION"
+        const val SHARED_PREF_WATCH_PROVIDER_REGION = "regions_key"
         const val SHARED_PREF_WATCH_PROVIDER_MOVIE = "SHARED_PREF_WATCH_PROVIDER_MOVIE"
     }
 }

@@ -19,4 +19,28 @@
     <string name="watch_providers">Watch Providers</string>
     <string name="ok">ok</string>
 
+    <string name="preferences_display_dark_mode">Dark mode</string>
+    <string name="preferences_app_version_title">App version</string>
+    <string name="preferences_general_header">General</string>
+    <string name="preferences_display_header">Display</string>
+    <string name="preferences_about_header">About</string>
+
+    <string-array name="night_mode_items">
+        <item>@string/night_mode_label_auto</item>
+        <item>@string/night_mode_label_off</item>
+        <item>@string/night_mode_label_on</item>
+    </string-array>
+    <string-array name="night_mode_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="night_mode_label_auto">Follow system</string>
+    <string name="night_mode_label_off">Off</string>
+    <string name="night_mode_label_on">On</string>
+    <string name="loading">loading…</string>
+    <string name="region">Region</string>
+    <string name="region_error">Can\'t load regions</string>
+    <string name="select_region">Select a region</string>
+
 </resources>

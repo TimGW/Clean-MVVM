@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/page_settings"
-        android:name="com.timgortworst.cleanarchitecture.presentation.features.settings.SettingsFragment"
+        android:name="com.timgortworst.cleanarchitecture.presentation.features.settings.SettingsHostFragment"
         android:label="@string/settings_toolbar_title"
         tools:layout="@layout/fragment_settings"/>
 </navigation>
