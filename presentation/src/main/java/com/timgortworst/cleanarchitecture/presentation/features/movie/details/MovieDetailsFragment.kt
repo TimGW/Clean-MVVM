@@ -26,6 +26,7 @@ import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.animateFade
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
+import com.timgortworst.cleanarchitecture.presentation.extension.setUpButtonColor
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
 import com.timgortworst.cleanarchitecture.presentation.features.MainActivity
 import com.timgortworst.cleanarchitecture.presentation.features.base.AppBarOffsetListener
@@ -79,7 +80,6 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         }
 
         observeUI()
-        requireActivity().setTranslucentStatus(true)
     }
 
     override fun onResume() {
@@ -151,6 +151,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
+                    requireActivity().setTranslucentStatus(true)
                     startPostponedEnterTransition()
                     return false
                 }
@@ -165,6 +166,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
             navController,
             AppBarConfiguration(navController.graph)
         )
+        binding.toolbar.setUpButtonColor(android.R.color.white, requireActivity().theme)
     }
 
     override fun onScrollStateChangedListener(scrollState: AppBarOffsetListener.ScrollState) {
