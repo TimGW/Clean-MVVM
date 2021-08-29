@@ -11,8 +11,11 @@
         android:label="@string/movie_list_toolbar_title"
         tools:layout="@layout/fragment_media_list">
 
-        <!-- don't use animations here.
-        These are handled by the Transition Framework-->
+        <!-- NOTE: When using shared elements transitions,
+         you should not use the Animation Framework (enterAnim, exitAnim, and so on).
+         Instead, you should be using only the Transition Framework
+         for setting your enter and exit transitions.
+         see: https://developer.android.com/guide/navigation/navigation-animate-transitions#shared-element -->
         <action
             android:id="@+id/show_movie_details"
             app:destination="@id/fragmentMovieDetails" />
