@@ -59,23 +59,6 @@ fun Activity.setTranslucentStatus(isTranslucent: Boolean) {
     }
 }
 
-fun View.animateFade(duration: Long, visibility: Int) {
-    val animSet = AnimationSet(true).apply {
-        interpolator = LinearInterpolator()
-        fillAfter = true
-        this.duration = duration
-    }
-
-    val alphaAnimation = if (visibility == View.VISIBLE) {
-        AlphaAnimation(0f, 1f)
-    } else {
-        AlphaAnimation(1f, 0f)
-    }
-
-    animSet.addAnimation(alphaAnimation)
-    startAnimation(animSet)
-}
-
 fun MaterialToolbar?.setUpButtonColor(@ColorRes color: Int, theme: Resources.Theme? = null) {
     if (this == null) return
     navigationIcon?.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(

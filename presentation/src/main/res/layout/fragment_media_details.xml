@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:scrimAnimationDuration="@android:integer/config_mediumAnimTime"
             app:scrimVisibleHeightTrigger="@dimen/scrim_visible_height_trigger"
             app:contentScrim="@color/color_background"
@@ -69,10 +69,10 @@
                     android:gravity="center_vertical"
                     tools:text="collapsed title"
                     android:lines="1"
+                    android:alpha="0"
                     android:ellipsize="end"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="-16dp"
-                    android:visibility="invisible"
                     style="@style/TextAppearance.App.CollapsingToolbar.Collapsed"/>
 
             </com.google.android.material.appbar.MaterialToolbar>

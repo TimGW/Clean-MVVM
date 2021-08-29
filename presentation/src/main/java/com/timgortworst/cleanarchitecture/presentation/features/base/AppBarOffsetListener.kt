@@ -7,7 +7,7 @@ class AppBarOffsetListener : AppBarLayout.OnOffsetChangedListener {
     var scrollStateListener: OnScrollStateListener? = null
 
     override fun onOffsetChanged(layout: AppBarLayout, offset: Int) {
-        val scrolledPercentile = (1 - abs(offset).toFloat() / layout.totalScrollRange.toFloat())
+        val scrolledPercentile = (abs(offset).toFloat() / layout.totalScrollRange.toFloat())
 
         when {
             abs(offset) == layout.totalScrollRange -> scrollStateListener?.onScrollStateChangedListener(

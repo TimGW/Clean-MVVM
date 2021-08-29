@@ -19,16 +19,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
-import com.timgortworst.cleanarchitecture.presentation.extension.animateFade
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.setUpButtonColor
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
-import com.timgortworst.cleanarchitecture.presentation.features.MainActivity
 import com.timgortworst.cleanarchitecture.presentation.features.base.AppBarOffsetListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,10 +35,6 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     private val args: MovieDetailsFragmentArgs by navArgs()
     private var _binding: FragmentMediaDetailsBinding? = null
     private val binding get() = _binding!!
-    private var isCollapsedTitleVisible = false
-    private val animTime by lazy {
-        resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-    }
     private val appBarScrollListener = AppBarOffsetListener().also {
         it.scrollStateListener = this@MovieDetailsFragment
     }
@@ -170,26 +163,13 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     }
 
     override fun onScrollStateChangedListener(scrollState: AppBarOffsetListener.ScrollState) {
-        binding.expandedTitle.alpha = scrollState.scrolledPercentile
+        binding.expandedTitle.alpha = 1 - scrollState.scrolledPercentile // fade out
 
-        when (scrollState) {
-            is AppBarOffsetListener.ScrollState.Collapsed -> {
-                requireActivity().setTranslucentStatus(false)
+        // start halfway but go twice the speed to reach alpha 1.0
+        binding.collapsedTitle.alpha = (scrollState.scrolledPercentile - 0.5f) * 2
 
-                if (!isCollapsedTitleVisible) {
-                    binding.collapsedTitle.animateFade(animTime, View.VISIBLE)
-                    isCollapsedTitleVisible = true
-                }
-            }
-            is AppBarOffsetListener.ScrollState.Expanded -> { /** do nothing **/ }
-            is AppBarOffsetListener.ScrollState.Scrolling -> {
-                requireActivity().setTranslucentStatus(true)
-
-                if (isCollapsedTitleVisible) {
-                    binding.collapsedTitle.animateFade(animTime, View.INVISIBLE)
-                    isCollapsedTitleVisible = false
-                }
-            }
-        }
+        requireActivity().setTranslucentStatus(
+            scrollState !is AppBarOffsetListener.ScrollState.Collapsed
+        )
     }
 }
