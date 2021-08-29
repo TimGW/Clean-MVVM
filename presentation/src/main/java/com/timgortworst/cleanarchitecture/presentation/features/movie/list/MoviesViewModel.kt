@@ -8,7 +8,6 @@ import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMoviesUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProvidersMovieUseCase
-import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProvidersMovieUseCaseImpl
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.features.settings.WatchProvidersAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +24,7 @@ class MoviesViewModel @Inject constructor(
     val region = sharedPrefs.getWatchProviderRegion().orEmpty()
     val watchProviders = liveData {
         val watchProviders = getWatchProvidersMovieUseCase.execute(
-            GetWatchProvidersMovieUseCaseImpl.Params(region)
+            GetWatchProvidersMovieUseCase.Params(region)
         )
 
         watchProviders.error?.message = determineErrorMessage(watchProviders.error)

@@ -5,7 +5,6 @@ import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieDetailsUseCase
-import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieDetailsUseCaseImpl
 import com.timgortworst.cleanarchitecture.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
@@ -21,7 +20,7 @@ class MovieDetailViewModel @Inject constructor(
     val movieDetails: LiveData<Result<MovieDetails?>> =
         savedStateHandle.getLiveData<Int>(STATE_ID_MOVIE).switchMap { movieId ->
             getMovieDetailsUseCase.execute(
-                GetMovieDetailsUseCaseImpl.Params(movieId, sharedPrefs.getWatchProviderRegion())
+                GetMovieDetailsUseCase.Params(movieId, sharedPrefs.getWatchProviderRegion())
             ).map {
                 it.error?.message = determineErrorMessage(it.error); it
             }.asLiveData()
