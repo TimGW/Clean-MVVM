@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.di
+package com.timgortworst.cleanarchitecture.presentation.features.movie
 
 import androidx.paging.PagingData
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie

@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.base
+package com.timgortworst.cleanarchitecture.presentation.features.settings
 
 import androidx.appcompat.app.AppCompatDelegate
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs

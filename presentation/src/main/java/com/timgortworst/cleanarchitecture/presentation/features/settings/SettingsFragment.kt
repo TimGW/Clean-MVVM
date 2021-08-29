@@ -11,7 +11,6 @@ import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs.Companion.SHARED_PREF_WATCH_PROVIDER_REGION
 import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProviderRegion
 import com.timgortworst.cleanarchitecture.presentation.R
-import com.timgortworst.cleanarchitecture.presentation.features.base.ThemeHelper
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

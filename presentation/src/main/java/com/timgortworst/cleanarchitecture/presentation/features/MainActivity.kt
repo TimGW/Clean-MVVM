@@ -9,7 +9,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.ActivityMainBinding
-import com.timgortworst.cleanarchitecture.presentation.features.base.ThemeHelper
+import com.timgortworst.cleanarchitecture.presentation.features.settings.ThemeHelper
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.di
+package com.timgortworst.cleanarchitecture.presentation.features.watchprovider
 
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProvider

@@ -1,5 +1,6 @@
 package com.timgortworst.cleanarchitecture.data.repository
 
+import com.timgortworst.cleanarchitecture.data.di.IoDispatcher
 import com.timgortworst.cleanarchitecture.data.local.WatchProviderDao
 import com.timgortworst.cleanarchitecture.data.model.watchprovider.WatchProviderRegionsEntity
 import com.timgortworst.cleanarchitecture.data.remote.WatchProviderService
@@ -7,6 +8,7 @@ import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProviderRegion
 import com.timgortworst.cleanarchitecture.domain.repository.WatchProviderRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -17,6 +19,7 @@ class WatchProviderRepositoryImpl @Inject constructor(
     private val service: WatchProviderService,
     private val watchProviderDao: WatchProviderDao,
     private val errorHandler: ErrorHandler,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : WatchProviderRepository {
 
     override fun getWatchProviderRegions(
@@ -36,7 +39,7 @@ class WatchProviderRepositoryImpl @Inject constructor(
 
         override fun shouldFetch(data: List<WatchProviderRegion>?) = data.isNullOrEmpty()
 
-    }.asFlow().flowOn(Dispatchers.IO)
+    }.asFlow().flowOn(dispatcher)
 
     override suspend fun getWatchProvidersMovie(region: String) = try {
         apiResult(service.getWatchProvidersMovie(region))

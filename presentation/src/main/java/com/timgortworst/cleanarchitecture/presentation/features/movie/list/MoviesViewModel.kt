@@ -21,7 +21,7 @@ class MoviesViewModel @Inject constructor(
 ) : ViewModel() {
 
     val moviesPaged = getMoviesUseCase.execute(Unit).cachedIn(viewModelScope)
-    val region = sharedPrefs.getWatchProviderRegion().orEmpty()
+    private val region = sharedPrefs.getWatchProviderRegion().orEmpty()
     val watchProviders = liveData {
         val watchProviders = getWatchProvidersMovieUseCase.execute(
             GetWatchProvidersMovieUseCase.Params(region)
