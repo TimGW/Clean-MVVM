@@ -35,6 +35,7 @@
 
     <color name="color_alpha_12">#1F000000</color>
     <color name="color_alpha_20">#33FFFFFF</color>
+    <color name="color_alpha_20_dark">#33000000</color>
     <color name="transparent">#00FFFFFF</color>
 </resources>
 
