@@ -10,10 +10,10 @@ class ThemeHelperImpl @Inject constructor(
 ) : ThemeHelper {
 
     override fun getAppTheme() = when (sharedPrefs.getThemeSetting()) {
-        0 -> R.style.Base_MyTheme
+        0 -> R.style.AppTheme_Blue
         1 -> R.style.AppTheme_Red
         2 -> R.style.AppTheme_Green
-        else -> R.style.Base_MyTheme
+        else -> R.style.AppTheme_Blue
     }
 
     override fun getNightMode(darkModeSetting: Int): Int {

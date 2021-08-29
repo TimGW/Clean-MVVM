@@ -61,9 +61,6 @@
         <item name="android:navigationBarColor">?android:colorBackground</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
         <item name="android:navigationBarDividerColor" tools:ignore="NewApi">@color/color_background</item>
-<!--        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>-->
-<!--        <item name="android:windowLightStatusBar">false</item>-->
-<!--        <item name="android:statusBarColor">@color/color_background</item>-->
 
         <!--Remap legacy AppCompat attributes to MaterialComponent attributes-->
         <item name="colorPrimaryDark">?colorPrimaryVariant</item>
@@ -72,7 +69,15 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
 
-    <style name="AppTheme.Red" parent="Base.MyTheme">
+    <style name="AppTheme.Blue" parent="MyTheme.DayNight">
+        <item name="colorPrimary">@color/color_primary_blue</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant_blue</item>
+        <item name="colorSecondary">@color/color_primary_blue</item>
+        <item name="colorSecondaryVariant">@color/color_primary_variant_blue</item>
+        <item name="iconTint">@color/color_primary_blue</item>
+    </style>
+
+    <style name="AppTheme.Red" parent="MyTheme.DayNight">
         <item name="colorPrimary">@color/color_primary_red</item>
         <item name="colorPrimaryVariant">@color/color_primary_variant_red</item>
         <item name="colorSecondary">@color/color_primary_red</item>
@@ -80,7 +85,7 @@
         <item name="iconTint">@color/color_primary_red</item>
     </style>
 
-    <style name="AppTheme.Green" parent="Base.MyTheme">
+    <style name="AppTheme.Green" parent="MyTheme.DayNight">
         <item name="colorPrimary">@color/color_primary_green</item>
         <item name="colorPrimaryVariant">@color/color_primary_variant_green</item>
         <item name="colorSecondary">@color/color_primary_green</item>
