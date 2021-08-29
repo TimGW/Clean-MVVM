@@ -9,7 +9,6 @@ import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMoviesUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProvidersMovieUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProvidersMovieUseCaseImpl
-import com.timgortworst.cleanarchitecture.domain.usecase.watchprovider.GetWatchProvidersTvUseCaseImpl
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.features.settings.WatchProvidersAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel

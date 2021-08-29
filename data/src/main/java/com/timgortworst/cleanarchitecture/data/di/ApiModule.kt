@@ -2,9 +2,11 @@ package com.timgortworst.cleanarchitecture.data.di
 
 import com.squareup.moshi.Moshi
 import com.timgortworst.cleanarchitecture.data.remote.MovieService
-import com.timgortworst.cleanarchitecture.data.remote.TvShowService
 import com.timgortworst.cleanarchitecture.data.remote.WatchProviderService
-import com.timgortworst.cleanarchitecture.data.remote.jsonAdapter.*
+import com.timgortworst.cleanarchitecture.data.remote.jsonAdapter.MovieDetailsJsonAdapter
+import com.timgortworst.cleanarchitecture.data.remote.jsonAdapter.MoviesJsonAdapter
+import com.timgortworst.cleanarchitecture.data.remote.jsonAdapter.WatchProviderJsonAdapter
+import com.timgortworst.cleanarchitecture.data.remote.jsonAdapter.WatchProviderRegionJsonAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,8 +23,6 @@ object ApiModule {
         return builder
             .add(MoviesJsonAdapter())
             .add(MovieDetailsJsonAdapter())
-            .add(TvShowsJsonAdapter())
-            .add(TvShowDetailsJsonAdapter())
             .add(WatchProviderJsonAdapter())
             .add(WatchProviderRegionJsonAdapter())
             .build()
@@ -31,11 +31,6 @@ object ApiModule {
     @Provides
     fun provideMovieService(retrofit: Retrofit): MovieService {
         return retrofit.create(MovieService::class.java)
-    }
-
-    @Provides
-    fun provideTvShowService(retrofit: Retrofit): TvShowService {
-        return retrofit.create(TvShowService::class.java)
     }
 
     @Provides

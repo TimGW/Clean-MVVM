@@ -6,11 +6,6 @@
         android:icon="@drawable/ic_movie"
         android:title="@string/menu_movies" />
     <item
-        android:id="@+id/page_tv"
-        android:enabled="true"
-        android:icon="@drawable/ic_tv"
-        android:title="@string/menu_tv" />
-    <item
         android:id="@+id/page_settings"
         android:enabled="true"
         android:icon="@drawable/ic_settings"

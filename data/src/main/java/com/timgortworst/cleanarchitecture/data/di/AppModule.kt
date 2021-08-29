@@ -50,9 +50,8 @@ abstract class AppModule {
         fun providesRoomDb(
             @ApplicationContext context: Context,
             @MoshiDefault moshi: Moshi
-        ) = Room.databaseBuilder(context, AppDatabase::class.java, "tmdb")
+        ) = Room.databaseBuilder(context, AppDatabase::class.java, "database")
             .addTypeConverter(TypeConverterMovie(moshi))
-            .addTypeConverter(TypeConverterTvShow(moshi))
             .fallbackToDestructiveMigration()
             .build()
 

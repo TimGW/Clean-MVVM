@@ -5,7 +5,6 @@ import androidx.paging.PagingState
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.data.remote.MovieService
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
-import com.timgortworst.cleanarchitecture.domain.model.tv.TvShow
 import retrofit2.HttpException
 import java.io.IOException
 

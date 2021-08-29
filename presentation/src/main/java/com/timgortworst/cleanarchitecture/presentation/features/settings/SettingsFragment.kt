@@ -57,7 +57,7 @@ class SettingsFragment : Fragment() {
             binding.layoutToolbar.collapsingToolbarLayout,
             binding.layoutToolbar.toolbar,
             findNavController(),
-            AppBarConfiguration.Builder(R.id.page_movies, R.id.page_tv, R.id.page_settings).build()
+            AppBarConfiguration.Builder(R.id.page_movies, R.id.page_settings).build()
         )
     }
 

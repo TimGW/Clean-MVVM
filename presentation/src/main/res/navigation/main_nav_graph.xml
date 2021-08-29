@@ -41,41 +41,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/page_tv"
-        android:name="com.timgortworst.cleanarchitecture.presentation.features.tv.list.TvShowsFragment"
-        android:label="@string/tv_shows_list_toolbar_title"
-        tools:layout="@layout/fragment_media_list">
-
-        <!-- don't use animations here.
-        These are handled by the Transition Framework-->
-        <action
-            android:id="@+id/show_tv_show_details"
-            app:destination="@id/tvShowDetailsFragment" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/tvShowDetailsFragment"
-        android:name="com.timgortworst.cleanarchitecture.presentation.features.tv.details.TvShowDetailsFragment"
-        android:label="{pageTitle}"
-        tools:layout="@layout/fragment_media_details">
-
-        <argument
-            android:name="pageTitle"
-            app:argType="string" />
-        <argument
-            android:name="tvShowId"
-            app:argType="integer" />
-        <argument
-            android:name="tvShowImage"
-            app:argType="string" />
-        <argument
-            android:name="transitionName"
-            app:argType="string" />
-
-    </fragment>
-
-    <fragment
         android:id="@+id/page_settings"
         android:name="com.timgortworst.cleanarchitecture.presentation.features.settings.SettingsFragment"
         android:label="@string/settings_toolbar_title"

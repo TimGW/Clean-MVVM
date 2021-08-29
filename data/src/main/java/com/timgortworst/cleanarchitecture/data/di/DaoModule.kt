@@ -2,7 +2,6 @@ package com.timgortworst.cleanarchitecture.data.di
 
 import com.timgortworst.cleanarchitecture.data.local.AppDatabase
 import com.timgortworst.cleanarchitecture.data.local.MovieDao
-import com.timgortworst.cleanarchitecture.data.local.TvShowDao
 import com.timgortworst.cleanarchitecture.data.local.WatchProviderDao
 import dagger.Module
 import dagger.Provides
@@ -16,11 +15,6 @@ object DaoModule {
     @Provides
     fun provideMovieDao(database: AppDatabase): MovieDao {
         return database.movieDao()
-    }
-
-    @Provides
-    fun provideTvShowDao(database: AppDatabase): TvShowDao {
-        return database.tvShowDao()
     }
 
     @Provides

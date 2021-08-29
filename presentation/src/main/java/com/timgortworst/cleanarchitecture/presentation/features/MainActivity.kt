@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.page_movies,
-                R.id.page_tv,
                 R.id.page_settings -> showBottomNav()
                 else -> hideBottomNav()
             }
