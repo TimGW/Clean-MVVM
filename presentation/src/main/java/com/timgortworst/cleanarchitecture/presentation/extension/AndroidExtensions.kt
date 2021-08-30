@@ -2,20 +2,16 @@ package com.timgortworst.cleanarchitecture.presentation.extension
 
 import android.app.Activity
 import android.content.res.Configuration
-import android.content.res.Resources
+import android.graphics.Color
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.AlphaAnimation
-import android.view.animation.AnimationSet
-import android.view.animation.LinearInterpolator
-import android.widget.Toolbar
-import androidx.annotation.ColorRes
-import androidx.core.content.res.ResourcesCompat
+import androidx.annotation.ColorInt
+import androidx.annotation.FloatRange
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
+import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
-import com.timgortworst.cleanarchitecture.presentation.R
 
 
 fun View.snackbar(
@@ -32,47 +28,61 @@ fun View.snackbar(
     return snackbar
 }
 
-fun Activity.setTranslucentStatus(isTranslucent: Boolean) {
+fun Activity.isDarkModeEnabled() = resources?.configuration
+    ?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+
+fun Fragment.isDarkModeEnabled() = resources.configuration
+    ?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+
+fun Activity.setTranslucentStatus(translucent: Boolean) {
     val flag = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
     val flags = window.attributes.flags
-    val isDarkModeEnabled = resources?.configuration
-        ?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
-    val toolbar = findViewById<MaterialToolbar>(R.id.toolbar) ?: return
 
     // guard to prevent multiple calls when flag is already set or cleared
-    if (((flags and flag) != 0 && isTranslucent) ||
-        ((flags and flag) == 0 && !isTranslucent)
+    if (((flags and flag) != 0 && translucent) ||
+        ((flags and flag) == 0 && !translucent)
     ) return
 
-    if (isTranslucent) {
+    if (translucent) {
         window.setFlags(flag, flag)
-        window.decorView.clearLightStatusBar()
-        toolbar.setUpButtonColor(android.R.color.white, theme)
+        window.decorView.setLightStatusBarIcons()
     } else {
-        if (isDarkModeEnabled) {
-            window.decorView.clearLightStatusBar()
+        if (isDarkModeEnabled()) {
+            window.decorView.setLightStatusBarIcons()
         } else {
-            window.decorView.setLightStatusBar()
-            toolbar.setUpButtonColor(android.R.color.black, theme)
+            window.decorView.setDarkStatusBarIcons()
         }
         window.clearFlags(flag)
     }
 }
 
-fun MaterialToolbar?.setUpButtonColor(@ColorRes color: Int, theme: Resources.Theme? = null) {
+fun MaterialToolbar?.setUpButtonColor(@ColorInt color: Int) {
     if (this == null) return
     navigationIcon?.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-            ResourcesCompat.getColor(resources, color, theme),
-            BlendModeCompat.SRC_ATOP)
+        color,
+        BlendModeCompat.SRC_ATOP)
 }
 
-private fun View.setLightStatusBar() {
+@ColorInt
+fun blendARGB(
+    @ColorInt fromColor: Int, @ColorInt toColor: Int,
+    @FloatRange(from = 0.0, to = 1.0) ratio: Float
+): Int {
+    val inverseRatio = 1 - ratio
+    val a: Float = Color.alpha(fromColor) * inverseRatio + Color.alpha(toColor) * ratio
+    val r: Float = Color.red(fromColor) * inverseRatio + Color.red(toColor) * ratio
+    val g: Float = Color.green(fromColor) * inverseRatio + Color.green(toColor) * ratio
+    val b: Float = Color.blue(fromColor) * inverseRatio + Color.blue(toColor) * ratio
+    return Color.argb(a.toInt(), r.toInt(), g.toInt(), b.toInt())
+}
+
+private fun View.setDarkStatusBarIcons() {
     var flags = systemUiVisibility
     flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     this.systemUiVisibility = flags
 }
 
-private fun View.clearLightStatusBar() {
+private fun View.setLightStatusBarIcons() {
     var flags = systemUiVisibility
     flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
     this.systemUiVisibility = flags

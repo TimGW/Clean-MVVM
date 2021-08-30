@@ -1,11 +1,13 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.details
 
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,9 +25,7 @@ import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
-import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
-import com.timgortworst.cleanarchitecture.presentation.extension.setUpButtonColor
-import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
+import com.timgortworst.cleanarchitecture.presentation.extension.*
 import com.timgortworst.cleanarchitecture.presentation.features.base.AppBarOffsetListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -159,7 +159,6 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
             navController,
             AppBarConfiguration(navController.graph)
         )
-        binding.toolbar.setUpButtonColor(android.R.color.white, requireActivity().theme)
     }
 
     override fun onScrollStateChangedListener(scrollState: AppBarOffsetListener.ScrollState) {
@@ -168,8 +167,12 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         // start quarterway but go 4-times the speed to reach alpha 1.0
         binding.collapsedTitle.alpha = (scrollState.scrolledPercentile - 0.75f) * 4
 
-        requireActivity().setTranslucentStatus(
-            scrollState !is AppBarOffsetListener.ScrollState.Collapsed
-        )
+        requireActivity().setTranslucentStatus(scrollState.scrolledPercentile < 0.75)
+
+        // only animate up-arrow color in light mode from white to black in collapsed mode
+        if (!isDarkModeEnabled()) {
+            binding.toolbar.setUpButtonColor(blendARGB(Color.WHITE, Color.BLACK, scrollState.scrolledPercentile)
+            )
+        }
     }
 }

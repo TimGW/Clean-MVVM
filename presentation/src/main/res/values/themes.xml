@@ -67,7 +67,7 @@
         <item name="colorAccent">?colorSecondary</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.Blue" parent="MyTheme.DayNight">
         <item name="colorPrimary">@color/color_primary_blue</item>
