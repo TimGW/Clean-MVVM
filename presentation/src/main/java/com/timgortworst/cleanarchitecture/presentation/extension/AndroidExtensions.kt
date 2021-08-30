@@ -28,13 +28,13 @@ fun View.snackbar(
     return snackbar
 }
 
-fun Activity.isDarkModeEnabled() = resources?.configuration
+private fun Activity.isDarkModeEnabled() = resources?.configuration
     ?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
 fun Fragment.isDarkModeEnabled() = resources.configuration
     ?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
-fun Activity.setTranslucentStatus(translucent: Boolean) {
+fun Activity.setTranslucentStatusBar(translucent: Boolean) {
     val flag = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
     val flags = window.attributes.flags
 
@@ -56,6 +56,18 @@ fun Activity.setTranslucentStatus(translucent: Boolean) {
     }
 }
 
+private fun View.setDarkStatusBarIcons() {
+    var flags = systemUiVisibility
+    flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+    this.systemUiVisibility = flags
+}
+
+private fun View.setLightStatusBarIcons() {
+    var flags = systemUiVisibility
+    flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+    this.systemUiVisibility = flags
+}
+
 fun MaterialToolbar?.setUpButtonColor(@ColorInt color: Int) {
     if (this == null) return
     navigationIcon?.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
@@ -74,16 +86,4 @@ fun blendARGB(
     val g: Float = Color.green(fromColor) * inverseRatio + Color.green(toColor) * ratio
     val b: Float = Color.blue(fromColor) * inverseRatio + Color.blue(toColor) * ratio
     return Color.argb(a.toInt(), r.toInt(), g.toInt(), b.toInt())
-}
-
-private fun View.setDarkStatusBarIcons() {
-    var flags = systemUiVisibility
-    flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-    this.systemUiVisibility = flags
-}
-
-private fun View.setLightStatusBarIcons() {
-    var flags = systemUiVisibility
-    flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-    this.systemUiVisibility = flags
 }

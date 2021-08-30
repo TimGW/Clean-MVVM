@@ -18,7 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaListBinding
-import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
+import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatusBar
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
 import com.timgortworst.cleanarchitecture.presentation.features.MainActivity
 import com.timgortworst.cleanarchitecture.presentation.features.base.GridMarginDecoration
@@ -67,7 +67,7 @@ class MoviesFragment : Fragment() {
         binding.recyclerView.doOnPreDraw {
             startPostponedEnterTransition()
         }
-        requireActivity().setTranslucentStatus(false)
+        requireActivity().setTranslucentStatusBar(false)
 
         binding.swiperefresh.setOnRefreshListener {
             movieAdapter.refresh()

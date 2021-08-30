@@ -160,7 +160,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         binding.collapsedTitle.alpha = if(expanded) 0f else 1f
         binding.appbar.setExpanded(expanded, false)
         if (expanded) binding.toolbar.setUpButtonColor(Color.WHITE)
-        requireActivity().setTranslucentStatus(expanded)
+        requireActivity().setTranslucentStatusBar(expanded)
     }
 
     private fun setupToolbar() {
@@ -176,10 +176,10 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         val scrolled = scrollState.scrolledPercentile
 
         binding.expandedTitle.alpha = 1 - scrolled // fade out
-        binding.collapsedTitle.alpha = (scrolled - SCRIM_TRIGGER_THRESHOLD) * 4
+        binding.collapsedTitle.alpha = (scrolled - SCRIM_TRIGGER_THRESHOLD) * 4 // fade in
         binding.collapsingToolbarLayout.setScrimsShown(scrolled >= SCRIM_TRIGGER_THRESHOLD)
 
-        requireActivity().setTranslucentStatus(scrolled < SCRIM_TRIGGER_THRESHOLD)
+        requireActivity().setTranslucentStatusBar(scrolled < SCRIM_TRIGGER_THRESHOLD)
 
         // only animate up-arrow color in light mode from white to black in collapsed mode
         if (!isDarkModeEnabled()) {
