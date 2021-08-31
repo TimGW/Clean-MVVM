@@ -173,19 +173,21 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     }
 
     override fun onScrollStateChangedListener(scrollState: AppBarOffsetListener.ScrollState) {
-        val scrolled = scrollState.scrolledPercentile
-        val fadeInAlpha = (scrolled - SCRIM_TRIGGER_THRESHOLD) * 4
+        val scrolled = scrollState.scrolledPercentile // (0..1)
 
+        // the higher up the scrim trigger is, the faster the fade animation must be
+        val speedMultiplier = 1 / (1 - SCRIM_TRIGGER_THRESHOLD)
+        val fadeInAlpha = (scrolled - SCRIM_TRIGGER_THRESHOLD) * speedMultiplier
+
+        binding.collapsingToolbarLayout.setScrimsShown(scrolled >= SCRIM_TRIGGER_THRESHOLD)
         binding.expandedTitle.alpha = 1 - scrolled // fade out
         binding.collapsedTitle.alpha = fadeInAlpha
-        binding.collapsingToolbarLayout.setScrimsShown(scrolled >= SCRIM_TRIGGER_THRESHOLD)
-
-        requireActivity().setTranslucentStatusBar(scrolled < SCRIM_TRIGGER_THRESHOLD)
 
         // only animate up-arrow color in light mode from white to black in collapsed mode
         if (!isDarkModeEnabled() && scrolled >= SCRIM_TRIGGER_THRESHOLD) {
             binding.toolbar.setUpButtonColor(blendARGB(Color.WHITE, Color.BLACK, fadeInAlpha))
         }
+        requireActivity().setTranslucentStatusBar(scrolled < SCRIM_TRIGGER_THRESHOLD)
     }
 
     companion object {
