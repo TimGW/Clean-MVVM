@@ -23,4 +23,9 @@ interface MovieService {
         @Path("movie_id") movieId: Int,
         @Query("append_to_response") providers: String = "watch/providers",
     ): Response<MovieDetailsEntity>
+
+    @GET("movie/{movie_id}/recommendations")
+    suspend fun getRelatedMovies(
+        @Path("movie_id") movieId: Int,
+    ): Response<Movies>
 }

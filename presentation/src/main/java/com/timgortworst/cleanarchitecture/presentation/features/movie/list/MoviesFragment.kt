@@ -21,7 +21,7 @@ import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMedia
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatusBar
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
 import com.timgortworst.cleanarchitecture.presentation.features.MainActivity
-import com.timgortworst.cleanarchitecture.presentation.features.base.GridMarginDecoration
+import com.timgortworst.cleanarchitecture.presentation.features.base.MoveListItemDecoration
 import com.timgortworst.cleanarchitecture.presentation.features.watchprovider.MovieWatchProvidersDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -121,7 +121,7 @@ class MoviesFragment : Fragment() {
             }
 
             val padding = resources.getDimension(R.dimen.default_padding).toInt()
-            addItemDecoration(GridMarginDecoration(padding))
+            addItemDecoration(MoveListItemDecoration(padding))
         }
     }
 

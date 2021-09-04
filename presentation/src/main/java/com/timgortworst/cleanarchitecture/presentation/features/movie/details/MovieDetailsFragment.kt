@@ -9,10 +9,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.Transition
 import androidx.transition.TransitionInflater
 import androidx.transition.TransitionListenerAdapter
@@ -27,7 +30,15 @@ import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.*
 import com.timgortworst.cleanarchitecture.presentation.features.base.AppBarOffsetListener
+import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.TextAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.NestedRecyclerAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.RelatedMoviesAdapter
+import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.GridSpanSizeLookup
+import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.RelatedMoviesItemDecoration
+import com.timgortworst.cleanarchitecture.presentation.model.Margins
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListener {
@@ -75,7 +86,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
             transitionName = args.transitionName
             startEnterTransitionAfterLoadingImage(args.movieImage, this)
         }
-
+        setupRecyclerView()
         observeUI()
     }
 
@@ -96,7 +107,8 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
 
     private fun observeUI() {
         viewModel.movieDetails.observe(viewLifecycleOwner) { result ->
-            binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
+            binding.progress.visibility =
+                if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
             result.data?.let { showMovieDetails(it) } ?: showEmptyState()
             result.error?.message?.let { showError(getString(it)) }
         }
@@ -111,18 +123,61 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     }
 
     private fun showMovieDetails(movieDetails: MovieDetails) {
+        val spacing = resources.getDimension(R.dimen.keyline_16).toInt()
+
+        binding.expandedTitle.text = args.pageTitle
+        binding.collapsedTitle.text = args.pageTitle
+
+        concatAdapter.adapters.forEach { concatAdapter.removeAdapter(it) }
+        // todo adapter binders
+        // todo decorator pattern
+
+        binding.noResults.visibility = View.GONE
+
         val watchProviders = movieDetails.watchProviders.map {
             (it.value.flatRate.orEmpty() + it.value.buy.orEmpty() + it.value.rent.orEmpty())
         }.joinToString()
 
-        binding.noResults.visibility = View.GONE
-        binding.mediaDetailsReleaseDate.text =
-            getString(R.string.media_detail_release_date, movieDetails.releaseDate)
-        binding.mediaDetailsOverview.text = movieDetails.overview
-        binding.watchProviders.visibility = if(watchProviders.isBlank()) View.GONE else View.VISIBLE
-        binding.watchProviders.text = getString(R.string.available_watch_providers, watchProviders)
-        binding.expandedTitle.text = args.pageTitle
-        binding.collapsedTitle.text = args.pageTitle
+        if (watchProviders.isNotBlank()) {
+            concatAdapter.addAdapter(TextAdapter(
+                getString(R.string.available_watch_providers, watchProviders),
+                Margins(left = spacing, top = spacing, right = spacing),
+            ))
+        }
+
+        concatAdapter.addAdapter(TextAdapter(
+            movieDetails.overview,
+            Margins(left = spacing, top = spacing, right = spacing),
+        ))
+
+        concatAdapter.addAdapter(TextAdapter(
+            getString(R.string.media_detail_release_date, movieDetails.releaseDate),
+            Margins(left = spacing, top = spacing, right = spacing),
+            R.style.TextAppearance_MyTheme_Headline6
+        ))
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.relatedMovies.collectLatest { result ->
+                binding.progress.visibility =
+                    if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
+                result.error?.message?.let { showError(getString(it)) }
+                if (result.data?.isNullOrEmpty() == false) {
+                    concatAdapter.addAdapter(TextAdapter(
+                        getString(R.string.also_watch),
+                        Margins(left = spacing, top = spacing, right = spacing),
+                        R.style.TextAppearance_MyTheme_Headline5
+                    ))
+                    concatAdapter.addAdapter(
+                        NestedRecyclerAdapter(
+                            result.data!!,
+                            relatedMoviesAdapter,
+                            Margins(top = spacing / 2),
+                            RelatedMoviesItemDecoration(padding),
+                        )
+                    )
+                }
+            }
+        }
     }
 
     private fun startEnterTransitionAfterLoadingImage(uri: String, imageView: ImageView) {
@@ -184,7 +239,9 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         binding.collapsedTitle.alpha = fadeInAlpha
 
         // only animate up-arrow color in light mode from white to black in collapsed mode
-        if (!isDarkModeEnabled() && scrolled >= SCRIM_TRIGGER_THRESHOLD) {
+        if (!isNightModeActive() && scrollState is AppBarOffsetListener.ScrollState.Expanded) {
+            binding.toolbar.setUpButtonColor(Color.WHITE)
+        } else if (!isNightModeActive() && scrolled >= SCRIM_TRIGGER_THRESHOLD) {
             binding.toolbar.setUpButtonColor(blendARGB(Color.WHITE, Color.BLACK, fadeInAlpha))
         }
         requireActivity().setTranslucentStatusBar(scrolled < SCRIM_TRIGGER_THRESHOLD)

@@ -5,12 +5,11 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import com.timgortworst.cleanarchitecture.presentation.R
 
 /**
  * Decoration for adding margin between blocks when used with a grid layout.
  */
-class GridMarginDecoration(
+class MoveListItemDecoration(
     private val spacing: Int
 ) : RecyclerView.ItemDecoration() {
 

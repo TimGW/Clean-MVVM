@@ -58,5 +58,6 @@
     <string name="region">Region</string>
     <string name="region_error">Can\'t load regions</string>
     <string name="select_region">Select a region</string>
+    <string name="also_watch">Also watch</string>
 
 </resources>

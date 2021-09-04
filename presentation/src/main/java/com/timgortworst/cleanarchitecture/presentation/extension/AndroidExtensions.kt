@@ -2,6 +2,7 @@ package com.timgortworst.cleanarchitecture.presentation.extension
 
 import android.app.Activity
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
 import android.view.View
 import android.view.WindowManager
@@ -12,6 +13,8 @@ import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
+import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 
 
 fun View.snackbar(
@@ -28,10 +31,10 @@ fun View.snackbar(
     return snackbar
 }
 
-private fun Activity.isDarkModeEnabled() = resources?.configuration
+private fun Activity.isNightModeActive() = resources?.configuration
     ?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
-fun Fragment.isDarkModeEnabled() = resources.configuration
+fun Fragment.isNightModeActive() = resources.configuration
     ?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
 fun Activity.setTranslucentStatusBar(translucent: Boolean) {
@@ -47,7 +50,7 @@ fun Activity.setTranslucentStatusBar(translucent: Boolean) {
         window.setFlags(flag, flag)
         window.decorView.setLightStatusBarIcons()
     } else {
-        if (isDarkModeEnabled()) {
+        if (isNightModeActive()) {
             window.decorView.setLightStatusBarIcons()
         } else {
             window.decorView.setDarkStatusBarIcons()
@@ -86,4 +89,19 @@ fun blendARGB(
     val g: Float = Color.green(fromColor) * inverseRatio + Color.green(toColor) * ratio
     val b: Float = Color.blue(fromColor) * inverseRatio + Color.blue(toColor) * ratio
     return Color.argb(a.toInt(), r.toInt(), g.toInt(), b.toInt())
+}
+
+fun View.setMargins(left: Int, top: Int, right: Int, bottom: Int) {
+    if (layoutParams is MarginLayoutParams) {
+        val p = layoutParams as MarginLayoutParams
+        p.setMargins(left, top, right, bottom)
+        requestLayout()
+    }
+}
+
+fun Resources.dpToPixels(dp: Int): Int {
+    // Get the screen's density scale
+    val scale: Float = displayMetrics.density
+    // Convert the dps to pixels, based on density scale
+    return (dp * scale + 0.5f).toInt()
 }

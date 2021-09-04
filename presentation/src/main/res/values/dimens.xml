@@ -7,11 +7,11 @@
     <dimen name="card_corner_radius">4dp</dimen>
     <dimen name="card_corner_radius_end">0dp</dimen>
 
-    <dimen name="keyline_0">2dp</dimen>
-    <dimen name="keyline_1">4dp</dimen>
-    <dimen name="keyline_2">8dp</dimen>
-    <dimen name="keyline_4">16dp</dimen>
-    <dimen name="keyline_5">24dp</dimen>
+    <dimen name="keyline_2">2dp</dimen>
+    <dimen name="keyline_4">4dp</dimen>
+    <dimen name="keyline_8">8dp</dimen>
+    <dimen name="keyline_16">16dp</dimen>
+    <dimen name="keyline_24">24dp</dimen>
 
     <dimen name="elevation_default_top_app_bar">4dp</dimen>
 
