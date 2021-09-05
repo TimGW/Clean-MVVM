@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
 import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
@@ -13,8 +14,7 @@ import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
-import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
+import java.util.*
 
 
 fun View.snackbar(
@@ -104,4 +104,25 @@ fun Resources.dpToPixels(dp: Int): Int {
     val scale: Float = displayMetrics.density
     // Convert the dps to pixels, based on density scale
     return (dp * scale + 0.5f).toInt()
+}
+
+private val suffixes: NavigableMap<Int, String> = object : TreeMap<Int, String>() {
+    init {
+        put(1_000, "K")
+        put(1_000_000, "M")
+    }
+}
+
+fun format(value: Int): String {
+    if (value == Integer.MIN_VALUE) return format(Integer.MIN_VALUE + 1)
+    if (value < 0) return "-" + format(-value)
+    if (value < 1000) return value.toString()
+
+    val e: Map.Entry<Int, String> = suffixes.floorEntry(value)
+    val divideBy = e.key
+    val suffix = e.value
+    val truncated = value / (divideBy / 10) //the number part of the output times 10
+    val hasDecimal = truncated < 100 && truncated / 10.0 != (truncated / 10).toDouble()
+
+    return if (hasDecimal) (truncated / 10.0).toString() + suffix else (truncated / 10).toString() + suffix
 }

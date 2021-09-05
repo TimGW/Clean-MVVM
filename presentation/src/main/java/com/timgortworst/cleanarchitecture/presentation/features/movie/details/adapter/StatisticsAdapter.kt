@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.AdapterStatisticsBinding
+import com.timgortworst.cleanarchitecture.presentation.extension.format
 import com.timgortworst.cleanarchitecture.presentation.extension.setMargins
 import com.timgortworst.cleanarchitecture.presentation.model.Margins
 import kotlin.math.roundToInt
@@ -29,7 +30,7 @@ class StatisticsAdapter(
         with(holder.binding) {
             statisticStatus.text = status
             statisticVotes.text = votes.toString()
-            statisticVoteCount.text = voteCount.toString()
+            statisticVoteCount.text = format(voteCount)
             statisticPopularity.text = popularity.roundToInt().toString()
 
             margins?.apply {
