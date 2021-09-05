@@ -50,6 +50,22 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         it.scrollStateListener = this@MovieDetailsFragment
     }
 
+    private val concatAdapter by lazy {
+        // If your Adapters share the same view types, and can support sharing ViewHolders between
+        // added adapters, provide an instance of Config where you set Config#isolateViewTypes
+        // to false. A common usage pattern for this is to return the R.layout.<layout_name> from
+        // the Adapter#getItemViewType(int) method.
+        ConcatAdapter(ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build())
+    }
+
+    private val relatedMoviesAdapter by lazy {
+        RelatedMoviesAdapter()
+    }
+
+    private val padding by lazy {
+        resources.getDimension(R.dimen.keyline_8).toInt()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -111,6 +127,15 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
                 if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
             result.data?.let { showMovieDetails(it) } ?: showEmptyState()
             result.error?.message?.let { showError(getString(it)) }
+        }
+    }
+
+    private fun setupRecyclerView() {
+        binding.recyclerView.apply {
+            layoutManager = GridLayoutManager(activity, GridSpanSizeLookup.FULL_WIDTH).apply {
+                spanSizeLookup = GridSpanSizeLookup(concatAdapter)
+            }
+            adapter = concatAdapter
         }
     }
 
