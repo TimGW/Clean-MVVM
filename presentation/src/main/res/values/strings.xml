@@ -59,5 +59,9 @@
     <string name="region_error">Can\'t load regions</string>
     <string name="select_region">Select a region</string>
     <string name="also_watch">Also watch</string>
+    <string name="statistic_rating_overline">Rating</string>
+    <string name="statistic_status_overline">Status</string>
+    <string name="statistic_popularity_overline">Popularity</string>
+    <string name="rating_max">/10</string>
 
 </resources>

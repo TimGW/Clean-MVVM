@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/statistic_rating_overline"
+        style="@style/TextAppearance.MyTheme.Overline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/statistic_rating_overline"
+        app:layout_constraintEnd_toStartOf="@+id/statistic_popularity_overline"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/statistic_status_overline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/statistic_votes_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/statistic_rating_overline"
+        app:layout_constraintStart_toStartOf="@+id/statistic_rating_overline"
+        app:layout_constraintTop_toBottomOf="@id/statistic_rating_overline">
+
+        <TextView
+            android:id="@+id/statistic_votes"
+            style="@style/TextAppearance.MyTheme.Headline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            tools:text="7.2" />
+
+        <TextView
+            android:id="@+id/statistic_rating_max"
+            style="@style/TextAppearance.MyTheme.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/rating_max"
+            app:layout_constraintBaseline_toBaselineOf="@id/statistic_votes"
+            app:layout_constraintStart_toEndOf="@+id/statistic_votes" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/statistic_vote_count"
+        style="@style/TextAppearance.MyTheme.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/statistic_votes_container"
+        app:layout_constraintStart_toStartOf="@+id/statistic_votes_container"
+        app:layout_constraintTop_toBottomOf="@id/statistic_votes_container"
+        tools:text="21k" />
+
+    <TextView
+        android:id="@+id/statistic_status_overline"
+        style="@style/TextAppearance.MyTheme.Overline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/statistic_status_overline"
+        app:layout_constraintEnd_toStartOf="@+id/statistic_rating_overline"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/statistic_status"
+        style="@style/TextAppearance.MyTheme.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="@+id/statistic_status_overline"
+        app:layout_constraintStart_toStartOf="@+id/statistic_status_overline"
+        app:layout_constraintTop_toBottomOf="@id/statistic_status_overline"
+        tools:text="Released" />
+
+    <TextView
+        android:id="@+id/statistic_popularity_overline"
+        style="@style/TextAppearance.MyTheme.Overline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/statistic_popularity_overline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/statistic_rating_overline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/statistic_popularity"
+        style="@style/TextAppearance.MyTheme.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="@+id/statistic_popularity_overline"
+        app:layout_constraintStart_toStartOf="@+id/statistic_popularity_overline"
+        app:layout_constraintTop_toBottomOf="@id/statistic_popularity_overline"
+        tools:text="206" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

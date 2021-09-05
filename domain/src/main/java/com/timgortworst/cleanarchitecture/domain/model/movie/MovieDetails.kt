@@ -9,6 +9,10 @@ data class MovieDetails(
     val title: String,
     var watchProviders: Map<String, Provider>,
     val modifiedAt: Long,
+    val voteAverage: Double,
+    val voteCount: Int,
+    val popularity: Double,
+    val status: String
 ) {
 
     data class Genre(

@@ -16,24 +16,26 @@ class TextAdapter(
     @StyleRes private val style: Int? = null,
 ) : RecyclerView.Adapter<TextAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = AdapterTextBinding.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        AdapterTextBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-
-        margins?.apply {
-            view.root.setMargins(left, top, right, bottom)
-        }
-        return ViewHolder(view)
-    }
+    )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val textView = holder.binding.root
+
         style?.let {
-            TextViewCompat.setTextAppearance(holder.binding.root, style)
+            TextViewCompat.setTextAppearance(textView, style)
         }
-        holder.binding.root.text = text
+
+        margins?.apply {
+            textView.setMargins(left, top, right, bottom)
+        }
+
+        textView.text = text
     }
 
     override fun getItemViewType(position: Int) = R.layout.adapter_text

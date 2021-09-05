@@ -27,7 +27,11 @@ class MovieDetailsJsonAdapter {
                         it.flatRate?.isNullOrEmpty() == false ||
                         it.rent?.isNullOrEmpty() == false
                     } ?: emptyMap(),
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                popularity ?: 0.0,
+                voteAverage ?: 0.0,
+                voteCount ?: 0,
+                status.orEmpty(),
             )
         }
         return entity

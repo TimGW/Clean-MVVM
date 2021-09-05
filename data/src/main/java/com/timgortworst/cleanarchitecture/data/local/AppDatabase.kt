@@ -10,7 +10,7 @@ import com.timgortworst.cleanarchitecture.data.model.watchprovider.WatchProvider
     entities = [
         MovieDetailsEntity::class,
         WatchProviderRegionsEntity::class,
-    ], version = 1
+    ], version = 2
 )
 @TypeConverters(TypeConverterMovie::class)
 abstract class AppDatabase : RoomDatabase() {

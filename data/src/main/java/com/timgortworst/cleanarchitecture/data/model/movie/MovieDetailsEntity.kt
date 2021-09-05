@@ -3,6 +3,7 @@ package com.timgortworst.cleanarchitecture.data.model.movie
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.squareup.moshi.Json
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 
 @Entity
@@ -15,7 +16,11 @@ data class MovieDetailsEntity(
     @ColumnInfo(name = "genres") val genres: List<Genre>,
     // key: countrycode, value: WatchProvider
     @ColumnInfo(name = "watch_providers") val watchProviders: Map<String, Provider>?,
-    @ColumnInfo(name = "modified_at") val modifiedAt: Long
+    @ColumnInfo(name = "modified_at") val modifiedAt: Long,
+    @ColumnInfo(name = "popularity") val popularity: Double,
+    @ColumnInfo(name = "vote_average") val voteAverage: Double,
+    @ColumnInfo(name = "vote_count") val voteCount: Int,
+    @ColumnInfo(name = "status") val status: String,
 ) {
     data class Genre(
         @ColumnInfo(name = "id") val id: Int,
@@ -47,6 +52,10 @@ data class MovieDetailsEntity(
                     )
                 },
                 modifiedAt,
+                popularity,
+                voteAverage,
+                voteCount,
+                status
             )
         }
     }
@@ -68,5 +77,9 @@ data class MovieDetailsEntity(
             )
         } ?: emptyMap(),
         modifiedAt,
+        voteAverage,
+        voteCount,
+        popularity,
+        status
     )
 }

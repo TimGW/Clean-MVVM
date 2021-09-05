@@ -30,11 +30,7 @@ import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.*
 import com.timgortworst.cleanarchitecture.presentation.features.base.AppBarOffsetListener
-import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.TextAdapter
-import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.NestedRecyclerAdapter
-import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.RelatedMoviesAdapter
-import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.GridSpanSizeLookup
-import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.RelatedMoviesItemDecoration
+import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.*
 import com.timgortworst.cleanarchitecture.presentation.model.Margins
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -158,6 +154,14 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         // todo decorator pattern
 
         binding.noResults.visibility = View.GONE
+
+        concatAdapter.addAdapter(StatisticsAdapter(
+            movieDetails.status,
+            movieDetails.voteAverage,
+            movieDetails.voteCount,
+            movieDetails.popularity,
+            Margins(left = spacing, top = spacing, right = spacing),
+        ))
 
         val watchProviders = movieDetails.watchProviders.map {
             (it.value.flatRate.orEmpty() + it.value.buy.orEmpty() + it.value.rent.orEmpty())
