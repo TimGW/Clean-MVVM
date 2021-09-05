@@ -145,7 +145,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
 
     private fun showMovieDetails(movieDetails: MovieDetails) {
         val spacing = resources.getDimension(R.dimen.keyline_16).toInt()
-
+        val defaultMargins = Margins(left = spacing, top = spacing, right = spacing)
         binding.expandedTitle.text = args.pageTitle
         binding.collapsedTitle.text = args.pageTitle
 
@@ -160,7 +160,12 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
             movieDetails.voteAverage,
             movieDetails.voteCount,
             movieDetails.popularity,
-            Margins(left = spacing, top = spacing, right = spacing),
+            defaultMargins,
+        ))
+
+        concatAdapter.addAdapter(TextAdapter(
+            movieDetails.overview,
+            defaultMargins,
         ))
 
         val watchProviders = movieDetails.watchProviders.map {
@@ -170,18 +175,13 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         if (watchProviders.isNotBlank()) {
             concatAdapter.addAdapter(TextAdapter(
                 getString(R.string.available_watch_providers, watchProviders),
-                Margins(left = spacing, top = spacing, right = spacing),
+                defaultMargins,
             ))
         }
 
         concatAdapter.addAdapter(TextAdapter(
-            movieDetails.overview,
-            Margins(left = spacing, top = spacing, right = spacing),
-        ))
-
-        concatAdapter.addAdapter(TextAdapter(
             getString(R.string.media_detail_release_date, movieDetails.releaseDate),
-            Margins(left = spacing, top = spacing, right = spacing),
+            defaultMargins,
             R.style.TextAppearance_MyTheme_Headline6
         ))
 
@@ -193,7 +193,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
                 if (result.data?.isNullOrEmpty() == false) {
                     concatAdapter.addAdapter(TextAdapter(
                         getString(R.string.also_watch),
-                        Margins(left = spacing, top = spacing, right = spacing),
+                        defaultMargins,
                         R.style.TextAppearance_MyTheme_Headline5
                     ))
                     concatAdapter.addAdapter(
