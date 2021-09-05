@@ -1,6 +1,7 @@
 package com.timgortworst.cleanarchitecture.data.remote
 
 import com.timgortworst.cleanarchitecture.data.model.movie.MovieDetailsEntity
+import com.timgortworst.cleanarchitecture.domain.model.movie.Credits
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movies
 import retrofit2.Response
 import retrofit2.http.GET
@@ -24,8 +25,15 @@ interface MovieService {
         @Query("append_to_response") providers: String = "watch/providers",
     ): Response<MovieDetailsEntity>
 
+    // todo append to moviedetails call
     @GET("movie/{movie_id}/recommendations")
     suspend fun getRelatedMovies(
         @Path("movie_id") movieId: Int,
     ): Response<Movies>
+
+    // todo append to moviedetails call
+    @GET("movie/{movie_id}/credits")
+    suspend fun getMovieCredits(
+        @Path("movie_id") movieId: Int,
+    ): Response<Credits>
 }

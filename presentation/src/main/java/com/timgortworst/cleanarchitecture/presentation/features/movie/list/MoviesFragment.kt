@@ -120,7 +120,7 @@ class MoviesFragment : Fragment() {
                 navigateToDetails(movie, view, transitionName)
             }
 
-            val padding = resources.getDimension(R.dimen.default_padding).toInt()
+            val padding = resources.getDimension(R.dimen.keyline_8).toInt()
             addItemDecoration(MoveListItemDecoration(padding))
         }
     }

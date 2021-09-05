@@ -2,9 +2,11 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie.details
 
 import androidx.lifecycle.*
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
+import com.timgortworst.cleanarchitecture.domain.model.movie.Credits
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
+import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieCreditsUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieDetailsUseCase
 import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetRelatedMoviesUseCase
 import com.timgortworst.cleanarchitecture.presentation.R
@@ -17,6 +19,7 @@ import javax.inject.Inject
 class MovieDetailViewModel @Inject constructor(
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     getRelatedMoviesUseCase: GetRelatedMoviesUseCase,
+    getMovieCreditsUseCase: GetMovieCreditsUseCase,
     private val sharedPrefs: SharedPrefs,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -37,6 +40,12 @@ class MovieDetailViewModel @Inject constructor(
             it.error?.message = determineErrorMessage(it.error); it
         }
 
+    val movieCredits: Flow<Result<Credits>> =
+        getMovieCreditsUseCase.execute(
+            GetMovieCreditsUseCase.Params(savedStateHandle.get<Int>(STATE_ID_MOVIE)!!)
+        ).map {
+            it.error?.message = determineErrorMessage(it.error); it
+        }
 
     private fun determineErrorMessage(error: Result.ErrorType?) = when (error) {
         is Result.ErrorType.DatabaseError -> R.string.database_error

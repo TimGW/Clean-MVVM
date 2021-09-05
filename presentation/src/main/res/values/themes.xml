@@ -93,4 +93,13 @@
         <item name="iconTint">@color/color_primary_green</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.SelectedCornerRadius" parent="">
+        <item name="cornerSizeTopRight">8dp</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerSizeBottomLeft">8dp</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerSizeBottomRight">8dp</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+    </style>
+
 </resources>

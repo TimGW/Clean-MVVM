@@ -3,10 +3,7 @@ package com.timgortworst.cleanarchitecture.data.di
 import com.squareup.moshi.Moshi
 import com.timgortworst.cleanarchitecture.data.remote.MovieService
 import com.timgortworst.cleanarchitecture.data.remote.WatchProviderService
-import com.timgortworst.cleanarchitecture.data.remote.jsonAdapter.MovieDetailsJsonAdapter
-import com.timgortworst.cleanarchitecture.data.remote.jsonAdapter.MoviesJsonAdapter
-import com.timgortworst.cleanarchitecture.data.remote.jsonAdapter.WatchProviderJsonAdapter
-import com.timgortworst.cleanarchitecture.data.remote.jsonAdapter.WatchProviderRegionJsonAdapter
+import com.timgortworst.cleanarchitecture.data.remote.jsonAdapter.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,6 +22,7 @@ object ApiModule {
             .add(MovieDetailsJsonAdapter())
             .add(WatchProviderJsonAdapter())
             .add(WatchProviderRegionJsonAdapter())
+            .add(MovieCreditsJsonAdapter())
             .build()
     }
 

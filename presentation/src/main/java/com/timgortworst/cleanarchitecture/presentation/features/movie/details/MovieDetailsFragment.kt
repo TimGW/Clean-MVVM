@@ -31,6 +31,7 @@ import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMedia
 import com.timgortworst.cleanarchitecture.presentation.extension.*
 import com.timgortworst.cleanarchitecture.presentation.features.base.AppBarOffsetListener
 import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.*
+import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.GridSpanSizeLookup.Companion.calculateSpanWidth
 import com.timgortworst.cleanarchitecture.presentation.model.Margins
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -58,8 +59,12 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         RelatedMoviesAdapter()
     }
 
-    private val padding by lazy {
-        resources.getDimension(R.dimen.keyline_8).toInt()
+    private val spacing by lazy {
+        resources.getDimension(R.dimen.keyline_16).toInt()
+    }
+
+    private val defaultMargins by lazy {
+        Margins(left = spacing, top = spacing, right = spacing)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,6 +137,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
                 spanSizeLookup = GridSpanSizeLookup(concatAdapter)
             }
             adapter = concatAdapter
+            addItemDecoration(GridMarginDecoration())
         }
     }
 
@@ -144,8 +150,6 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     }
 
     private fun showMovieDetails(movieDetails: MovieDetails) {
-        val spacing = resources.getDimension(R.dimen.keyline_16).toInt()
-        val defaultMargins = Margins(left = spacing, top = spacing, right = spacing)
         binding.expandedTitle.text = args.pageTitle
         binding.collapsedTitle.text = args.pageTitle
 
@@ -184,11 +188,24 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
             ))
         }
 
-//        concatAdapter.addAdapter(TextAdapter(
-//            getString(R.string.media_detail_release_date, movieDetails.releaseDate),
-//            defaultMargins,
-//            R.style.TextAppearance_MyTheme_Headline6
-//        ))
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.movieCredits.collectLatest { result ->
+                binding.progress.visibility =
+                    if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
+                result.error?.message?.let { showError(getString(it)) }
+                if (result.data != null) {
+                    concatAdapter.addAdapter(TextAdapter(
+                        getString(R.string.cast_and_crew),
+                        defaultMargins,
+                        R.style.TextAppearance_MyTheme_Headline5
+                    ))
+
+                    concatAdapter.addAdapter(CastAdapter(calculateSpanWidth(2)).apply {
+                        submitList(result.data?.cast?.take(15))
+                    })
+                }
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.relatedMovies.collectLatest { result ->
@@ -206,7 +223,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
                             result.data!!,
                             relatedMoviesAdapter,
                             Margins(top = spacing / 2),
-                            RelatedMoviesItemDecoration(padding),
+                            RelatedMoviesItemDecoration(spacing / 2),
                         )
                     )
                 }

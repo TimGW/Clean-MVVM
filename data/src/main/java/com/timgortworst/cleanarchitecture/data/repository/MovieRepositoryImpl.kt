@@ -6,11 +6,13 @@ import com.timgortworst.cleanarchitecture.data.local.MovieDao
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.data.model.movie.MovieDetailsEntity
 import com.timgortworst.cleanarchitecture.data.remote.MovieService
+import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.ErrorHandler
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.domain.repository.MovieRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -38,6 +40,22 @@ class MovieRepositoryImpl @Inject constructor(
 
             if (apiResponse.isSuccessful) {
                 emit(Result.Success(remoteResponse?.results.orEmpty()))
+            } else {
+                emit(Result.Error(errorHandler.getApiError(apiResponse.code()), null))
+            }
+        } catch (e: Exception) {
+            emit(Result.Error(errorHandler.getError(e), null))
+        }
+    }
+
+    override fun getMovieCredits(movieId: Int) = flow {
+        emit(Result.Loading(null))
+        try {
+            val apiResponse = movieService.getMovieCredits(movieId)
+            val remoteResponse = apiResponse.body()
+
+            if (apiResponse.isSuccessful && remoteResponse != null) {
+                emit(Result.Success(remoteResponse))
             } else {
                 emit(Result.Error(errorHandler.getApiError(apiResponse.code()), null))
             }
