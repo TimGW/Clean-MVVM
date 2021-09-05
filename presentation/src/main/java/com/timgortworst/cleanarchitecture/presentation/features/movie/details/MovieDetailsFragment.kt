@@ -163,6 +163,11 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
             defaultMargins,
         ))
 
+        concatAdapter.addAdapter(GenresAdapter(
+            movieDetails.genres,
+            defaultMargins,
+        ))
+
         concatAdapter.addAdapter(TextAdapter(
             movieDetails.overview,
             defaultMargins,
@@ -179,11 +184,11 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
             ))
         }
 
-        concatAdapter.addAdapter(TextAdapter(
-            getString(R.string.media_detail_release_date, movieDetails.releaseDate),
-            defaultMargins,
-            R.style.TextAppearance_MyTheme_Headline6
-        ))
+//        concatAdapter.addAdapter(TextAdapter(
+//            getString(R.string.media_detail_release_date, movieDetails.releaseDate),
+//            defaultMargins,
+//            R.style.TextAppearance_MyTheme_Headline6
+//        ))
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.relatedMovies.collectLatest { result ->
