@@ -3,13 +3,14 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie.details
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -29,13 +30,13 @@ import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMediaDetailsBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.*
+import com.timgortworst.cleanarchitecture.presentation.features.base.AdapterItemBinder
 import com.timgortworst.cleanarchitecture.presentation.features.base.AppBarOffsetListener
 import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.*
 import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.GridSpanSizeLookup.Companion.calculateSpanWidth
 import com.timgortworst.cleanarchitecture.presentation.model.Margins
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListener {
@@ -47,24 +48,15 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         it.scrollStateListener = this@MovieDetailsFragment
     }
 
+    @Inject
+    lateinit var movieDetailsAdapterBinder: AdapterItemBinder<ConcatAdapter, MovieDetails>
+
     private val concatAdapter by lazy {
         // If your Adapters share the same view types, and can support sharing ViewHolders between
         // added adapters, provide an instance of Config where you set Config#isolateViewTypes
         // to false. A common usage pattern for this is to return the R.layout.<layout_name> from
         // the Adapter#getItemViewType(int) method.
         ConcatAdapter(ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build())
-    }
-
-    private val relatedMoviesAdapter by lazy {
-        RelatedMoviesAdapter()
-    }
-
-    private val spacing by lazy {
-        resources.getDimension(R.dimen.keyline_16).toInt()
-    }
-
-    private val defaultMargins by lazy {
-        Margins(left = spacing, top = spacing, right = spacing)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,8 +116,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
 
     private fun observeUI() {
         viewModel.movieDetails.observe(viewLifecycleOwner) { result ->
-            binding.progress.visibility =
-                if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
+            binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
             result.data?.let { showMovieDetails(it) } ?: showEmptyState()
             result.error?.message?.let { showError(getString(it)) }
         }
@@ -150,85 +141,13 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
     }
 
     private fun showMovieDetails(movieDetails: MovieDetails) {
+        binding.noResults.visibility = View.GONE
         binding.expandedTitle.text = args.pageTitle
         binding.collapsedTitle.text = args.pageTitle
 
         concatAdapter.adapters.forEach { concatAdapter.removeAdapter(it) }
-        // todo adapter binders
-        // todo decorator pattern
 
-        binding.noResults.visibility = View.GONE
-
-        concatAdapter.addAdapter(StatisticsAdapter(
-            movieDetails.status,
-            movieDetails.voteAverage,
-            movieDetails.voteCount,
-            movieDetails.popularity,
-            defaultMargins,
-        ))
-
-        concatAdapter.addAdapter(GenresAdapter(
-            movieDetails.genres,
-            defaultMargins,
-        ))
-
-        concatAdapter.addAdapter(TextAdapter(
-            movieDetails.overview,
-            defaultMargins,
-        ))
-
-        val watchProviders = movieDetails.watchProviders.map {
-            (it.value.flatRate.orEmpty() + it.value.buy.orEmpty() + it.value.rent.orEmpty())
-        }.joinToString()
-
-        if (watchProviders.isNotBlank()) {
-            concatAdapter.addAdapter(TextAdapter(
-                getString(R.string.available_watch_providers, watchProviders),
-                defaultMargins,
-            ))
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.movieCredits.collectLatest { result ->
-                binding.progress.visibility =
-                    if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
-                result.error?.message?.let { showError(getString(it)) }
-                if (result.data != null) {
-                    concatAdapter.addAdapter(TextAdapter(
-                        getString(R.string.cast_and_crew),
-                        defaultMargins,
-                        R.style.TextAppearance_MyTheme_Headline5
-                    ))
-
-                    concatAdapter.addAdapter(CastAdapter(calculateSpanWidth(2)).apply {
-                        submitList(result.data?.cast?.take(15))
-                    })
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.relatedMovies.collectLatest { result ->
-                binding.progress.visibility =
-                    if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
-                result.error?.message?.let { showError(getString(it)) }
-                if (result.data?.isNullOrEmpty() == false) {
-                    concatAdapter.addAdapter(TextAdapter(
-                        getString(R.string.also_watch),
-                        defaultMargins,
-                        R.style.TextAppearance_MyTheme_Headline5
-                    ))
-                    concatAdapter.addAdapter(
-                        NestedRecyclerAdapter(
-                            result.data!!,
-                            relatedMoviesAdapter,
-                            Margins(top = spacing / 2),
-                            RelatedMoviesItemDecoration(spacing / 2),
-                        )
-                    )
-                }
-            }
-        }
+        movieDetailsAdapterBinder.addToAdapter(concatAdapter, movieDetails)
     }
 
     private fun startEnterTransitionAfterLoadingImage(uri: String, imageView: ImageView) {
@@ -291,6 +210,7 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
 
         // only animate up-arrow color in light mode from white to black in collapsed mode
         if (!isNightModeActive() && scrollState is AppBarOffsetListener.ScrollState.Expanded) {
+            // if you swipe too fast, sometimes the button doesn't become fully white. This enforces it.
             binding.toolbar.setUpButtonColor(Color.WHITE)
         } else if (!isNightModeActive() && scrolled >= SCRIM_TRIGGER_THRESHOLD) {
             binding.toolbar.setUpButtonColor(blendARGB(Color.WHITE, Color.BLACK, fadeInAlpha))

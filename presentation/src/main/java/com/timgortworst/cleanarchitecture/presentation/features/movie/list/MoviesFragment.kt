@@ -163,7 +163,7 @@ class MoviesFragment : Fragment() {
             MoviesFragmentDirections.showMovieDetails(
                 movie.title,
                 movie.id,
-                movie.highResImage,
+                Movie.HIGH_RES_PREFIX + movie.posterPath,
                 transitionName,
             )
 

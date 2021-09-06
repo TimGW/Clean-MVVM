@@ -12,7 +12,9 @@ data class MovieDetails(
     val voteAverage: Double,
     val voteCount: Int,
     val popularity: Double,
-    val status: String
+    val status: String,
+    val recommendations: List<Movie>,
+    val cast: List<Credits.Cast>,
 ) {
 
     data class Genre(

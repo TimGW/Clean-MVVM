@@ -31,6 +31,7 @@ class GenresAdapter(
                 root.setMargins(left, top, right, bottom)
             }
 
+            root.removeAllViews()
             genres.forEach {
                 root.addView(buildChip(holder.itemView.context, it))
             }

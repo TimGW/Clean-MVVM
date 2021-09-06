@@ -14,6 +14,9 @@ data class Movie(
     val video: Boolean,
     val voteAverage: Double,
     val voteCount: Int,
-    var lowResImage: String,
-    var highResImage: String,
-)
+) {
+    companion object {
+        const val LOW_RES_PREFIX = "https://image.tmdb.org/t/p/w185/"
+        const val HIGH_RES_PREFIX = "https://image.tmdb.org/t/p/w500/"
+    }
+}

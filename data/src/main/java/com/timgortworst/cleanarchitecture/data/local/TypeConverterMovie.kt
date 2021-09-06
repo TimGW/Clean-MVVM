@@ -11,6 +11,54 @@ import com.timgortworst.cleanarchitecture.data.model.movie.MovieDetailsEntity
 class TypeConverterMovie(private val moshi: Moshi) {
 
     @TypeConverter
+    fun fromMovieJson(
+        value: String
+    ): List<MovieDetailsEntity.Movie>? {
+        val type = Types.newParameterizedType(
+            List::class.java,
+            MovieDetailsEntity.Movie::class.java)
+
+        val adapter: JsonAdapter<List<MovieDetailsEntity.Movie>> = moshi.adapter(type)
+        return if (value.isEmpty()) null else adapter.fromJson(value)
+    }
+
+    @TypeConverter
+    fun toMovieJson(
+        list: List<MovieDetailsEntity.Movie>
+    ): String {
+        val type = Types.newParameterizedType(
+            List::class.java,
+            MovieDetailsEntity.Movie::class.java)
+
+        val adapter: JsonAdapter<List<MovieDetailsEntity.Movie>> = moshi.adapter(type)
+        return adapter.toJson(list)
+    }
+
+    @TypeConverter
+    fun fromMovieCastJson(
+        value: String
+    ): List<MovieDetailsEntity.Cast>? {
+        val type = Types.newParameterizedType(
+            List::class.java,
+            MovieDetailsEntity.Cast::class.java)
+
+        val adapter: JsonAdapter<List<MovieDetailsEntity.Cast>> = moshi.adapter(type)
+        return if (value.isEmpty()) null else adapter.fromJson(value)
+    }
+
+    @TypeConverter
+    fun toMovieCastJson(
+        list: List<MovieDetailsEntity.Cast>
+    ): String {
+        val type = Types.newParameterizedType(
+            List::class.java,
+            MovieDetailsEntity.Cast::class.java)
+
+        val adapter: JsonAdapter<List<MovieDetailsEntity.Cast>> = moshi.adapter(type)
+        return adapter.toJson(list)
+    }
+
+    @TypeConverter
     fun fromMovieGenreJson(
         value: String
     ): List<MovieDetailsEntity.Genre>? {

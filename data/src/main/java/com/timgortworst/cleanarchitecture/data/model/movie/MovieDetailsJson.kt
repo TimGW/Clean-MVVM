@@ -27,7 +27,9 @@ data class MovieDetailsJson(
     @field:Json(name = "video") val video: Boolean?,
     @field:Json(name = "vote_average") val voteAverage: Double?,
     @field:Json(name = "vote_count") val voteCount: Int?,
-    @field:Json(name = "watch/providers") val watchProviders: WatchProviders?,
+    @field:Json(name = "watch/providers") val watchProviders: MovieWatchProviders?,
+    @field:Json(name = "recommendations") val recommendations: MoviesJson,
+    @field:Json(name = "credits") val credits: MovieCreditsJson,
 ) {
     data class Genre(
         @field:Json(name = "id") val id: Int?,
@@ -50,36 +52,4 @@ data class MovieDetailsJson(
         @field:Json(name = "iso_639_1") val iso6391: String?,
         @field:Json(name = "name") val name: String?
     )
-
-    data class WatchProviders(
-        @field:Json(name = "results") val results: Map<String, Result>?
-    ) {
-        data class Result(
-            @field:Json(name = "link") val link: String?,
-            @field:Json(name = "flatrate") val flatRate: List<FlatRate>?,
-            @field:Json(name = "buy") val buy: List<Buy>?,
-            @field:Json(name = "rent") val rent: List<Rent>?,
-        ) {
-            data class FlatRate(
-                @field:Json(name = "display_priority") val displayPriority: Long?,
-                @field:Json(name = "logo_path") val logoPath: String?,
-                @field:Json(name = "provider_id") val providerID: Long?,
-                @field:Json(name = "provider_name") val providerName: String?
-            )
-
-            data class Buy(
-                @field:Json(name = "display_priority") val displayPriority: Long?,
-                @field:Json(name = "logo_path") val logoPath: String?,
-                @field:Json(name = "provider_id") val providerID: Long?,
-                @field:Json(name = "provider_name") val providerName: String?
-            )
-
-            data class Rent(
-                @field:Json(name = "display_priority") val displayPriority: Long?,
-                @field:Json(name = "logo_path") val logoPath: String?,
-                @field:Json(name = "provider_id") val providerID: Long?,
-                @field:Json(name = "provider_name") val providerName: String?
-            )
-        }
-    }
 }

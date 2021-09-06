@@ -19,11 +19,13 @@ class MoviesAdapter : BasePagingAdapter<Movie, MediaListItemBinding>(DiffUtilMov
         MediaListItemBinding::inflate
 
     override fun bind(binding: MediaListItemBinding, item: Movie, position: Int) {
-        val transName = item.highResImage + getItemViewType(position)
+        val highResImage = Movie.HIGH_RES_PREFIX + item.posterPath
+        val lowResImage = Movie.LOW_RES_PREFIX + item.posterPath
+        val transName = highResImage + getItemViewType(position)
 
         binding.moveListItemImage.apply {
             Glide.with(context)
-                .load(item.lowResImage)
+                .load(lowResImage)
                 .placeholder(R.drawable.media_placeholder)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(this)

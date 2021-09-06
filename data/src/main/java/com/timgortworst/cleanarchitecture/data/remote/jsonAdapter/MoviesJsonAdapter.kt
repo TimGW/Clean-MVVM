@@ -32,8 +32,6 @@ class MoviesJsonAdapter {
                     it.video ?: false,
                     it.voteAverage ?: 0.0,
                     it.voteCount ?: 0,
-                    "https://image.tmdb.org/t/p/w185/".plus(it.posterPath),
-                    "https://image.tmdb.org/t/p/original/".plus(it.posterPath),
                 )
             },
             moviesJson.totalPages,
