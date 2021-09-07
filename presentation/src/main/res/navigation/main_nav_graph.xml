@@ -28,6 +28,10 @@
         android:label="{pageTitle}"
         tools:layout="@layout/fragment_media_details">
 
+        <action
+            android:id="@+id/show_movie_details"
+            app:destination="@id/fragmentMovieDetails" />
+
         <argument
             android:name="pageTitle"
             app:argType="string" />

@@ -1,12 +1,16 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter
 
 import android.content.Context
+import android.view.View
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.ConcatAdapter
 import com.timgortworst.cleanarchitecture.domain.model.movie.Credits
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.features.base.AdapterItemBinder
+import com.timgortworst.cleanarchitecture.presentation.features.movie.details.MovieDetailsFragmentDirections
 import com.timgortworst.cleanarchitecture.presentation.model.Margins
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
@@ -84,6 +88,10 @@ class MovieDetailsAdapterBinder @Inject constructor(
     }
 
     private fun ConcatAdapter.addRelatedMovies(item: List<Movie>) {
+        relatedMoviesAdapter.clickListener = { movie, imageView, transitionName ->
+            navigateToDetails(movie, imageView, transitionName)
+        }
+
         addAdapter(
             TextAdapter(
                 context.resources.getString(R.string.also_watch),
@@ -99,6 +107,18 @@ class MovieDetailsAdapterBinder @Inject constructor(
                 RelatedMoviesItemDecoration(spacing / 2),
             )
         )
+    }
+
+    private fun navigateToDetails(movie: Movie, sharedView: View, transitionName: String) {
+        val directions = MovieDetailsFragmentDirections.showMovieDetails(
+            movie.title,
+            movie.id,
+            Movie.HIGH_RES_PREFIX + movie.posterPath,
+            transitionName,
+        )
+
+        val extras = FragmentNavigatorExtras(sharedView to transitionName)
+        findNavController(sharedView).navigate(directions, extras)
     }
 }
 
