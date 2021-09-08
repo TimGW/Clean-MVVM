@@ -59,11 +59,12 @@
     <string name="region_error">Can\'t load regions</string>
     <string name="select_region">Select a region</string>
     <string name="also_watch">Also watch</string>
-    <string name="cast_and_crew">Cast &amp; Crew</string>
+    <string name="cast">Cast</string>
     <string name="statistic_rating_overline">Rating</string>
     <string name="statistic_status_overline">Status</string>
     <string name="statistic_popularity_overline">Popularity</string>
     <string name="rating_max">/10</string>
     <string name="character">as %1$s</string>
+    <string name="show_more">Show more</string>
 
 </resources>

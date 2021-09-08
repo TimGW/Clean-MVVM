@@ -74,22 +74,37 @@ class MovieDetailsAdapterBinder @Inject constructor(
     }
 
     private fun ConcatAdapter.addCast(item: List<Credits.Cast>) {
+        val maxItems = 8
+
         addAdapter(
             TextAdapter(
-                context.resources.getString(R.string.cast_and_crew),
+                context.resources.getString(R.string.cast),
                 defaultMargins,
                 R.style.TextAppearance_MyTheme_Headline5
             )
         )
 
-        addAdapter(
-            CastAdapter(
-                GridSpanSizeLookup.calculateSpanWidth(
-                    context.resources.getInteger(R.integer.cast_columns)
-                )
+        val castAdapter = CastAdapter(
+            GridSpanSizeLookup.calculateSpanWidth(
+                context.resources.getInteger(R.integer.cast_columns)
+            )
+        ).apply {
+            submitList(item.take(maxItems))
+        }
+
+        addAdapter(castAdapter)
+
+        if (item.size > maxItems) {
+            addAdapter(ButtonAdapter(
+                context.getString(R.string.show_more),
+                Margins(top = spacing / 2)
             ).apply {
-                submitList(item.take(15)) // todo add more button which adds them to the list
+                onClickListener = {
+                    castAdapter.submitList(item)
+                    removeAdapter(this)
+                }
             })
+        }
     }
 
     private fun ConcatAdapter.addRelatedMovies(item: List<Movie>) {
