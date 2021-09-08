@@ -3,7 +3,6 @@ package com.timgortworst.cleanarchitecture.presentation.features.movie.details
 import androidx.recyclerview.widget.ConcatAdapter
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.presentation.features.base.AdapterItemBinder
-import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.MovieDetailsAdapterBinder
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

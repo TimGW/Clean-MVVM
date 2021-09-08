@@ -1,4 +1,4 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter
+package com.timgortworst.cleanarchitecture.presentation.features.movie.details
 
 import android.content.Context
 import android.view.View
@@ -10,7 +10,7 @@ import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.features.base.AdapterItemBinder
-import com.timgortworst.cleanarchitecture.presentation.features.movie.details.MovieDetailsFragmentDirections
+import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.*
 import com.timgortworst.cleanarchitecture.presentation.model.Margins
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
@@ -82,9 +82,14 @@ class MovieDetailsAdapterBinder @Inject constructor(
             )
         )
 
-        addAdapter(CastAdapter(GridSpanSizeLookup.calculateSpanWidth(2)).apply {
-            submitList(item.take(15))
-        })
+        addAdapter(
+            CastAdapter(
+                GridSpanSizeLookup.calculateSpanWidth(
+                    context.resources.getInteger(R.integer.cast_columns)
+                )
+            ).apply {
+                submitList(item.take(15)) // todo add more button which adds them to the list
+            })
     }
 
     private fun ConcatAdapter.addRelatedMovies(item: List<Movie>) {
