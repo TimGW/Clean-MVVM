@@ -67,16 +67,10 @@ class MoviesFragment : Fragment() {
         binding.recyclerView.doOnPreDraw {
             startPostponedEnterTransition()
         }
-        requireActivity().setTranslucentStatusBar(false)
 
         binding.swiperefresh.setOnRefreshListener {
             movieAdapter.refresh()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.layoutToolbar.collapsingToolbarLayout.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
@@ -113,15 +107,15 @@ class MoviesFragment : Fragment() {
 
     private fun setupMovieList() {
         binding.recyclerView.apply {
-            layoutManager =
-                GridLayoutManager(activity, resources.getInteger(R.integer.media_columns))
+            layoutManager = GridLayoutManager(activity, resources.getInteger(R.integer.media_columns))
             adapter = movieAdapter
             movieAdapter.clickListener = { movie, view, transitionName ->
                 navigateToDetails(movie, view, transitionName)
             }
 
-            val padding = resources.getDimension(R.dimen.keyline_8).toInt()
-            addItemDecoration(MoveListItemDecoration(padding))
+            addItemDecoration(MoveListItemDecoration(
+                resources.getDimension(R.dimen.keyline_8).toInt()
+            ))
         }
     }
 
@@ -150,15 +144,12 @@ class MoviesFragment : Fragment() {
             ?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         view?.snackbar(
-            message = message ?: getString(R.string.connection_error),
+            message = message ?: getString(R.string.generic_error),
             anchorView = bottomNavView
         )
     }
 
     private fun navigateToDetails(movie: Movie, sharedView: View, transitionName: String) {
-        // this prevents a bug where the toolbar title already has the name of the next fragment
-        binding.layoutToolbar.collapsingToolbarLayout.visibility = View.INVISIBLE
-
         val directions =
             MoviesFragmentDirections.showMovieDetails(
                 movie.title,

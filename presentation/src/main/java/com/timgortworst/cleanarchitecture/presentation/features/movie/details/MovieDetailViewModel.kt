@@ -1,8 +1,10 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.details
 
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.switchMap
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
-import com.timgortworst.cleanarchitecture.domain.model.movie.MovieDetails
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieDetailsUseCase
 import com.timgortworst.cleanarchitecture.presentation.R
@@ -17,14 +19,13 @@ class MovieDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    val movieDetails: LiveData<Result<MovieDetails?>> =
-        savedStateHandle.getLiveData<Int>(STATE_ID_MOVIE).switchMap { movieId ->
-            getMovieDetailsUseCase.execute(
-                GetMovieDetailsUseCase.Params(movieId, sharedPrefs.getWatchProviderRegion())
-            ).map {
-                it.error?.message = determineErrorMessage(it.error); it
-            }.asLiveData()
-        }
+    val movieDetails = savedStateHandle.getLiveData<Int>(STATE_ID_MOVIE).switchMap { movieId ->
+        getMovieDetailsUseCase.execute(
+            GetMovieDetailsUseCase.Params(movieId, sharedPrefs.getWatchProviderRegion())
+        ).map {
+            it.error?.message = determineErrorMessage(it.error); it
+        }.asLiveData()
+    }
 
     private fun determineErrorMessage(error: Result.ErrorType?) = when (error) {
         is Result.ErrorType.DatabaseError -> R.string.database_error

@@ -83,18 +83,19 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMediaDetailsBinding.inflate(layoutInflater)
-        setupToolbar()
 
+        binding.mediaDetailsImage.apply {
+            transitionName = args.transitionName
+            startEnterTransitionAfterLoadingImage(args.movieImage, this)
+        }
+
+        setupToolbar()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.mediaDetailsImage.apply {
-            transitionName = args.transitionName
-            startEnterTransitionAfterLoadingImage(args.movieImage, this)
-        }
         setupRecyclerView()
         observeUI()
     }
@@ -111,13 +112,19 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
 
     override fun onDestroyView() {
         super.onDestroyView()
+        requireActivity().setTranslucentStatusBar(false)
         _binding = null
     }
 
     private fun observeUI() {
         viewModel.movieDetails.observe(viewLifecycleOwner) { result ->
-            binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
-            result.data?.let { showMovieDetails(it) } ?: showEmptyState()
+            binding.progress.visibility = if (result is Result.Loading) {
+                View.VISIBLE
+            } else {
+                if (result.data == null && result.error == null) showEmptyState()
+                View.GONE
+            }
+            result.data?.let { showMovieDetails(it) }
             result.error?.message?.let { showError(getString(it)) }
         }
     }
@@ -160,8 +167,8 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    setExpandedToolbar(false)
                     startPostponedEnterTransition()
+                    setExpandedToolbar(false)
                     return false
                 }
 
@@ -172,8 +179,8 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
-                    setExpandedToolbar(true)
                     startPostponedEnterTransition()
+                    setExpandedToolbar(true)
                     return false
                 }
             })
