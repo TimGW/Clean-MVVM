@@ -1,21 +1,21 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter
 
 import android.content.res.Resources
-import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.timgortworst.cleanarchitecture.domain.model.movie.Credits
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.CastListItemBinding
+import com.timgortworst.cleanarchitecture.presentation.extension.setMargins
 import com.timgortworst.cleanarchitecture.presentation.features.base.BaseListAdapter
 import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.GridSpanSizeLookup.Companion.FULL_WIDTH
+import com.timgortworst.cleanarchitecture.presentation.model.Margins
 
 class CastAdapter(
     spanWidth: Int,
 ) : BaseListAdapter<Credits.Cast, CastListItemBinding>(DiffUtilCastItem()),
-    AdapterSpanSize,
-    AdapterDecoration {
+    AdapterSpanSize {
 
     override val itemViewType = R.layout.cast_list_item
 
@@ -27,31 +27,35 @@ class CastAdapter(
 
     override fun getItemCount() = if (currentList.isEmpty()) 0 else currentList.size
 
-    override fun getItemDecoration(
+    private fun getItemDecoration(
         resources: Resources,
-        adapterPosition: Int,
-        relativePosition: Int
-    ): Rect {
+        position: Int
+    ): Margins {
         val spacing = resources.getDimension(R.dimen.keyline_8).toInt()
         val maxSpanCount = FULL_WIDTH / columnSpans
-        val rect = Rect()
-        val column = relativePosition % maxSpanCount
+        val margins = Margins()
+        val column = position % maxSpanCount
 
         val left = spacing - column * spacing / maxSpanCount
-        rect.left = if (column == 0) left * 2 else left
+        margins.left = if (column == 0) left * 2 else left
 
         val right = (column + 1) * spacing / maxSpanCount
-        rect.right = if (column == maxSpanCount - 1) right * 2 else right
+        margins.right = if (column == maxSpanCount - 1) right * 2 else right
 
-        if (relativePosition < maxSpanCount) rect.top = spacing
-        rect.bottom = spacing
-        return rect
+        if (position < maxSpanCount) margins.top = spacing
+        margins.bottom = spacing
+
+        return margins
     }
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> CastListItemBinding =
         CastListItemBinding::inflate
 
     override fun bind(binding: CastListItemBinding, item: Credits.Cast, position: Int) {
+        with(getItemDecoration(binding.root.resources, position)) {
+            binding.root.setMargins(left, top, right, bottom)
+        }
+
         binding.moveListItemImage.apply {
             Glide.with(context)
                 .load("https://image.tmdb.org/t/p/w185" + item.profilePath)
@@ -61,8 +65,6 @@ class CastAdapter(
         }
 
         binding.name.text = item.name
-
-        val character = binding.root.context.getString(R.string.character, item.character)
-        binding.character.text = character
+        binding.character.text = binding.root.context.getString(R.string.character, item.character)
     }
 }

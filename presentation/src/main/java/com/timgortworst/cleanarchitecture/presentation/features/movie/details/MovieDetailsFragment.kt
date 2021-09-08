@@ -128,7 +128,6 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
                 spanSizeLookup = GridSpanSizeLookup(concatAdapter)
             }
             adapter = concatAdapter
-            addItemDecoration(GridMarginDecoration())
         }
     }
 
