@@ -1,0 +1,4 @@
+# This file contains sensitive api-key information
+
+# Add your TMDB API key
+THEMOVIEDB_API_KEY="Add your API key here"
