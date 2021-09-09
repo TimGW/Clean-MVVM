@@ -10,6 +10,12 @@ def apiKeyPropertiesFile = rootProject.file('apikey.properties')
 def apiKeyProperties = new Properties()
 apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
 
+// Remove signing information from build files
+// https://developer.android.com/studio/publish/app-signing#secure-shared-keystore
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -28,10 +34,26 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("keystores/debug/debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+        release {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['storePassword']
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
             minifyEnabled false
+            signingConfig signingConfigs.debug
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
         }
@@ -40,6 +62,7 @@ android {
             debuggable false
             minifyEnabled true
             shrinkResources true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

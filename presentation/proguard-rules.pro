@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keepnames @kotlin.Metadata class com.timgortworst.cleanarchitecture.data.model.**
+-keep class com.timgortworst.cleanarchitecture.data.model.** { *; }
+-keepclassmembers class com.timgortworst.cleanarchitecture.data.model.** { *; }

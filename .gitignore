@@ -77,3 +77,6 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+/presentation/keystores/release/cleanmvvm.keystore
+/keystore.properties
