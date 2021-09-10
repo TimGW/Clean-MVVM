@@ -110,9 +110,13 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         binding.appbar.removeOnOffsetChangedListener(appBarScrollListener)
     }
 
+    override fun onStop() {
+        super.onStop()
+        requireActivity().setTranslucentStatusBar(false)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
-        requireActivity().setTranslucentStatusBar(false)
         _binding = null
     }
 

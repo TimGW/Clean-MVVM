@@ -4,8 +4,11 @@ import android.app.Activity
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
+import android.view.Window
+import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
@@ -48,27 +51,41 @@ fun Activity.setTranslucentStatusBar(translucent: Boolean) {
 
     if (translucent) {
         window.setFlags(flag, flag)
-        window.decorView.setLightStatusBarIcons()
+        window.setLightStatusBarIcons()
     } else {
         if (isNightModeActive()) {
-            window.decorView.setLightStatusBarIcons()
+            window.setLightStatusBarIcons()
         } else {
-            window.decorView.setDarkStatusBarIcons()
+            window.setDarkStatusBarIcons()
         }
         window.clearFlags(flag)
     }
 }
 
-private fun View.setDarkStatusBarIcons() {
-    var flags = systemUiVisibility
-    flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-    this.systemUiVisibility = flags
+private fun Window.setDarkStatusBarIcons() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        insetsController?.setSystemBarsAppearance(
+            APPEARANCE_LIGHT_STATUS_BARS,
+            APPEARANCE_LIGHT_STATUS_BARS
+        )
+    } else {
+        var flags = decorView.systemUiVisibility
+        flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        decorView.systemUiVisibility = flags
+    }
 }
 
-private fun View.setLightStatusBarIcons() {
-    var flags = systemUiVisibility
-    flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-    this.systemUiVisibility = flags
+private fun Window.setLightStatusBarIcons() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        insetsController?.setSystemBarsAppearance(
+            0,
+            APPEARANCE_LIGHT_STATUS_BARS
+        )
+    } else {
+        var flags = decorView.systemUiVisibility
+        flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        decorView.systemUiVisibility = flags
+    }
 }
 
 fun MaterialToolbar?.setUpButtonColor(@ColorInt color: Int) {
