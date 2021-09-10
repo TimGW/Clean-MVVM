@@ -3,12 +3,12 @@
     <targets>
         <target android:excludeId="@android:id/statusBarBackground" />
         <target android:excludeId="@android:id/navigationBarBackground" />
+        <target android:excludeId="@id/appbar" />
     </targets>
 
     <changeBounds android:interpolator="@android:interpolator/accelerate_decelerate" />
     <changeTransform />
     <changeClipBounds />
-<!--    <changeImageTransform />-->
 
 </transitionSet>
 

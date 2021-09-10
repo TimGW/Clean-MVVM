@@ -108,6 +108,8 @@ class MovieDetailsAdapterBinder @Inject constructor(
     }
 
     private fun ConcatAdapter.addRelatedMovies(item: List<Movie>) {
+        if (item.isEmpty()) return
+
         relatedMoviesAdapter.clickListener = { movie, imageView, transitionName ->
             navigateToDetails(movie, imageView, transitionName)
         }

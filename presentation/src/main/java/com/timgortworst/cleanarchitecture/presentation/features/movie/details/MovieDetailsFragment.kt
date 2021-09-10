@@ -1,10 +1,9 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.details
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,8 +32,6 @@ import com.timgortworst.cleanarchitecture.presentation.extension.*
 import com.timgortworst.cleanarchitecture.presentation.features.base.AdapterItemBinder
 import com.timgortworst.cleanarchitecture.presentation.features.base.AppBarOffsetListener
 import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.*
-import com.timgortworst.cleanarchitecture.presentation.features.movie.details.adapter.GridSpanSizeLookup.Companion.calculateSpanWidth
-import com.timgortworst.cleanarchitecture.presentation.model.Margins
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -59,6 +56,11 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
         ConcatAdapter(ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build())
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        postponeEnterTransition()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,8 +75,6 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
                     exitTransition = null
                 }
             })
-
-        postponeEnterTransition()
     }
 
     override fun onCreateView(
