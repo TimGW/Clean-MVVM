@@ -24,7 +24,10 @@ class MovieWatchProvidersDialog : BaseWatchProvidersDialog() {
         viewModel.watchProviders.observe(this) { result ->
             binding.progress.visibility = if (result is Result.Loading) View.VISIBLE else View.INVISIBLE
             result.data?.let { showData(it) }
-            result.error?.message?.let { showError(getString(it)) } ?: run {
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            error?.let { showError(getString(it)) } ?: run {
                 binding.errorMessage.visibility = View.GONE
             }
         }

@@ -1,15 +1,13 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.details
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
 import com.timgortworst.cleanarchitecture.domain.usecase.movie.GetMovieDetailsUseCase
 import com.timgortworst.cleanarchitecture.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,11 +16,14 @@ class MovieDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
+    private val _errorMessage = MutableLiveData<Int?>()
+    val errorMessage: LiveData<Int?> = _errorMessage
+
     val movieDetails = savedStateHandle.getLiveData<Int>(STATE_ID_MOVIE).switchMap { movieId ->
         getMovieDetailsUseCase.execute(
             GetMovieDetailsUseCase.Params(movieId)
-        ).map {
-            it.error?.message = determineErrorMessage(it.error); it
+        ).onEach {
+            _errorMessage.value = determineErrorMessage(it.error)
         }.asLiveData()
     }
 

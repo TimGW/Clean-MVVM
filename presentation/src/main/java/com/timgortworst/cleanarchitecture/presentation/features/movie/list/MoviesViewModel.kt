@@ -1,8 +1,6 @@
 package com.timgortworst.cleanarchitecture.presentation.features.movie.list
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.cachedIn
 import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.domain.model.state.Result
@@ -20,6 +18,9 @@ class MoviesViewModel @Inject constructor(
     private val sharedPrefs: SharedPrefs,
 ) : ViewModel() {
 
+    private val _errorMessage = MutableLiveData<Int?>()
+    val errorMessage: LiveData<Int?> = _errorMessage
+
     val moviesPaged = getMoviesUseCase.execute(Unit).cachedIn(viewModelScope)
     private val region = sharedPrefs.getWatchProviderRegion().orEmpty()
     val watchProviders = liveData {
@@ -27,7 +28,7 @@ class MoviesViewModel @Inject constructor(
             GetWatchProvidersMovieUseCase.Params(region)
         )
 
-        watchProviders.error?.message = determineErrorMessage(watchProviders.error)
+        _errorMessage.value = determineErrorMessage(watchProviders.error)
 
         emit(watchProviders)
     }

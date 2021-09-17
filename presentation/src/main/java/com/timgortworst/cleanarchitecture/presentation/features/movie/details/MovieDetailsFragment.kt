@@ -129,7 +129,10 @@ class MovieDetailsFragment : Fragment(), AppBarOffsetListener.OnScrollStateListe
                 View.GONE
             }
             result.data?.let { showMovieDetails(it) }
-            result.error?.message?.let { showError(getString(it)) }
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            error?.let { showError(getString(it)) }
         }
     }
 
