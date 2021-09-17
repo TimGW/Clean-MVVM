@@ -1,6 +1,7 @@
 package com.timgortworst.cleanarchitecture.data.repository
 
 import com.timgortworst.cleanarchitecture.data.di.IoDispatcher
+import com.timgortworst.cleanarchitecture.data.local.SharedPrefs
 import com.timgortworst.cleanarchitecture.data.local.WatchProviderDao
 import com.timgortworst.cleanarchitecture.data.model.watchprovider.WatchProviderRegionsEntity
 import com.timgortworst.cleanarchitecture.data.remote.WatchProviderService
@@ -19,8 +20,11 @@ class WatchProviderRepositoryImpl @Inject constructor(
     private val service: WatchProviderService,
     private val watchProviderDao: WatchProviderDao,
     private val errorHandler: ErrorHandler,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
+    private val sharedPrefs: SharedPrefs
 ) : WatchProviderRepository {
+
+    override fun getUserWatchProviderRegion() = sharedPrefs.getWatchProviderRegion()
 
     override fun getWatchProviderRegions(
     ) = object : NetworkBoundResource<List<WatchProviderRegionsEntity>, List<WatchProviderRegion>?>(

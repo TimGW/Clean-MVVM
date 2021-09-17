@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface WatchProviderRepository {
     fun getWatchProviderRegions(): Flow<Result<List<WatchProviderRegion>?>>
     suspend fun getWatchProvidersMovie(region: String): Result<List<WatchProvider>>
+    fun getUserWatchProviderRegion(): String?
 }

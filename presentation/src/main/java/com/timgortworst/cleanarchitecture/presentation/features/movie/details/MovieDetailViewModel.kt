@@ -15,13 +15,12 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
-    private val sharedPrefs: SharedPrefs,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     val movieDetails = savedStateHandle.getLiveData<Int>(STATE_ID_MOVIE).switchMap { movieId ->
         getMovieDetailsUseCase.execute(
-            GetMovieDetailsUseCase.Params(movieId, sharedPrefs.getWatchProviderRegion())
+            GetMovieDetailsUseCase.Params(movieId)
         ).map {
             it.error?.message = determineErrorMessage(it.error); it
         }.asLiveData()
