@@ -1,5 +1,5 @@
 # Clean-MVVM
-Example Android application using TMDB Api with clean architecture principles, MVVM, Hilt DI, Kotlin, Coroutines, Kotlin Flow, LiveData, Room, Retrofit and Moshi.
+Example Android application using TMDB Api with clean architecture principles, MVVM, Hilt DI, Kotlin, Coroutines, Kotlin Flow, LiveData, Room, Retrofit, Moshi and Paging 3 library.
 
 # Setup
 You need to setup your own TMDB API key. Register for one [here](https://www.themoviedb.org/settings/api). You can read their terms and conditions [here](https://www.themoviedb.org/documentation/api/terms-of-use)
