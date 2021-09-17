@@ -17,12 +17,10 @@ class SettingsViewModel @Inject constructor(
     getWatchProviderRegionsUseCase: GetWatchProviderRegionsUseCase,
 ) : ViewModel() {
     private val _errorMessage = MutableLiveData<Int?>()
-    val errorMessage: LiveData<Int?>
-        get() = _errorMessage
+    val errorMessage: LiveData<Int?> = _errorMessage
 
     private val _data = MutableLiveData<List<WatchProviderRegion>?>()
-    val data: LiveData<List<WatchProviderRegion>?>
-        get() = _data
+    val data: LiveData<List<WatchProviderRegion>?> = _data
 
     init {
         viewModelScope.launch {
