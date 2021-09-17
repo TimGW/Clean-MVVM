@@ -2,13 +2,15 @@ package com.timgortworst.cleanarchitecture.data.local
 
 import android.content.Context
 import com.squareup.moshi.Moshi
+import com.timgortworst.cleanarchitecture.data.di.MoshiDefault
 import com.timgortworst.cleanarchitecture.domain.model.watchprovider.WatchProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class SharedPrefs(
+class SharedPrefs @Inject constructor(
     private val spm: SharedPrefManager,
     @ApplicationContext private val context: Context,
-    private val moshi: Moshi
+    @MoshiDefault private val moshi: Moshi
 ) {
     fun setDarkModeSetting(darkMode: Int) {
         spm.setIntValue(SHARED_PREF_DARK_MODE, darkMode)

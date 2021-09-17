@@ -39,13 +39,6 @@ abstract class AppModule {
     companion object {
 
         @Provides
-        fun providesSharedPreferences(
-            sharedPrefManager: SharedPrefManager,
-            @ApplicationContext context: Context,
-            @MoshiDefault moshi: Moshi
-        ): SharedPrefs = SharedPrefs(sharedPrefManager, context, moshi)
-
-        @Provides
         @Singleton
         fun providesRoomDb(
             @ApplicationContext context: Context,
