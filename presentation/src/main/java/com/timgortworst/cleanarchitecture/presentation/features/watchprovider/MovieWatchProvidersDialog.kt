@@ -26,7 +26,7 @@ class MovieWatchProvidersDialog : BaseWatchProvidersDialog() {
             result.data?.let { showData(it) }
         }
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+        viewModel.errorMessage.observe(this) { error ->
             error?.let { showError(getString(it)) } ?: run {
                 binding.errorMessage.visibility = View.GONE
             }
