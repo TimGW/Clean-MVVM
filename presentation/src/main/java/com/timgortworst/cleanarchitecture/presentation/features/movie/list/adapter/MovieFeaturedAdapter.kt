@@ -17,7 +17,7 @@ class MovieFeaturedAdapter(
     movie: Movie,
     override val spans: Spans,
 ) : SpannedAdapter<Movie, MovieListItemFeaturedBinding>(movie), AdapterDecoration {
-    var clickListener: ((Movie, ImageView, String) -> Unit)? = null
+    var clickListener: ((Movie, ImageView) -> Unit)? = null
 
     override val bindingInflater: BindingInflater<MovieListItemFeaturedBinding>
         get() = MovieListItemFeaturedBinding::inflate
@@ -54,20 +54,16 @@ class MovieFeaturedAdapter(
     }
 
     override fun bind(binding: MovieListItemFeaturedBinding, item: Movie, position: Int) {
-        val transName = item.highResImage + getItemViewType(position)
-
         binding.featuredImage.apply {
             Glide.with(context)
-                .load(item.highResImage)
+                .load(item.lowResImage)
                 .into(this)
-
-            transitionName = transName
         }
 
         binding.featuredTitle.text = item.title
 
         binding.featuredTitle.setOnClickListener {
-            clickListener?.invoke(item, binding.featuredImage, transName)
+            clickListener?.invoke(item, binding.featuredImage)
         }
     }
 }

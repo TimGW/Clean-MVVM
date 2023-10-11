@@ -25,10 +25,6 @@ class MovieListAdapter(
 
     override val itemViewType = R.layout.movie_list_item
 
-    override fun getItemId(position: Int): Long {
-        return getItem(position).id.toLong()
-    }
-
     override fun getItemRect(
         resources: Resources,
         adapterPosition: Int,

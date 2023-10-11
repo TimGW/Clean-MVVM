@@ -15,21 +15,14 @@ import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapt
 class NestedMovieListAdapter : ListAdapter<Movie, NestedMovieListAdapter.ViewHolder>(
     DiffUtilMovieItem()
 ) {
-    var clickListener: ((Movie, ImageView, String) -> Unit)? = null
-
-    override fun getItemId(position: Int): Long {
-        return getItem(position).id.toLong()
-    }
-
-    override fun getItemCount() = if (currentList.isEmpty()) 0 else currentList.size
+    var clickListener: ((Movie, ImageView) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         MovieListItemNestedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
+        holder.bind(getItem(position))
     }
 
     override fun getItemViewType(position: Int): Int = R.layout.movie_list_item_nested
@@ -39,19 +32,15 @@ class NestedMovieListAdapter : ListAdapter<Movie, NestedMovieListAdapter.ViewHol
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
-            val transName = movie.highResImage + getItemViewType(bindingAdapterPosition)
-
             binding.moveListItemImage.apply {
                 Glide.with(context)
                     .load(movie.lowResImage)
                     .placeholder(R.drawable.movie_placeholder)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(this)
-
-                transitionName = transName
             }
             binding.moveListItemImage.setOnClickListener {
-                clickListener?.invoke(movie, binding.moveListItemImage, transName)
+                clickListener?.invoke(movie, binding.moveListItemImage)
             }
         }
     }

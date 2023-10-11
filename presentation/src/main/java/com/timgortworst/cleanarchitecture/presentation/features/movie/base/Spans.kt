@@ -17,7 +17,7 @@ sealed class Spans(val systemSpans: Int) {
     // This converts the actual required columns for the number of visible columns on screen.
     class Absolute(visibleSpans: Int) : Spans(FullWidth.systemSpans / visibleSpans)
 
-    // For example you have a grid with 3 columns and you want to add an item that spans 2 of the total of 3
+    // For example you have a grid with 3 columns and you want to add an item that spans 60%
     class Relative(
         visibleSpans: Int,
         subSpans: Int,
@@ -30,7 +30,7 @@ sealed class Spans(val systemSpans: Int) {
             visibleSpans: Int,
             subSpans: Int
         ): Int {
-            if (visibleSpans == 0 || subSpans == 0) return FullWidth.systemSpans
+            if (visibleSpans == 0 || subSpans == 0 || subSpans >= visibleSpans) return FullWidth.systemSpans
             val relativeSubSpans = (visibleSpans.toFloat() / subSpans.toFloat())
             val relativeTotalSpans = FullWidth.systemSpans.toFloat().div(relativeSubSpans)
             return ceil(relativeTotalSpans).toInt()

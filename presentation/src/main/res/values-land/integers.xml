@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="grid_columns">5</integer>
-    <integer name="break_2_columns">3</integer>
+    <integer name="break_2_columns">2</integer>
 
     <integer name="featured_item_rows">2</integer>
     <integer name="featured_item_rows_before_break_2">1</integer>

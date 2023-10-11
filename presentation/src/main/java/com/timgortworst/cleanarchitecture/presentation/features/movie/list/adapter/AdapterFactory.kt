@@ -5,6 +5,7 @@ import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
@@ -22,13 +23,13 @@ object AdapterFactory {
     fun createAdapters(
         resources: Resources,
         movies: List<Movie>,
-        clickAction: (Movie, View, String) -> Unit,
+        clickAction: (Movie, View) -> Unit,
     ): List<RecyclerView.Adapter<*>> {
         val padding = resources.getDimension(R.dimen.default_padding).toInt()
-        val itemDecoration = NestedListItemDecoration(padding)
         val availableSpans = resources.getInteger(R.integer.grid_columns)
-        val singleSpan = Spans.Absolute(availableSpans)
         val break2Spans = resources.getInteger(R.integer.break_2_columns)
+        val nestedItemDecoration = NestedListItemDecoration(padding)
+        val singleSpan = Spans.Absolute(availableSpans)
         val remainingMovies = movies.toMutableList()
 
         return listOf(
@@ -49,7 +50,7 @@ object AdapterFactory {
 
             // break 1
             HeaderAdapter(text = "Kijken"),
-            NestedRecyclerAdapter(items = movies, itemAdapter = NestedMovieListAdapter(), itemDecoration = itemDecoration),
+            NestedRecyclerAdapter(items = movies, itemAdapter = NestedMovieListAdapter(), itemDecoration = nestedItemDecoration),
 
             // block items 2/3
             HeaderAdapter(),
@@ -89,13 +90,13 @@ object AdapterFactory {
 
             // horizontal sliders
             HeaderAdapter(text = "Explained"),
-            NestedRecyclerAdapter(items = movies, itemAdapter = NestedMovieListAdapter(), itemDecoration = itemDecoration),
+            NestedRecyclerAdapter(items = movies, itemAdapter = NestedMovieListAdapter(), itemDecoration = nestedItemDecoration),
 
             HeaderAdapter(text = "Collections"),
-            NestedRecyclerAdapter(items = movies, itemAdapter = NestedMovieListAdapter(), itemDecoration = itemDecoration),
+            NestedRecyclerAdapter(items = movies, itemAdapter = NestedMovieListAdapter(), itemDecoration = nestedItemDecoration),
 
             HeaderAdapter(text = "Sport"),
-            NestedRecyclerAdapter(items = movies, itemAdapter = NestedMovieListAdapter(), itemDecoration = itemDecoration),
+            NestedRecyclerAdapter(items = movies, itemAdapter = NestedMovieListAdapter(), itemDecoration = nestedItemDecoration),
 
             // remaining items
             HeaderAdapter(),
@@ -104,4 +105,8 @@ object AdapterFactory {
             },
         )
     }
+}
+
+fun ConcatAdapter.clear() {
+    adapters.forEach { removeAdapter(it) }
 }

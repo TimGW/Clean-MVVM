@@ -16,6 +16,8 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
     private val itemDecoration: RecyclerView.ItemDecoration,
 ) : RecyclerView.Adapter<NestedRecyclerAdapter<T, A>.ViewHolder>() {
     private val scrollStates: MutableMap<String, Parcelable?> = mutableMapOf()
+    // Recycled view pools allow multiple RecyclerViews to share a common pool of scrap views.
+    // This is useful if you have multiple RecyclerViews with adapters that use the same view types,
     private val viewPool = RecyclerView.RecycledViewPool()
 
     private fun getSectionID(position: Int): String {
