@@ -13,7 +13,7 @@ import com.timgortworst.cleanarchitecture.presentation.databinding.LayoutRecycle
 class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
     private val items: List<T>,
     private val itemAdapter: A,
-    private vararg val itemDecorations: RecyclerView.ItemDecoration,
+    private val itemDecoration: RecyclerView.ItemDecoration,
 ) : RecyclerView.Adapter<NestedRecyclerAdapter<T, A>.ViewHolder>() {
     private val scrollStates: MutableMap<String, Parcelable?> = mutableMapOf()
     private val viewPool = RecyclerView.RecycledViewPool()
@@ -56,7 +56,7 @@ class NestedRecyclerAdapter<T, A : ListAdapter<T, *>>(
                 binding.recyclerView.context, HORIZONTAL, false
             ).apply {
                 initialPrefetchItemCount = 4
-                itemDecorations.forEach { addItemDecoration(it) }
+                addItemDecoration(itemDecoration)
             }
         }
 

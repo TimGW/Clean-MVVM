@@ -45,7 +45,7 @@ class MovieDetailsFragment : Fragment() {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.movie_detail_enter)
         returnTransition = inflater.inflateTransition(android.R.transition.fade)
-        sharedElementEnterTransition = TransitionInflater.from(context)
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
             .inflateTransition(R.transition.shared_element_transition)
             .addListener(object : TransitionListenerAdapter() {
                 override fun onTransitionEnd(transition: Transition) {

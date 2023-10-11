@@ -14,15 +14,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.domain.model.state.Resource
-import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.FragmentMovieListBinding
 import com.timgortworst.cleanarchitecture.presentation.extension.addSingleScrollDirectionListener
 import com.timgortworst.cleanarchitecture.presentation.extension.setTranslucentStatus
 import com.timgortworst.cleanarchitecture.presentation.extension.snackbar
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.Spans
 import com.timgortworst.cleanarchitecture.presentation.features.movie.list.adapter.AdapterFactory
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridMarginDecoration
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.FULL_WIDTH
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.decoration.GridMarginDecoration
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.GridSpanSizeLookup
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,7 +48,7 @@ class MovieListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMovieListBinding.inflate(layoutInflater, container, false)
-        sharedElementReturnTransition = TransitionInflater.from(context)
+        sharedElementReturnTransition = TransitionInflater.from(requireContext())
         return binding.root
     }
 
@@ -71,7 +70,7 @@ class MovieListFragment : Fragment() {
     }
 
     private fun observeUI() {
-        viewModel.movies.observe(viewLifecycleOwner, {
+        viewModel.movies.observe(viewLifecycleOwner) {
             binding.noResults.visibility = View.GONE
             binding.swiperefresh.isRefreshing = false
             when (it) {
@@ -79,15 +78,16 @@ class MovieListFragment : Fragment() {
                     it.errorEntity?.message?.let { msg -> view?.snackbar(msg) }
                     binding.noResults.visibility = View.VISIBLE
                 }
+
                 Resource.Loading -> binding.swiperefresh.isRefreshing = true
                 is Resource.Success -> setupAdapters(it.data)
             }
-        })
+        }
     }
 
     private fun setupMovieList() {
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(activity, FULL_WIDTH).apply {
+            layoutManager = GridLayoutManager(requireContext(), Spans.FullWidth.systemSpans).apply {
                 spanSizeLookup = GridSpanSizeLookup(concatAdapter)
             }
             adapter = concatAdapter

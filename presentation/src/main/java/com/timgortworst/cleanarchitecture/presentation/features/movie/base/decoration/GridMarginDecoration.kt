@@ -1,9 +1,10 @@
-package com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration
+package com.timgortworst.cleanarchitecture.presentation.features.movie.base.decoration
 
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
+/** Let the child adapters decide which margins/decorations to apply */
 class GridMarginDecoration : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
@@ -12,8 +13,7 @@ class GridMarginDecoration : RecyclerView.ItemDecoration() {
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        val position: Int = parent.getChildAdapterPosition(view)
-        val decoration = getDecoration(parent, position) ?: return
+        val decoration = getDecoration(parent, parent.getChildAdapterPosition(view)) ?: return
 
         outRect.left = decoration.left
         outRect.top = decoration.top
@@ -22,11 +22,11 @@ class GridMarginDecoration : RecyclerView.ItemDecoration() {
     }
 
     private fun getDecoration(parent: RecyclerView, adapterPosition: Int): Rect? {
-        val adapter = parent.findViewHolderForLayoutPosition(adapterPosition)?.bindingAdapter
+        val childAdapter = parent.findViewHolderForLayoutPosition(adapterPosition)?.bindingAdapter
         val relativePosition = parent.findViewHolderForLayoutPosition(adapterPosition)
             ?.bindingAdapterPosition ?: adapterPosition
 
-        return (adapter as? AdapterDecoration)?.getItemDecoration(
+        return (childAdapter as? AdapterDecoration)?.getItemRect(
             parent.resources,
             adapterPosition,
             relativePosition

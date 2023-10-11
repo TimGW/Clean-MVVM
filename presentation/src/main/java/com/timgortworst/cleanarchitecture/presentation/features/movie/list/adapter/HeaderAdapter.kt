@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListHeaderBinding
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterDecoration
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.decoration.AdapterDecoration
 
 class HeaderAdapter(
     private val text: String = "",
@@ -29,7 +29,7 @@ class HeaderAdapter(
 
     override fun getItemCount() = 1
 
-    override fun getItemDecoration(
+    override fun getItemRect(
         resources: Resources,
         adapterPosition: Int,
         relativePosition: Int
@@ -46,5 +46,4 @@ class HeaderAdapter(
             binding.headerText.text = text
         }
     }
-
 }

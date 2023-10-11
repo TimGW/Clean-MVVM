@@ -40,3 +40,14 @@ fun RecyclerView.addSingleScrollDirectionListener() {
 fun Int.safeDiv(other: Int): Int {
     return if (other == 0) 1 else this / other
 }
+
+val Any.doNothing: Unit
+    get() = Unit
+
+fun <T> MutableList<T>.removeFirst(items: Int): List<T> {
+    val result = mutableListOf<T>()
+    repeat(items) {
+        result.add(removeAt(it))
+    }
+    return result.toList()
+}

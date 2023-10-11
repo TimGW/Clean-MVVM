@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/featured_title"
-            style="@style/TextAppearance.MyTheme.Headline4"
+            style="@style/TextAppearance.MyTheme.Headline5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="bottom"

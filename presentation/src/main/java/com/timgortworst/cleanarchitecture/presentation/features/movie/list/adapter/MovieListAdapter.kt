@@ -5,60 +5,54 @@ import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.timgortworst.cleanarchitecture.domain.model.movie.Movie
 import com.timgortworst.cleanarchitecture.presentation.R
 import com.timgortworst.cleanarchitecture.presentation.databinding.MovieListItemBinding
 import com.timgortworst.cleanarchitecture.presentation.features.movie.base.SpannedListAdapter
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.AdapterDecoration
-import com.timgortworst.cleanarchitecture.presentation.features.movie.list.decoration.GridSpanSizeLookup.Companion.FULL_WIDTH
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.Spans
+import com.timgortworst.cleanarchitecture.presentation.features.movie.base.decoration.AdapterDecoration
 
 class MovieListAdapter(
-    spanWidth: Int,
-    private val decoration: AdapterDecoration? = null
+    override val spans: Spans,
+    private val decoration: AdapterDecoration? = null,
 ) : SpannedListAdapter<Movie, MovieListItemBinding>(DiffUtilMovieItem()), AdapterDecoration {
     var clickListener: ((Movie, ImageView, String) -> Unit)? = null
 
-    override val itemViewType = R.layout.movie_list_item
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> MovieListItemBinding =
+        MovieListItemBinding::inflate
 
-    override val columnSpans = spanWidth
+    override val itemViewType = R.layout.movie_list_item
 
     override fun getItemId(position: Int): Long {
         return getItem(position).id.toLong()
     }
 
-    override fun getItemCount() = if (currentList.isEmpty()) 0 else currentList.size
-
-    override fun getItemDecoration(
+    override fun getItemRect(
         resources: Resources,
         adapterPosition: Int,
         relativePosition: Int
-    ): Rect {
-        return decoration?.getItemDecoration(resources, adapterPosition, relativePosition) ?: run {
-            val spacing = resources.getDimension(R.dimen.default_padding).toInt()
-            val maxSpanCount = FULL_WIDTH / columnSpans
-            val rect = Rect()
-            val column = relativePosition % maxSpanCount
-
-            rect.left = spacing - column * spacing / maxSpanCount
-            rect.right = (column + 1) * spacing / maxSpanCount
-            if (relativePosition < maxSpanCount) rect.top = spacing
-            rect.bottom = spacing
-            return rect
+    ) = decoration?.getItemRect(resources, adapterPosition, relativePosition) ?: run {
+        val spacing = resources.getDimension(R.dimen.default_padding).toInt()
+        val maxSpanCount = Spans.calculateMaxSpanCount(spans)
+        val column = relativePosition % maxSpanCount
+        return Rect().apply {
+            left = spacing - column * spacing / maxSpanCount
+            right = (column + 1) * spacing / maxSpanCount
+            if (relativePosition < maxSpanCount) top = spacing
+            bottom = spacing
         }
     }
-
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> MovieListItemBinding =
-        MovieListItemBinding::inflate
 
     override fun bind(binding: MovieListItemBinding, item: Movie, position: Int) {
         val transName = item.highResImage + getItemViewType(position)
 
+        binding.moveListItemText?.text = item.title
+
         binding.moveListItemImage.apply {
             Glide.with(context)
-                .load(item.lowResImage)
+                .load(item.highResImage)
                 .placeholder(R.drawable.movie_placeholder)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(this)

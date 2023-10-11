@@ -39,7 +39,7 @@ class NestedMovieListAdapter : ListAdapter<Movie, NestedMovieListAdapter.ViewHol
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
-            val transName = movie.highResImage + getItemViewType(position)
+            val transName = movie.highResImage + getItemViewType(bindingAdapterPosition)
 
             binding.moveListItemImage.apply {
                 Glide.with(context)
